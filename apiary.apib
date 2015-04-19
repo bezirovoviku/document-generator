@@ -1,0 +1,94 @@
+FORMAT: 1A
+
+# docgen
+Aplikace poběží jako služba na internetu. Pomocí http metod (GET, POST), šablony (ve formátu DOCX) a dodaných dat bude aplikace generovat dokumenty ve formátu PDF nebo DOCX.
+
+# Generation
+## Requests [/api/request]
+### Create request [POST]
+
++ Attributes (object)
+    + user_key (required, string) - User API key
+    + template_id (required, number) - ID of template to be used for generation
+    + data (required, object) - Template data
+    + response_url (optional, string) - URL that will be called, when request is completed
+
++ Request (application/json)
+        
+        {
+            "user_key": "userkey",
+            "template_id": 128,
+            "data": {
+                "sender": "Kumos me, Apur Susu 12, Segal",
+                "receiver": "Kule Huhu, Alamar 26, Gugu, Mongo",
+                "items": [
+                    {
+                        "name": "Item 1",
+                        "count": 1,
+                        "price": 10
+                    },
+                    {
+                        "name": "Item 2",
+                        "count": 5,
+                        "price": 20
+                    },
+
+                ]
+            }
+        }
+
++ Response 200 (application/json)
+
+        {
+            "code": 200,
+            "message": "Request has been added to the queue",
+            "data": {
+                "request_id": 10,
+                "request_url": "http://.../api/request/KEY/10/"
+            }
+        }
+        
++ Response 500 (application/json)
+
+        {
+            "code": 500,
+            "message": "User key is invalid.",
+            "data": null
+        }
+
++ Response 404 (application/json)
+
+        {
+            "code": 404,
+            "message": "Invalid template id.",
+            "data": null
+        }
+        
++ Response 505 (application/json)
+
+        {
+            "code": 505,
+            "message": "No data specified.",
+            "data": null
+        }
+
+## Request informations [/api/request/{key}/{id}]
+
+Returns details about request including. When request is completed, it will include link to download generated documents.
+
++ Parameters
+    + key (string, required) - User API key.
+    + id (number, required) - ID of request
+
+### Details [GET]
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "id": 10,
+                "template_id": 128,
+                "completed": true,
+                "download_url": "http://..../request-10.zip"
+            }
