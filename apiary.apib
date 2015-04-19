@@ -4,6 +4,44 @@ FORMAT: 1A
 API allows you to generate multiple docx documents using specified template and data
 
 # Generation
+## Template [/api/template]
+### Upload template [POST]
+
++ Attributes
+    + file (required, array) - POST file type
+
++ Request (application/x-www-form-urlencoded)
+
++ Response 200 (application/json)
+
+        {
+            "code": 200,
+            "message": "Template has been successfully uploaded",
+            "data": {
+                "template_id": 10
+            }
+        }
+        
++ Response 505 (application/json)
+
+        {
+            "code": 500,
+            "message": "Error occured when uploading template",
+            "data": {
+                "error_id": 1,
+                "error": "File is too big"
+            }
+        }
+
++ Response 500 (application/json)
+
+        {
+            "code": 500,
+            "message": "User key is invalid.",
+            "data": null
+        }
+
+
 ## Requests [/api/request]
 ### Create request [POST]
 
@@ -71,7 +109,7 @@ API allows you to generate multiple docx documents using specified template and 
             "data": null
         }
 
-## Request informations [/api/request/{key}/{id}]
+## Informations [/api/request/{key}/{id}]
 
 Returns details about request including. When request is completed, it will include link to download generated documents.
 
@@ -79,7 +117,7 @@ Returns details about request including. When request is completed, it will incl
     + key (string, required) - User API key.
     + id (number, required) - ID of request
 
-### Details [GET]
+### Request details [GET]
 
 + Response 200 (application/json)
 
@@ -91,3 +129,19 @@ Returns details about request including. When request is completed, it will incl
                 "completed": true,
                 "download_url": "http://..../request-10.zip"
             }
+
++ Response 500 (application/json)
+
+        {
+            "code": 500,
+            "message": "User key is invalid.",
+            "data": null
+        }
+
++ Response 404 (application/json)
+
+        {
+            "code": 404,
+            "message": "Invalid template id.",
+            "data": null
+        }
