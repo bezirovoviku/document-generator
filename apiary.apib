@@ -30,7 +30,7 @@ Creates new template. Returns its ID and MD5 checksum.
             "md5": "09f5f87a3bf63e32a8325b9202a5ed78"
         }
  
-+ Response 401
++ Response 401 (application/json)
         
         {
             "error": "API key is invalid."
@@ -58,13 +58,13 @@ Deletes template pernamently.
 
 + Response 200 (application/json)
  
-+ Response 401
++ Response 401 (application/json)
         
         {
             "error": "API key is invalid."
         }
 
-+ Response 404
++ Response 404 (application/json)
         
         {
             "error": "Template ID is invalid."
