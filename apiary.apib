@@ -4,8 +4,19 @@ FORMAT: 1A
 API allows you to generate multiple docx documents using specified template and data
 
 # Generation
-## Template [/api/template]
+
+For all following actions, API key specified in HTTP header is required.
+
+## Template [/api/v1/template]
 ### Upload template [POST]
+
+Creates new template. Returns its ID and MD5 checksum.
+
++ Request
+    
+    + Headers
+        
+            X-Auth: API key
 
 + Attributes
     + file (required, array) - POST file type
@@ -15,38 +26,64 @@ API allows you to generate multiple docx documents using specified template and 
 + Response 200 (application/json)
 
         {
-            "code": 200,
-            "message": "Template has been successfully uploaded",
-            "data": {
-                "template_id": 10
-            }
+            "template_id": 10,
+            "md5": "09f5f87a3bf63e32a8325b9202a5ed78"
         }
+ 
++ Response 401
         
-+ Response 505 (application/json)
-
         {
-            "code": 500,
-            "message": "Error occured when uploading template",
-            "data": {
-                "error_id": 1,
-                "error": "File is too big"
-            }
+            "error": "API key is invalid."
         }
 
 + Response 500 (application/json)
 
         {
-            "code": 500,
-            "message": "User key is invalid.",
-            "data": null
+            "error_id": 1,
+            "error": "File is too big."
+        }
+
+### Delete template [GET /api/v1/template/{template_id}]
+
+Deletes template pernamently.
+
++ Request
+    
+    + Headers
+    
+            X-Auth: API key
+
++ Parameters
+    + template_id (required, number) - template ID
+
++ Response 200 (application/json)
+ 
++ Response 401
+        
+        {
+            "error": "API key is invalid."
+        }
+
++ Response 404
+        
+        {
+            "error": "Template ID is invalid."
         }
 
 
-## Requests [/api/request]
+
+## Requests [/api/v1/request]
 ### Create request [POST]
 
+Creates new request. Returns its ID.
+
++ Request
+    
+    + Headers
+        
+            X-Auth: API key
+
 + Attributes (object)
-    + user_key (required, string) - User API key
     + template_id (required, number) - ID of template to be used for generation
     + data (required, object) - Template data
     + response_url (optional, string) - URL that will be called, when request is completed
@@ -54,8 +91,7 @@ API allows you to generate multiple docx documents using specified template and 
 + Request (application/json)
         
         {
-            "user_key": "userkey",
-            "template_id": 128,
+            "template_id": 18,
             "data": {
                 "sender": "Kumos me, Apur Susu 12, Segal",
                 "receiver": "Kule Huhu, Alamar 26, Gugu, Mongo",
@@ -77,47 +113,41 @@ API allows you to generate multiple docx documents using specified template and 
 + Response 200 (application/json)
 
         {
-            "code": 200,
-            "message": "Request has been added to the queue",
-            "data": {
-                "request_id": 10,
-                "request_url": "http://.../api/request/KEY/10/"
-            }
+            "request_id": 10
         }
         
-+ Response 500 (application/json)
++ Response 401 (application/json)
 
         {
-            "code": 500,
-            "message": "User key is invalid.",
-            "data": null
+            "error": "API key is invalid.",
         }
 
 + Response 404 (application/json)
 
         {
-            "code": 404,
-            "message": "Invalid template id.",
-            "data": null
+            "error": "Invalid template id.",
         }
         
-+ Response 505 (application/json)
++ Response 417 (application/json)
 
         {
-            "code": 505,
-            "message": "No data specified.",
-            "data": null
+            "error": "No data specified.",
         }
 
-## Informations [/api/request/{key}/{id}]
+## Informations [/api/v1/request/{id}]
 
 Returns details about request including. When request is completed, it will include link to download generated documents.
 
 + Parameters
-    + key (string, required) - User API key.
     + id (number, required) - ID of request
 
 ### Request details [GET]
+
++ Request
+    
+    + Headers
+        
+            X-Auth: API key
 
 + Response 200 (application/json)
 
@@ -130,18 +160,14 @@ Returns details about request including. When request is completed, it will incl
                 "download_url": "http://..../request-10.zip"
             }
 
-+ Response 500 (application/json)
++ Response 401 (application/json)
 
         {
-            "code": 500,
-            "message": "User key is invalid.",
-            "data": null
+            "error": "API key is invalid.",
         }
 
 + Response 404 (application/json)
 
         {
-            "code": 404,
-            "message": "Invalid template id.",
-            "data": null
+            "error": "Invalid template id.",
         }
