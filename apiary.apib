@@ -8,15 +8,23 @@ API allows you to generate multiple docx documents using specified template and 
 For all following actions, API key specified in HTTP header is required.
 
 ## Template [/api/v1/template]
+
+Templates are used for generation of multiple documents.
+
 ### Upload template [POST]
 
-Creates new template. Returns its ID and MD5 checksum.
+Uploads new template. Returns its ID and MD5 checksum. X-Upload-Content-Length contains file size and file contents should be sent as body.
 
 + Request
     
     + Headers
         
             X-Auth: API key
+            X-Upload-Content-Length: 2000000
+
+    + Body
+        
+            DOCX BINARY DATA WITH SPECIFIED LENGTH
 
 + Attributes
     + file (required, array) - POST file type
@@ -73,9 +81,13 @@ Deletes template pernamently.
 
 
 ## Requests [/api/v1/request]
+
+Requests for document generation. When you have your template ready, you need to provide data to the server.
+Server will then generate all required documents. This may take some time, so you will need to either specify callback url, or ask server periodically if the request is finished.
+
 ### Create request [POST]
 
-Creates new request. Returns its ID.
+Creates new request. Returns its ID. Data are template data, where each item in array is new document.
 
 + Request
     
@@ -86,7 +98,7 @@ Creates new request. Returns its ID.
 + Attributes (object)
     + template_id (required, number) - ID of template to be used for generation
     + type (required, string) - Result type, pdf or docx
-    + data (required, object) - Template data
+    + data (required, array) - Array of template data, each item as one generated document
     + response_url (optional, string) - URL that will be called, when request is completed
 
 + Request (application/json)
@@ -94,22 +106,28 @@ Creates new request. Returns its ID.
         {
             "template_id": 18,
             "type": "docx",
-            "data": {
-                "sender": "Kumos me, Apur Susu 12, Segal",
-                "receiver": "Kule Huhu, Alamar 26, Gugu, Mongo",
-                "items": [
-                    {
-                        "name": "Item 1",
-                        "count": 1,
-                        "price": 10
-                    },
-                    {
-                        "name": "Item 2",
-                        "count": 5,
-                        "price": 20
-                    }
-                ]
-            }
+            "data": [
+                {
+                    "sender": "Kumos me, Apur Susu 12, Segal",
+                    "receiver": "Kule Huhu, Alamar 26, Gugu, Mongo",
+                    "items": [
+                        {
+                            "name": "Item 1",
+                            "count": 1,
+                            "price": 10
+                        },
+                        {
+                            "name": "Item 2",
+                            "count": 5,
+                            "price": 20
+                        }
+                    ]
+                }, {
+                    "sender": "Kuu kaa",
+                    "receiver": "Document",
+                    "items": []
+                }
+            ]
         }
 
 + Response 200 (application/json)
