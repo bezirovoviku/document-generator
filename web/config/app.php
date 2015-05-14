@@ -2,6 +2,8 @@
 
 return [
 
+	'name' => 'Docgen',
+
 	/*
 	|--------------------------------------------------------------------------
 	| Application Debug Mode
@@ -39,7 +41,7 @@ return [
 	|
 	*/
 
-	'timezone' => 'UTC',
+	'timezone' => 'UTC+1',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -52,7 +54,7 @@ return [
 	|
 	*/
 
-	'locale' => 'en',
+	'locale' => 'cs',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -65,7 +67,7 @@ return [
 	|
 	*/
 
-	'fallback_locale' => 'en',
+	'fallback_locale' => 'cs',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -145,6 +147,11 @@ return [
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
 
+		/*
+		 * Composer Service Providers
+		 */
+		'Collective\Html\HtmlServiceProvider',
+
 	],
 
 	/*
@@ -192,6 +199,10 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
+
+		// composer
+		'Form' => 'Collective\Html\FormFacade',
+		'Html' => 'Collective\Html\HtmlFacade',
 
 	],
 
