@@ -1,5 +1,10 @@
 <?php
 
 Route::get('/', 'HomeController@index');
-Route::get('/about', 'HomeController@about');
+
+// dashboard
+Route::get('/dashboard', 'DashboardController@index');
+
+// admin
+Route::get('/admin', 'AdminController@index');
 
