@@ -9,17 +9,17 @@ class UserSeeder extends Seeder {
 	{
 		User::create([
 			'email' => 'admin@admin.cz',
-			'password' => 'heslo',
+			'password' => 'pass',
 		]);
 
-        $faker = Faker\Factory::create();
-        for ($i = 0; $i < 10; $i++) { 
-        	User::create([
+		$faker = Faker\Factory::create();
+		for ($i = 0; $i < 10; $i++) { 
+			User::create([
 				'email' => $faker->unique()->email,
-				'password' => 'heslo',
+				'password' => 'pass',
 				'request_limit' => $faker->numberBetween(0, 300),
 			]);
-        }
+		}
 	}
 
 }

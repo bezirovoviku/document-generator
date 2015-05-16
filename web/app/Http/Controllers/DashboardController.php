@@ -1,22 +1,26 @@
 <?php namespace App\Http\Controllers;
 
-use Auth;
+use Illuminate\Contracts\Auth\Guard;
 use App\Template;
 use App\Request;
 
 class DashboardController extends Controller {
 
-	public function __construct()
+	public function __construct(Guard $auth)
 	{
         $this->middleware('auth');
+
+    	$this->user = $auth->user();
 	}
 
 	public function index()
 	{
+    	$this->user->load('requests', 'templates');
+
 		return view('dashboard.index')
-			->with('user', Auth::user())
-			->with('requests', Request::all())
-			->with('templates', Template::all());
+			->with('user', $this->user)
+			->with('requests', $this->user->requests)
+			->with('templates', $this->user->templates);
 	}
 
 }

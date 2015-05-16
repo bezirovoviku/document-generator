@@ -4,15 +4,17 @@
 Route::model('request', 'App\Request');
 
 // home page
-Route::get('/', 'HomeController@index');
+Route::get('', 'HomeController@index');
+Route::post('register-login', 'HomeController@loginOrRegister');
+Route::get('logout', 'HomeController@logout');
 
 // dashboard
-Route::get('/dashboard', 'DashboardController@index');
+Route::get('dashboard', 'DashboardController@index');
 
 // admin
-Route::get('/admin', 'AdminController@index');
+Route::get('admin', 'AdminController@index');
 
 // request operations
-Route::get('/request/{request}/download', 'RequestController@download');
-Route::get('/request/{request}/cancel', 'RequestController@cancel');
+Route::get('request/{request}/download', 'RequestController@download');
+Route::get('request/{request}/cancel', 'RequestController@cancel');
 

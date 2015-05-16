@@ -9,12 +9,12 @@ class Request extends Model {
 
 	public function user()
 	{
-		$this->template()->user();
+		return $this->template->user();
 	}
 
 	public function template()
 	{
-		$this->belongsTo('App\Template');
+		return $this->belongsTo('App\Template');
 	}
 
 	public function getStatusAttribute()

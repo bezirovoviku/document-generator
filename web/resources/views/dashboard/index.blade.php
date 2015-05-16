@@ -138,7 +138,7 @@
         </div>
         <div class="panel-body">
             <div class="form-group form-group-lg">
-                <input type="text" class="form-control text-center" disabled value="{{ $user->apiKey }}">
+                <input type="text" class="form-control text-center" disabled value="{{ $user->api_key }}">
             </div>
             <p>Use this key in your application to make requests. For more informations, read <a href="#">the docs</a> please.</p>
         </div>
