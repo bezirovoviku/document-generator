@@ -10,8 +10,7 @@
             @endforeach
 
             {{-- menu for authenticated users --}}
-            {{-- TODO condition --}}
-            @if (!Auth::check())
+            @if (Auth::check())
                 @foreach (['Dashboard' => action('DashboardController@index')] as $text => $url)
                     <li class="{{ Request::url() == $url ? 'active' : '' }}">
                         <a href="{{ $url }}">{{ $text }}</a>
@@ -20,8 +19,7 @@
             @endif
 
             {{-- menu for admin --}}
-            {{-- TODO condition --}}
-            @if (!Auth::check())
+            @if (Auth::check() && Auth::user()->isAdmin())
                 @foreach (['Admin' => action('AdminController@index')] as $text => $url)
                     <li class="{{ Request::url() == $url ? 'active' : '' }}">
                         <a href="{{ $url }}">{{ $text }}</a>
@@ -31,11 +29,10 @@
         </ul>
 
         {{-- right side for authenticated users --}}
-        {{-- TODO condition --}}
-        {{-- @if (Auth::check()) --}}
-        <div class="navbar-right">
-            <p class="navbar-text">Signed in as xxx@xx.cz{{-- Auth::user()->$email --}}, <a href="#" class="navbar-link">logout</a></p>
-        </div>
-        {{-- @endif --}}
+        @if (Auth::check())
+            <div class="navbar-right">
+                <p class="navbar-text">Signed in as {{ Auth::user()->email }}, <a href="#" class="navbar-link">logout</a></p>
+            </div>
+        @endif
     </div>
 </nav>

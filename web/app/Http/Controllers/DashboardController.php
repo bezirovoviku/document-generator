@@ -1,18 +1,22 @@
 <?php namespace App\Http\Controllers;
 
+use Auth;
+use App\Template;
+use App\Request;
+
 class DashboardController extends Controller {
 
 	public function __construct()
 	{
-        // TODO change middleware to auth
-        // $this->middleware('auth');
-		$this->middleware('guest');
+        $this->middleware('auth');
 	}
 
 	public function index()
 	{
-
-		return view('dashboard.index');
+		return view('dashboard.index')
+			->with('user', Auth::user())
+			->with('requests', Request::all())
+			->with('templates', Template::all());
 	}
 
 }

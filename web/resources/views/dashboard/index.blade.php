@@ -44,18 +44,18 @@
                 </tr>
             </thead>
             <tbody>
+                @forelse ($templates as $template)
                 <tr>
-                    <td class="text-right">123</td>
-                    <td class="text-right">12&times;</td>
-                    <td>Lorem ipsum dolor sit amet</td>
+                    <td class="text-right">{{ $template->id }}</td>
+                    <td class="text-right">TODO &times;</td>
+                    <td>{{ $template->name }}</td>
                     <td><a href="#">details</a> | <a href="#">delete</a></td>
                 </tr>
+                @empty
                 <tr>
-                    <td class="text-right">123</td>
-                    <td class="text-right">12&times;</td>
-                    <td>Lorem ipsum dolor sit amet</td>
-                    <td><a href="#">details</a> | <a href="#">delete</a></td>
+                    <td colspan="4" class="text-center text-muted">No templates</td>
                 </tr>
+                @endforelse
             </tbody>
         </table>
         </div>
@@ -96,36 +96,29 @@
                 </tr>
             </thead>
             <tbody>
+                @forelse ($requests as $request)
                 <tr>
-                    <td class="text-right">123</td>
-                    <td><a href="#">Lorem ipsum dolor sit amet</a></td>
-                    <td class="text-warning">in progress</td>
+                    <td class="text-right">{{ $request->id }}</td>
+                    <td>{{ $request->template->name }}</td>
+                    {{-- TODO: text colored by status --}}
+                    <td class="text-{{ $request->status }}">@include('partial.request_status', ['request' => $request])</td>
                 </tr>
+                @empty
                 <tr>
-                    <td class="text-right">123</td>
-                    <td><a href="#">Lorem ipsum dolor sit amet</a></td>
-                    <td class="text-success">done - <a href="#">download</a></td>
+                    <td colspan="3" class="text-center text-muted">No requests</td>
                 </tr>
-                <tr>
-                    <td class="text-right">123</td>
-                    <td>unknown</td>
-                    <td class="text-danger">failed - bad template</td>
-                </tr>
-                <tr>
-                    <td class="text-right">123</td>
-                    <td><a href="#">Lorem ipsum dolor sit amet</a></td>
-                    <td class="text-danger">failed - missing data</td>
-                </tr>
+                @endforelse
             </tbody>
         </table>
         </div>
 
-        <nav class="panel-footer">
+        {{-- TODO: pagging --}}
+        {{-- <nav class="panel-footer">
             <ul class="pager">
                 <li class="previous disabled"><a href="#">newer items</a></li>
                 <li class="next"><a href="#">older items</a></li>
             </ul>
-        </nav>
+        </nav> --}}
 
     </div>
 
@@ -145,7 +138,7 @@
         </div>
         <div class="panel-body">
             <div class="form-group form-group-lg">
-                <input type="text" class="form-control text-center" disabled value="be78f6d0fe83185af32e95a5896f7260">
+                <input type="text" class="form-control text-center" disabled value="{{ $user->apiKey }}">
             </div>
             <p>Use this key in your application to make requests. For more informations, read <a href="#">the docs</a> please.</p>
         </div>
