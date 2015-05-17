@@ -1,5 +1,6 @@
 <?php namespace App;
 
+use Hash;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -10,25 +11,31 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	use Authenticatable, CanResetPassword;
 
-	/**
-	 * The database table used by the model.
-	 *
-	 * @var string
-	 */
-	protected $table = 'users';
-
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
-	protected $fillable = ['name', 'email', 'password'];
-
-	/**
-	 * The attributes excluded from the model's JSON form.
-	 *
-	 * @var array
-	 */
+	protected $fillable = ['email', 'password', 'request_limit'];
 	protected $hidden = ['password', 'remember_token'];
 
+	public function templates()
+	{
+		return $this->hasMany('App\Template');
+	}
+
+	public function requests()
+	{
+		return $this->hasManyThrough('App\Request', 'App\Template');
+	}
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
+    }
+
+	public function regenerateApiKey()
+	{
+		$this->attributes['api_key'] = md5($this->id . microtime());
+	}
+
+	public function isAdmin()
+	{
+		return true;
+	}
 }
