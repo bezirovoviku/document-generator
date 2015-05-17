@@ -17,7 +17,7 @@ class RequestSeeder extends Seeder {
         		'type' => $faker->randomElement(['pdf', 'docx']),
         		'data' => NULL, // TODO
         		'callback_url' => $faker->url,
-        		'created_at' => ($created_at = $faker->dateTime),
+        		'created_at' => ($created_at = $faker->dateTimeThisYear),
         		'updated_at' => $created_at,
         		'generated_at' => $faker->dateTimeBetween($created_at, $created_at->modify('+3 day')),
 			]);

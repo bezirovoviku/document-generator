@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use Hash;
+use DB;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -28,6 +29,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         $this->attributes['password'] = Hash::make($value);
     }
+
+	public function getUsageHistory()
+	{
+		$res = [];
+		// one year (12 months) ago
+		for ($i = 11; $i >= 0; $i--) {
+			// key is x-axis label, value is y-value
+			$res[date('M Y', strtotime("-$i months"))] = $this->requests()->monthsBefore($i)->count();
+		}
+		return $res;
+	}
 
 	public function regenerateApiKey()
 	{

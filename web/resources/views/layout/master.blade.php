@@ -5,8 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>@yield('title') | {{ Config::get('app.name') }}</title>
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
-	<script type="text/javascript" src="https://code.jquery.com/jquery.js"></script>
-	<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	{{-- <script type="text/javascript" src="https://code.jquery.com/jquery.js"></script> --}}
+	{{-- <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> --}}
 	@yield('header')
 </head>
 <body class="@yield('body_class')">

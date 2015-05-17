@@ -21,10 +21,19 @@ class DashboardController extends Controller {
 	{
     	$this->user->load('requests', 'templates');
 
-		return view('dashboard.index')
+		$view = view('dashboard.index')
 			->with('user', $this->user)
 			->with('requests', $this->user->requests)
-			->with('templates', $this->user->templates);
+			->with('templates', $this->user->templates)
+			->with('usageHistory', $this->user->getUsageHistory());
+
+		if ($this->user->request_limit) {
+			$requestsUsed = $this->user->requests()->lastMonth()->count();
+			$view->with('requestsUsed', $requestsUsed);
+			$view->with('requestsPercentage', round(100 * $requestsUsed / $this->user->request_limit));
+		}
+
+    	return $view;
 	}
 
 	public function regenerateApiKey()
@@ -37,7 +46,7 @@ class DashboardController extends Controller {
 	public function updateLimits(UpdateLimitsRequest $request)
 	{
 		$this->user->update($request->all());
-		return redirect()->back()->withSuccess('Changes saved.');
+		return redirect()->back()->withSuccess('New limits saved.');
 	}
 
 	public function uploadTemplate(Request $request)
