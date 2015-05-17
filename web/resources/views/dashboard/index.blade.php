@@ -50,7 +50,7 @@
                 @forelse ($templates as $template)
                 <tr>
                     <td class="text-right">{{ $template->id }}</td>
-                    <td class="text-right">TODO &times;</td>
+                    <td class="text-right">{{ $template->getUsageCount() }} &times;</td>
                     <td>{{ $template->name }}</td>
                     <td><a href="#">details</a> | <a href="#">delete</a></td>
                 </tr>
@@ -63,7 +63,7 @@
         </table>
         </div>
 
-        {!! Form::open(['class' => 'form-horizontal']) !!}
+        {!! Form::open(['action' => 'DashboardController@uploadTemplate', 'class' => 'form-horizontal', 'files' => true]) !!}
         <div class="panel-body">
             <fieldset>
                 <legend>
@@ -75,8 +75,8 @@
                     <div class="col-md-8 col-sm-9">{!! Form::text('name', null, ['id' => 'templateName', 'class' => 'form-control']) !!}</div>
                 </div>
                 <div class="form-group">
-                    <label for="templateFile" class="col-md-4 col-sm-3 control-label">DOCX template file</label>
-                    <div class="col-md-8 col-sm-9">{!! Form::file('file', null, ['id' => 'templateFile']) !!}</div>
+                    <label for="template" class="col-md-4 col-sm-3 control-label">DOCX template file</label>
+                    <div class="col-md-8 col-sm-9">{!! Form::file('template', null, ['id' => 'template']) !!}</div>
                 </div>
             </fieldset>
         </div>
@@ -156,22 +156,28 @@
 
         <img src="http://placehold.it/800x300" class="img-responsive">
 
-        <div class="panel-body">
-            <?php
-            $used = $user->requests()->lastMonth()->count();
-            $percentage = round(100 * $used / $user->request_limit);
-            ?>
-            <p>You have used <strong>{{ $used }} of {{ $user->request_limit }}</strong> allowed requests this month.</p>
-            <div class="progress">
-                <div class="progress-bar progress-bar-{{ $percentage < 66 ? 'success' : ($percentage < 80 ? 'warning' : 'danger') }}"
-                    role="progressbar" style="width: {{ $percentage }}%; min-width: 8%">
-                    {{ $percentage }}%
+        @if ($user->request_limit)
+            <div class="panel-body">
+                <?php
+                $used = $user->requests()->lastMonth()->count();
+                $percentage = round(100 * $used / $user->request_limit);
+                ?>
+                <p>You have used <strong>{{ $used }} of {{ $user->request_limit }}</strong> allowed requests this month.</p>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-{{ $percentage < 66 ? 'success' : ($percentage < 80 ? 'warning' : 'danger') }}"
+                        role="progressbar" style="width: {{ $percentage }}%; min-width: 2em">
+                        {{ $percentage }}%
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="panel-footer">
-            <button type="button" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-circle-arrow-up"></span> Raise the limit</button>
-        </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-circle-arrow-up"></span> Raise the limit</button>
+            </div>
+        @else
+            <div class="panel-body">
+                You have <strong>unlimited</strong> number of requests. Let's generate!
+            </div>
+        @endif
     </div>
 
 </div>

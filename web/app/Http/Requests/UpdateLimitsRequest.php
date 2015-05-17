@@ -28,7 +28,7 @@ class UpdateLimitsRequest extends Request {
 	public function rules()
 	{
 		return [
-			'request_limit' => 'numeric|min:0'
+			'request_limit' => 'required|numeric|min:0'
 		];
 	}
 

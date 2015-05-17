@@ -17,7 +17,6 @@ class CreateTemplatesTable extends Migration {
 			$table->increments('id');
 			$table->integer('user_id')->unsigned()->nullable();
 			$table->string('name');
-			$table->string('filename')->unique();
 			$table->timestamps();
 
 			$table->foreign('user_id')->references('id')->on('users');

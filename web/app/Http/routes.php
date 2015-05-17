@@ -12,6 +12,7 @@ Route::get('logout', 'HomeController@logout');
 Route::get('dashboard', 'DashboardController@index');
 Route::post('regenerate-api-key', 'DashboardController@regenerateApiKey');
 Route::post('update-limits', 'DashboardController@updateLimits');
+Route::post('upload-template', 'DashboardController@uploadTemplate');
 
 // admin
 Route::get('admin', 'AdminController@index');
