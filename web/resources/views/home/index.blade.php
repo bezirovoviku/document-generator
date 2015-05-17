@@ -9,18 +9,22 @@
 <h1>Document generator</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam commodi, distinctio sequi beatae inventore vitae possimus libero numquam error ut, ex odio repellat sint et fugit, maiores laborum cumque suscipit!</p>
 
-{!! Form::open(['action' => 'HomeController@loginOrRegister']) !!}
-	<div class="form-group">{!! Form::email('email', Request::old('email'), ['class' => 'form-control', 'placeholder' => 'email', 'required']) !!}</div>
-	<div class="form-group">{!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'password', 'required']) !!}</div>
-	<div class="row">
-		<div class="col-sm-4 col-sm-push-8">
-			<div class="form-group">{!! Form::button('Login', ['name' => 'login', 'value' => 1, 'type' => 'submit', 'class' => 'btn btn-block btn-default']) !!}</div>
+@if (!Auth::check())
+	{!! Form::open(['action' => 'HomeController@loginOrRegister']) !!}
+		<div class="form-group">{!! Form::email('email', Request::old('email'), ['class' => 'form-control', 'placeholder' => 'email', 'required']) !!}</div>
+		<div class="form-group">{!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'password', 'required']) !!}</div>
+		<div class="row">
+			<div class="col-sm-4 col-sm-push-8">
+				<div class="form-group">{!! Form::button('Login', ['name' => 'login', 'value' => 1, 'type' => 'submit', 'class' => 'btn btn-block btn-default']) !!}</div>
+			</div>
+			<div class="col-sm-8 col-sm-pull-4">
+				<div class="form-group">{!! Form::button('Register', ['name' => 'register', 'value' => 1, 'type' => 'submit', 'class' => 'btn btn-block btn-primary']) !!}</div>
+			</div>
 		</div>
-		<div class="col-sm-8 col-sm-pull-4">
-			<div class="form-group">{!! Form::button('Register', ['name' => 'register', 'value' => 1, 'type' => 'submit', 'class' => 'btn btn-block btn-primary']) !!}</div>
-		</div>
-	</div>
-{!! Form::close() !!}
+	{!! Form::close() !!}
+@else
+	<a href="{{ action('DashboardController@index') }}" class="btn btn-block btn-primary">Go to dashboard</a>
+@endif
 </div>
 </div>
 

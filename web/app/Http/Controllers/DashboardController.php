@@ -23,8 +23,8 @@ class DashboardController extends Controller {
 
 		$view = view('dashboard.index')
 			->with('user', $this->user)
-			->with('requests', $this->user->requests)
 			->with('templates', $this->user->templates)
+			->with('requests', $this->user->requests()->paginate(\App\Request::ITEMS_PER_PAGE))
 			->with('usageHistory', $this->user->getUsageHistory());
 
 		if ($this->user->request_limit) {

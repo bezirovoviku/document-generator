@@ -31,7 +31,7 @@
 		{{-- right side for authenticated users --}}
 		@if (Auth::check())
 			<div class="navbar-right">
-				<p class="navbar-text">Signed in as {{ Auth::user()->email }}, <a href="{{ action('HomeController@logout') }}" class="navbar-link">logout</a></p>
+				<p class="navbar-text">Logged in as {{ Auth::user()->email }}, <a href="{{ action('HomeController@logout') }}" class="navbar-link">logout</a></p>
 			</div>
 		@endif
 	</div>

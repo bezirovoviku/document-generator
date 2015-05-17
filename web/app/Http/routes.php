@@ -5,7 +5,7 @@ Route::model('request', 'App\Request');
 Route::model('template', 'App\Template');
 
 // home page
-Route::get('', 'HomeController@index');
+Route::get('/', 'HomeController@index');
 Route::post('register-login', 'HomeController@loginOrRegister');
 Route::get('logout', 'HomeController@logout');
 

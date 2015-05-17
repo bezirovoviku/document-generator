@@ -5,6 +5,8 @@ use DB;
 
 class Request extends Model {
 
+	const ITEMS_PER_PAGE = 10;
+
 	protected $fillable = ['type', 'data', 'callback_url'];
 	protected $dates = ['created_at', 'updated_at', 'generated_at'];
 

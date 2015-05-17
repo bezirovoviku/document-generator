@@ -16,7 +16,7 @@ class HomeController extends Controller {
 
 	public function __construct(Guard $auth, Registrar $registrar)
 	{
-		$this->middleware('guest', ['except' => ['logout']]);
+		$this->middleware('guest', ['except' => ['index', 'logout']]);
 
 		$this->auth = $auth;
 		$this->registrar = $registrar;

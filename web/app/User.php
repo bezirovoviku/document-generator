@@ -1,7 +1,6 @@
 <?php namespace App;
 
 use Hash;
-use DB;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;

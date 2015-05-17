@@ -100,7 +100,7 @@
 		</div>
 
 		<div class="table-responsive">
-		<table class="table table-hover">
+		<table class="table table-hover" id="requests">
 			<thead>
 				<tr>
 					<th class="text-right">ID</th>
@@ -130,12 +130,9 @@
 		</div>
 
 		{{-- TODO: pagging --}}
-		{{-- <nav class="panel-footer">
-			<ul class="pager">
-				<li class="previous disabled"><a href="#">newer items</a></li>
-				<li class="next"><a href="#">older items</a></li>
-			</ul>
-		</nav> --}}
+		<nav class="text-center">
+			{!! $requests->setPath(Request::url())->fragment('requests')->render() !!}
+		</nav>
 
 	</div>
 
