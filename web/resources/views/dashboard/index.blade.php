@@ -10,7 +10,7 @@
 <div class="col-md-7 col-md-push-5">
 
     {{-- admin --}}
-    {!! Form::open() !!}
+    {!! Form::model($user, ['action' => 'DashboardController@updateLimits']) !!}
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="pull-right">
@@ -20,8 +20,9 @@
         </div>
         <div class="panel-body">
             <div class="form-group">
-                <label for="limit">Maximum requsts per month</label>
-                {!! Form::number('limit', null, ['id' => 'limit', 'class' => 'form-control', 'step' => 1]) !!}
+                <label for="request_limit">Request limit</label>
+                {!! Form::number('request_limit', null, ['id' => 'request_limit', 'class' => 'form-control', 'step' => 1, 'min' => 0]) !!}
+                <p class="help-block"><code>0</code> means no limit.</p>
             </div>
         </div>
     </div>

@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use Illuminate\Contracts\Auth\Guard;
+use App\Http\Requests\UpdateLimitsRequest;
 use App\Template;
 use App\Request;
 
@@ -28,6 +29,12 @@ class DashboardController extends Controller {
 		$this->user->regenerateApiKey();
 		$this->user->save();
 		return redirect()->back()->withSuccess('API key regenerated.');
+	}
+
+	public function updateLimits(UpdateLimitsRequest $request)
+	{
+		$this->user->update($request->all());
+		return redirect()->back()->withSuccess('Changes were saved.');
 	}
 
 }
