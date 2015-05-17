@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Request extends Model {
 
@@ -16,6 +17,11 @@ class Request extends Model {
 	{
 		return $this->belongsTo('App\Template');
 	}
+
+    public function scopeLastMonth($query)
+    {
+        return $query->where('requests.created_at', '>', DB::raw('DATE_SUB(curdate(), INTERVAL 1 MONTH)'));
+    }
 
 	public function getStatusAttribute()
 	{

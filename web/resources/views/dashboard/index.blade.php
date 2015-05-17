@@ -10,23 +10,25 @@
 <div class="col-md-7 col-md-push-5">
 
     {{-- admin --}}
-    {!! Form::model($user, ['action' => 'DashboardController@updateLimits']) !!}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="pull-right">
-                <button type="submit" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-ok"></span> Apply</button>
+    @if (Auth::user()->isAdmin())
+        {!! Form::model($user, ['action' => 'DashboardController@updateLimits']) !!}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="pull-right">
+                    <button type="submit" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-ok"></span> Apply</button>
+                </div>
+                <h3 class="panel-title">Admin tools</h3>
             </div>
-            <h3 class="panel-title">Admin tools</h3>
-        </div>
-        <div class="panel-body">
-            <div class="form-group">
-                <label for="request_limit">Request limit</label>
-                {!! Form::number('request_limit', null, ['id' => 'request_limit', 'class' => 'form-control', 'step' => 1, 'min' => 0]) !!}
-                <p class="help-block"><code>0</code> means no limit.</p>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="request_limit">Request limit</label>
+                    {!! Form::number('request_limit', null, ['id' => 'request_limit', 'class' => 'form-control', 'step' => 1, 'min' => 0]) !!}
+                    <p class="help-block">Maximum requests per month. <code>0</code> means no limit.</p>
+                </div>
             </div>
         </div>
-    </div>
-    {!! Form::close() !!}
+        {!! Form::close() !!}
+    @endif
 
     {{-- templates --}}
     <div class="panel panel-default">
@@ -155,9 +157,16 @@
         <img src="http://placehold.it/800x300" class="img-responsive">
 
         <div class="panel-body">
-            <p>You have used <strong>60 of 100</strong> free requests this month.</p>
+            <?php
+            $used = $user->requests()->lastMonth()->count();
+            $percentage = round(100 * $used / $user->request_limit);
+            ?>
+            <p>You have used <strong>{{ $used }} of {{ $user->request_limit }}</strong> allowed requests this month.</p>
             <div class="progress">
-                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                <div class="progress-bar progress-bar-{{ $percentage < 66 ? 'success' : ($percentage < 80 ? 'warning' : 'danger') }}"
+                    role="progressbar" style="width: {{ $percentage }}%; min-width: 8%">
+                    {{ $percentage }}%
+                </div>
             </div>
         </div>
         <div class="panel-footer">
