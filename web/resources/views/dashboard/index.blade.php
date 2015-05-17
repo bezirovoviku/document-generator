@@ -14,7 +14,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="pull-right">
-                <button type="submit" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-ok"></span> apply</button>
+                <button type="submit" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-ok"></span> Apply</button>
             </div>
             <h3 class="panel-title">Admin tools</h3>
         </div>
@@ -128,11 +128,11 @@
 <div class="col-md-5 col-md-pull-7">
 
     {{-- API key --}}
-    {!! Form::open() !!}
+    {!! Form::open(['action' => 'DashboardController@regenerateApiKey']) !!}
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="pull-right">
-                <button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-refresh"></span> regenerate</button>
+                <button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-refresh"></span> Regenerate</button>
             </div>
             <h3 class="panel-title">Your API key</h3>
         </div>

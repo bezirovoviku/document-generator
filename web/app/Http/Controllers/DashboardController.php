@@ -23,4 +23,11 @@ class DashboardController extends Controller {
 			->with('templates', $this->user->templates);
 	}
 
+	public function regenerateApiKey()
+	{
+		$this->user->regenerateApiKey();
+		$this->user->save();
+		return redirect()->back()->withSuccess('API key regenerated.');
+	}
+
 }

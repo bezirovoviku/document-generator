@@ -12,10 +12,7 @@
 <body class="@yield('body_class')">
 
 	@include('partial.navigation')
-
-	<div class="container">
-		@include('partial.messages')
-	</div>
+	@include('partial.messages')
 
 	<div id="content">
 		@yield('content')

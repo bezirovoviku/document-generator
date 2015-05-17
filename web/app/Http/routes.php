@@ -10,6 +10,7 @@ Route::get('logout', 'HomeController@logout');
 
 // dashboard
 Route::get('dashboard', 'DashboardController@index');
+Route::post('regenerate-api-key', 'DashboardController@regenerateApiKey');
 
 // admin
 Route::get('admin', 'AdminController@index');
