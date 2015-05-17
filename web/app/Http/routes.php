@@ -2,6 +2,7 @@
 
 // models
 Route::model('request', 'App\Request');
+Route::model('template', 'App\Template');
 
 // home page
 Route::get('', 'HomeController@index');
@@ -12,7 +13,8 @@ Route::get('logout', 'HomeController@logout');
 Route::get('dashboard', 'DashboardController@index');
 Route::post('regenerate-api-key', 'DashboardController@regenerateApiKey');
 Route::post('update-limits', 'DashboardController@updateLimits');
-Route::post('upload-template', 'DashboardController@uploadTemplate');
+Route::post('template/upload', 'DashboardController@uploadTemplate');
+Route::post('template/{template}/delete', 'DashboardController@deleteTemplate');
 
 // admin
 Route::get('admin', 'AdminController@index');

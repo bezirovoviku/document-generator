@@ -15,7 +15,7 @@ class Request extends Model {
 
 	public function template()
 	{
-		return $this->belongsTo('App\Template');
+		return $this->belongsTo('App\Template')->withTrashed();
 	}
 
     public function scopeLastMonth($query)

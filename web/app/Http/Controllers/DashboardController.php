@@ -4,6 +4,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Filesystem;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateLimitsRequest;
+use App\Http\Requests\DeleteTemplateRequest;
 use App\Template;
 
 class DashboardController extends Controller {
@@ -36,7 +37,7 @@ class DashboardController extends Controller {
 	public function updateLimits(UpdateLimitsRequest $request)
 	{
 		$this->user->update($request->all());
-		return redirect()->back()->withSuccess('Changes were saved.');
+		return redirect()->back()->withSuccess('Changes saved.');
 	}
 
 	public function uploadTemplate(Request $request)
@@ -51,9 +52,22 @@ class DashboardController extends Controller {
 		$this->user->templates()->save($template);
 
 		// save to filesystem
-		$request->file('template')->move($template->getPath(), $template->getFilename());
+		$request->file('template')->move($template->getRealPath(), $template->getFilename());
 
-		return redirect()->back()->withSuccess('Template was uploaded.');
+		return redirect()->back()->withSuccess('Template uploaded.');
+	}
+
+	public function deleteTemplate(DeleteTemplateRequest $request, Template $template)
+	{
+		// delete from filesystem (and quietly ignore errors)
+		if ($this->storage->exists($template->getPathname())) {
+			$this->storage->delete($template->getPathname());
+		}
+
+		// delete from DB
+		$template->delete();
+
+		return redirect()->back()->withSuccess('Template deleted.');
 	}
 
 }

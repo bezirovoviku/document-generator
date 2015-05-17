@@ -43,7 +43,7 @@
                     <th class="text-right">ID</th>
                     <th class="text-right">Used</th>
                     <th>Name</th>
-                    <th>Actions</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -52,7 +52,11 @@
                     <td class="text-right">{{ $template->id }}</td>
                     <td class="text-right">{{ $template->getUsageCount() }} &times;</td>
                     <td>{{ $template->name }}</td>
-                    <td><a href="#">details</a> | <a href="#">delete</a></td>
+                    <td class="text-right">
+                        {!! Form::open(['action' => ['DashboardController@deleteTemplate', $template->id]]) !!}
+                            <button type="submit" class="btn btn-xs btn-link">delete</button>
+                        {!! Form::close() !!}
+                    </td>
                 </tr>
                 @empty
                 <tr>
@@ -102,7 +106,11 @@
                 @forelse ($requests as $request)
                 <tr>
                     <td class="text-right">{{ $request->id }}</td>
-                    <td>{{ $request->template->name }}</td>
+                    @if (!$request->template->deleted_at)
+                        <td>{{ $request->template->name }}</td>
+                    @else
+                        <td class="text-muted"><s>{{ $request->template->name }}</s></td>
+                    @endif
                     {{-- TODO: text colored by status --}}
                     <td class="text-{{ $request->status }}">@include('partial.request_status', ['request' => $request])</td>
                 </tr>
