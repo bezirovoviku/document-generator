@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\User;
 
 class CreateUsersTable extends Migration {
 
@@ -19,6 +20,7 @@ class CreateUsersTable extends Migration {
 			$table->string('password', 60);
 			$table->string('api_key', 32)->unique();
 			$table->integer('request_limit')->unsigned()->default(0);
+			$table->enum('role', [User::ROLE_ADMIN, User::ROLE_USER])->default('user');
 			$table->rememberToken();
 			$table->timestamps();
 		});

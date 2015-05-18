@@ -11,7 +11,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	use Authenticatable, CanResetPassword;
 
-	protected $fillable = ['email', 'password', 'request_limit'];
+	const ROLE_USER = 'user';
+	const ROLE_ADMIN = 'admin';
+
+	protected $fillable = ['email', 'password', 'request_limit', 'role'];
 	protected $hidden = ['password', 'remember_token'];
 
 	public function templates()
@@ -45,8 +48,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		$this->attributes['api_key'] = md5($this->id . microtime());
 	}
 
+	public function setRole($role)
+	{
+		assert($role == static::ROLE_ADMIN || $role == static::ROLE_USER);
+		$this->role = $role;
+	}
+
 	public function isAdmin()
 	{
-		return true;
+		return $this->role == static::ROLE_ADMIN;
 	}
 }
