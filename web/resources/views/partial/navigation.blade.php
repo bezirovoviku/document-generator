@@ -1,3 +1,4 @@
+<a href="#content" class="sr-only sr-only-focusable">skip to content</a>
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
 
@@ -20,7 +21,7 @@
 
 			{{-- menu for admin --}}
 			@if (Auth::check() && Auth::user()->isAdmin())
-				@foreach (['Admin' => action('AdminController@index')] as $text => $url)
+				@foreach (['All users' => action('AdminController@users'), 'All requests' => action('AdminController@requests')] as $text => $url)
 					<li class="{{ Request::url() == $url ? 'active' : '' }}">
 						<a href="{{ $url }}">{{ $text }}</a>
 					</li>

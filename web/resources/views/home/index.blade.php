@@ -23,7 +23,7 @@
 		</div>
 	{!! Form::close() !!}
 @else
-	<a href="{{ action('DashboardController@index') }}" class="btn btn-block btn-primary">Go to dashboard</a>
+	<a href="{{ action('DashboardController@index') }}" class="btn btn-block btn-primary">Go to your dashboard</a>
 @endif
 </div>
 </div>

@@ -11,20 +11,20 @@ class DashboardController extends Controller {
 
 	public function __construct(Guard $auth, Filesystem\Factory $storage)
 	{
-        $this->middleware('auth');
+		$this->middleware('auth');
 
-    	$this->user = $auth->user();
-    	$this->storage = $storage;
+		$this->user = $auth->user();
+		$this->storage = $storage;
 	}
 
 	public function index()
 	{
-    	$this->user->load('requests', 'templates');
+		$this->user->load('requests', 'templates');
 
 		$view = view('dashboard.index')
 			->with('user', $this->user)
 			->with('templates', $this->user->templates)
-			->with('requests', $this->user->requests()->paginate(\App\Request::ITEMS_PER_PAGE))
+			->with('requests', $this->user->requests()->newestFirst()->paginate())
 			->with('usageHistory', $this->user->getUsageHistory());
 
 		if ($this->user->request_limit) {
@@ -33,7 +33,7 @@ class DashboardController extends Controller {
 			$view->with('requestsPercentage', round(100 * $requestsUsed / $this->user->request_limit));
 		}
 
-    	return $view;
+		return $view;
 	}
 
 	public function regenerateApiKey()

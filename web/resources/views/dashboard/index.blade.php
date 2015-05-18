@@ -10,6 +10,9 @@
 @section('content')
 
 <div class="container">
+
+<h1 class="page-header">Dashboard</h1>
+
 <div class="row">
 
 {{-- right col --}}
@@ -117,8 +120,7 @@
 					@else
 						<td class="text-muted"><s>{{ $request->template->name }}</s></td>
 					@endif
-					{{-- TODO: text colored by status --}}
-					<td class="text-{{ $request->status }}">@include('partial.request_status', ['request' => $request])</td>
+					<td>@include('partial.request_status', ['request' => $request])</td>
 				</tr>
 				@empty
 				<tr>
@@ -129,7 +131,6 @@
 		</table>
 		</div>
 
-		{{-- TODO: pagging --}}
 		<nav class="text-center">
 			{!! $requests->setPath(Request::url())->fragment('requests')->render() !!}
 		</nav>

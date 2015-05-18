@@ -1,18 +1,25 @@
 <?php namespace App\Http\Controllers;
 
+use App\User;
+use App\Request;
+
 class AdminController extends Controller {
 
 	public function __construct()
 	{
-        // TODO middleware for admin
-        // $this->middleware('auth');
-		$this->middleware('guest');
+        $this->middleware('admin');
 	}
 
-	public function index()
+	public function users()
 	{
+		return view('admin.users')
+			->with('users', User::orderBy('role', 'ASC')->orderBy('email', 'ASC')->paginate());
+	}
 
-		return view('admin.index');
+	public function requests()
+	{
+		return view('admin.requests')
+			->with('requests', Request::newestFirst()->paginate());
 	}
 
 }

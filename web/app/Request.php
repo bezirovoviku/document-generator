@@ -5,8 +5,6 @@ use DB;
 
 class Request extends Model {
 
-	const ITEMS_PER_PAGE = 10;
-
 	protected $fillable = ['type', 'data', 'callback_url'];
 	protected $dates = ['created_at', 'updated_at', 'generated_at'];
 
@@ -23,6 +21,11 @@ class Request extends Model {
 	public function scopeLastMonth($query)
 	{
 		return $query->where('requests.created_at', '>', DB::raw('date_sub(curdate(), interval 1 month)'));
+	}
+
+	public function scopeNewestFirst($query)
+	{
+		return $query->orderBy('updated_at', 'DESC');
 	}
 
 	public function scopeMonthsBefore($query, $months)

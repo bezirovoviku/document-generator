@@ -1,5 +1,7 @@
 <?php
 
+// TODO: cleanup routes
+
 // models
 Route::model('request', 'App\Request');
 Route::model('template', 'App\Template');
@@ -17,7 +19,8 @@ Route::post('template/upload', 'DashboardController@uploadTemplate');
 Route::post('template/{template}/delete', 'DashboardController@deleteTemplate');
 
 // admin
-Route::get('admin', 'AdminController@index');
+Route::get('admin/users', 'AdminController@users');
+Route::get('admin/requests', 'AdminController@requests');
 
 // request operations
 Route::get('request/{request}/download', 'RequestController@download');
