@@ -1,5 +1,9 @@
 @if ($request->status == 'done')
-	done - <a href="{{ action('RequestController@download', $request->id) }}">download</a>
+	<span class="text-success">
+		<span class="glyphicon glyphicon-ok"></span> done
+	</span>
 @elseif ($request->status == 'in_progress')
-	in progress - <a href="{{ action('RequestController@cancel', $request->id) }}">cancel</a>
+	<span class="text-warning">
+		<span class="glyphicon glyphicon-hourglass"></span> in progress
+	</span>
 @endif
