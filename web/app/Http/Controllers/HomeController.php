@@ -11,12 +11,10 @@ class HomeController extends Controller {
 
 	use AuthenticatesAndRegistersUsers;
 
-	var $redirectPath = '/dashboard';
-	var $loginPath = '/';
-
 	public function __construct(Guard $auth, Registrar $registrar)
 	{
-		$this->middleware('guest', ['except' => ['index', 'logout']]);
+		$this->redirectPath = action('DashboardController@index');
+		$this->loginPath = action('HomeController@index');
 
 		$this->auth = $auth;
 		$this->registrar = $registrar;

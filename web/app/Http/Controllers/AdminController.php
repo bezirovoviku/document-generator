@@ -5,11 +5,6 @@ use App\Request;
 
 class AdminController extends Controller {
 
-	public function __construct()
-	{
-        $this->middleware('admin');
-	}
-
 	public function users()
 	{
 		return view('admin.users')

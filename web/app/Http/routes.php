@@ -1,28 +1,50 @@
 <?php
 
-// TODO: cleanup routes
-
 // models
 Route::model('request', 'App\Request');
 Route::model('template', 'App\Template');
 
+
 // home page
 Route::get('/', 'HomeController@index');
-Route::post('register-login', 'HomeController@loginOrRegister');
-Route::get('logout', 'HomeController@logout');
 
-// dashboard
-Route::get('dashboard', 'DashboardController@index');
-Route::post('regenerate-api-key', 'DashboardController@regenerateApiKey');
-Route::post('update-limits', 'DashboardController@updateLimits');
-Route::post('template/upload', 'DashboardController@uploadTemplate');
-Route::post('template/{template}/delete', 'DashboardController@deleteTemplate');
 
-// admin
-Route::get('admin/users', 'AdminController@users');
-Route::get('admin/requests', 'AdminController@requests');
+// ----------------------------------------------------------------------------
+// guest only routes
+Route::group(['middleware' => 'guest'], function() {
+	Route::post('register-login', 'HomeController@loginOrRegister');
+});
 
-// request operations
-Route::get('request/{request}/download', 'RequestController@download');
-Route::get('request/{request}/cancel', 'RequestController@cancel');
 
+// ----------------------------------------------------------------------------
+// user routes
+Route::group(['middleware' => 'auth', 'prefix' => 'user'], function() {
+
+	Route::get('dashboard', 'DashboardController@index');
+	Route::post('regenerate-api-key', 'DashboardController@regenerateApiKey');
+	Route::get('logout', 'HomeController@logout');
+
+	// template resource
+	Route::group(['prefix' => 'template'], function() {
+		Route::post('upload', 'DashboardController@uploadTemplate');
+		Route::post('{template}/delete', 'DashboardController@deleteTemplate');
+	});
+
+	// request resource
+	Route::group(['prefix' => 'request/{request}'], function() {
+		Route::get('download', 'RequestController@download');
+		Route::get('cancel', 'RequestController@cancel');
+	});
+
+	// admin only
+	Route::post('update-limits', 'DashboardController@updateLimits');
+
+});
+
+
+// ----------------------------------------------------------------------------
+// admin only routes
+Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function() {
+	Route::get('users', 'AdminController@users');
+	Route::get('requests', 'AdminController@requests');
+});
