@@ -1,5 +1,7 @@
 <?php
-require_once('lib/DocumentGenerator.php');
+require_once('docx/Docx/Generator.php');
+require_once('docx/Docx/ParseException.php');
+require_once('docx/Docx/Document.php');
 
 $input_data = array(
 	array(
@@ -18,7 +20,7 @@ $input_data = array(
 	)
 );
 
-$generator = new DocumentGenerator();
+$generator = new Docx\Generator();
 $generator->setTemplate('data/template.docx');
 $generator->setTmp('./tmp/');
 $generator->generateArchive($input_data, 'tmp/archive.zip');
