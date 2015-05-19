@@ -11,8 +11,6 @@ class DashboardController extends Controller {
 
 	public function __construct(Guard $auth, Filesystem\Factory $storage)
 	{
-		$this->middleware('auth');
-
 		$this->user = $auth->user();
 		$this->storage = $storage;
 	}
@@ -43,12 +41,6 @@ class DashboardController extends Controller {
 		return redirect()->back()->withSuccess('API key regenerated.');
 	}
 
-	public function updateLimits(UpdateLimitsRequest $request)
-	{
-		$this->user->update($request->all());
-		return redirect()->back()->withSuccess('New limits saved.');
-	}
-
 	public function uploadTemplate(Request $request)
 	{
 		$this->validate($request, [
@@ -77,6 +69,12 @@ class DashboardController extends Controller {
 		$template->delete();
 
 		return redirect()->back()->withSuccess('Template deleted.');
+	}
+
+	public function updateLimits(UpdateLimitsRequest $request)
+	{
+		$this->user->update($request->all());
+		return redirect()->back()->withSuccess('New limits saved.');
 	}
 
 }
