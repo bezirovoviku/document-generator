@@ -57,8 +57,18 @@ class Request extends Model {
 		$generator = new Generator();
 		$generator->setTmp(static::TMP_PATH);
 		$generator->setTemplate($this->template->getRealPathname());
-
 		$generator->generateArchive(json_decode($this->data, true), $this->getStoragePathname());
+
+		// ping callback url if set
+		if ($this->callback_url) {
+			$ch = curl_init($this->callback_url);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+			curl_exec($ch);
+			curl_close($ch);
+		}
+
 		$this->generated_at = $this->freshTimestamp();
 		$this->save();
 	}
