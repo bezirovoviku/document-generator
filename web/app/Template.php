@@ -56,6 +56,11 @@ class Template extends Model {
 		return join(DIRECTORY_SEPARATOR, [storage_path(), 'app', static::TEMPLATE_DIR, $this->getPath()]);
 	}
 
+	public function getRealPathname()
+	{
+		return join(DIRECTORY_SEPARATOR, [$this->getRealPath(), $this->getFilename()]);
+	}
+
 	public function getPathname()
 	{
 		return join(DIRECTORY_SEPARATOR, [$this->getPath(), $this->getFilename()]);

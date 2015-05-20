@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Docx\Generator;
 use DB;
 
 class Request extends Model {
@@ -46,6 +47,15 @@ class Request extends Model {
 		} else {
 			return 'in_progress';
 		}
+	}
+
+	public function generate()
+	{
+		$generator = new Generator();
+		$generator->setTmp('/tmp');
+		$generator->setTemplate($request->template->getRealPathname());
+		$generator->generateArchive(json_decode($request->data, true), storage_path() . '/app/archives/' . md5($request->id) . '.zip');
+		$this->generated_at = $request->freshTimestamp();
 	}
 
 }

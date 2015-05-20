@@ -89,6 +89,14 @@ class ApiController extends Controller {
 
 		$template->requests()->save($request);
 
+		// TODO move to cron
+		try {
+			$request->generate();
+		} catch (Exception $e) {
+			throw new ApiException('Generating failed.');
+		}
+
+		return ['request_id' => $request->id];
 	}
 
 	/**
