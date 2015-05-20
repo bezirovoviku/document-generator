@@ -48,18 +48,32 @@ class ApiController extends Controller {
 	}
 
 	/**
-	 * Deletes template
+	 * Deletes template by its ID
 	 */
 	public function deleteTemplate(Request $request, $template_id) {
+		// get template from DB
 		$template = $this->getUser($request)->templates()->find($template_id);
 		if ($template == NULL) {
-			throw new ApiException('Template with given ID not found.');
+			throw new ApiException('Template not found.');
 		}
+
 		$template->delete();
 		return response(NULL, 200);
 	}
 
 	public function createRequest() {}
-	public function requestInfo() {}
+
+	/**
+	 * Returns request info by its ID
+	 */
+	public function requestInfo(Request $request, $request_id) {
+		// get request from DB
+		$request = $this->getUser($request)->requests()->find($request_id);
+		if ($request == NULL) {
+			throw new ApiException('Request not found.');
+		}
+
+		return $request;
+	}
 
 }

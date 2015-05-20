@@ -7,6 +7,8 @@ class Request extends Model {
 
 	protected $fillable = ['type', 'data', 'callback_url'];
 	protected $dates = ['created_at', 'updated_at', 'generated_at'];
+	protected $appends = ['status'];
+	protected $visible = ['id', 'template_id', 'status'];
 
 	public function user()
 	{
