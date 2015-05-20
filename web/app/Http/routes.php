@@ -1,9 +1,6 @@
 <?php
 
-// models
-Route::model('request', 'App\Request');
-Route::model('template', 'App\Template');
-
+use App\Exceptions\ApiException;
 
 // home page
 Route::get('/', 'HomeController@index');
@@ -44,11 +41,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'user'], function() {
 // ----------------------------------------------------------------------------
 // api routes
 Route::group(['middleware' => 'api', 'prefix' => 'api/v1'], function() {
+
 	Route::post('template', 'ApiController@uploadTemplate');
-	Route::delete('template/{template}', 'ApiController@deleteTemplate');
+	Route::delete('template/{template_id}', 'ApiController@deleteTemplate');
 	
 	Route::post('request', 'ApiController@createRequest');
-	Route::get('request/{request}', 'ApiController@requestInfo');
+	Route::get('request/{request_id}', 'ApiController@requestInfo');
 });
 
 // ----------------------------------------------------------------------------

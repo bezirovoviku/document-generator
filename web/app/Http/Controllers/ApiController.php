@@ -3,7 +3,7 @@
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Filesystem;
 use Illuminate\Http\Request;
-
+use App\Exceptions\ApiException;
 use App\User;
 use App\Template;
 
@@ -29,6 +29,7 @@ class ApiController extends Controller {
 	public function uploadTemplate(Request $request) {
 		$this->validate($request, [
 			'name' => 'required|max:255',
+			// TODO maximum filesize check
 		]);
 
 		// save to DB
@@ -40,14 +41,24 @@ class ApiController extends Controller {
 		// save to filesystem
 		$this->storage->put($template->getStoragePathname(), $request->getContent());
 
-		// return response
 		return [
 			'template_id' => $template->id,
 			'md5' => md5_file($template->getRealPath()),
 		];
 	}
 
-	public function deleteTemplate() {}
+	/**
+	 * Deletes template
+	 */
+	public function deleteTemplate(Request $request, $template_id) {
+		$template = $this->getUser($request)->templates()->find($template_id);
+		if ($template == NULL) {
+			throw new ApiException('Template with given ID not found.');
+		}
+		$template->delete();
+		return response(NULL, 200);
+	}
+
 	public function createRequest() {}
 	public function requestInfo() {}
 

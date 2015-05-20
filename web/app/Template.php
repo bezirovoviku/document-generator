@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Storage;
 
 class Template extends Model {
 
@@ -25,6 +26,18 @@ class Template extends Model {
 	{
 		return $this->requests()->count();
 	}
+
+	public function delete()
+	{
+		// delete from filesystem (and quietly ignore errors)
+		if (Storage::exists($this->getStoragePathname())) {
+			Storage::delete($this->getStoragePathname());
+		}
+
+		// delete from DB
+		parent::delete();
+	}
+
 
 	// storage path helpers follows
 

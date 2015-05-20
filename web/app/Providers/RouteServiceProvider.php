@@ -3,6 +3,9 @@
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
+use App\Request;
+use App\Template;
+
 class RouteServiceProvider extends ServiceProvider {
 
 	/**
@@ -22,8 +25,12 @@ class RouteServiceProvider extends ServiceProvider {
 	 */
 	public function boot(Router $router)
 	{
-		//
-		
+		$router->model('request', 'Request');
+		$router->model('template', 'Template');
+
+		$router->pattern('request_id', '[0-9]+');
+		$router->pattern('template_id', '[0-9]+');
+	
 		parent::boot($router);
 	}
 

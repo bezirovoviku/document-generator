@@ -1,7 +1,6 @@
 <?php namespace App\Http\Controllers;
 
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Filesystem;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateLimitsRequest;
 use App\Http\Requests\DeleteTemplateRequest;
@@ -9,10 +8,9 @@ use App\Template;
 
 class DashboardController extends Controller {
 
-	public function __construct(Guard $auth, Filesystem\Factory $storage)
+	public function __construct(Guard $auth)
 	{
 		$this->user = $auth->user();
-		$this->storage = $storage;
 	}
 
 	public function index()
@@ -60,14 +58,7 @@ class DashboardController extends Controller {
 
 	public function deleteTemplate(DeleteTemplateRequest $request, Template $template)
 	{
-		// delete from filesystem (and quietly ignore errors)
-		if ($this->storage->exists($template->getStoragePathname())) {
-			$this->storage->delete($template->getStoragePathname());
-		}
-
-		// delete from DB
 		$template->delete();
-
 		return redirect()->back()->withSuccess('Template deleted.');
 	}
 
