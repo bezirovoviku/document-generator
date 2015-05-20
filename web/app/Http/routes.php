@@ -43,7 +43,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'user'], function() {
 
 // ----------------------------------------------------------------------------
 // api routes
-Route::group(['middleware' => 'auth', 'prefix' => 'api/v1'], function() {
+Route::group(['middleware' => 'api', 'prefix' => 'api/v1'], function() {
 	Route::post('template', 'ApiController@uploadTemplate');
 	Route::delete('template/{template}', 'ApiController@deleteTemplate');
 	
