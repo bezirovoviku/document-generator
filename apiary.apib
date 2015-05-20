@@ -11,9 +11,12 @@ For all following actions, API key specified in HTTP header is required.
 
 Templates are used for generation of multiple documents.
 
-### Upload template [POST]
+### Upload template [POST /api/v1/template/?name={name}]
 
 Uploads new template. Returns its ID and MD5 checksum. X-Upload-Content-Length contains file size and file contents should be sent as body.
+
++ Parameters
+    + name (required, string) - template name
 
 + Request
     
@@ -28,8 +31,6 @@ Uploads new template. Returns its ID and MD5 checksum. X-Upload-Content-Length c
 
 + Attributes
     + file (required, array) - POST file type
-
-+ Request (application/x-www-form-urlencoded)
 
 + Response 200 (application/json)
 
@@ -99,7 +100,7 @@ Creates new request. Returns its ID. Data are template data, where each item in 
     + template_id (required, number) - ID of template to be used for generation
     + type (required, string) - Result type, pdf or docx
     + data (required, array) - Array of template data, each item as one generated document
-    + response_url (optional, string) - URL that will be called, when request is completed
+    + callback_url (optional, string) - URL that will be called, when request is completed
 
 + Request (application/json)
         
@@ -148,7 +149,7 @@ Creates new request. Returns its ID. Data are template data, where each item in 
             "error": "Invalid template id.",
         }
         
-+ Response 417 (application/json)
++ Response 422 (application/json)
 
         {
             "error": "No data specified.",
@@ -176,8 +177,7 @@ Returns details about request. When request is completed, it will include link t
             {
                 "id": 10,
                 "template_id": 128,
-                "completed": true,
-                "download_url": "http://..../request-10.zip"
+                "status": "done"
             }
 
 + Response 401 (application/json)
@@ -191,3 +191,43 @@ Returns details about request. When request is completed, it will include link t
         {
             "error": "Invalid request id.",
         }
+        
+## Download [/api/v1/request/{request_id}/download]
+
+Download archive containing generated documents
+
++ Parameters
+    + request_id (number, required) - ID of request
+
+### Download completed request [GET]
+
++ Request
+    
+    + Headers
+        
+            X-Auth: API key
+
++ Response 200 (application/zip)
+
+    + Body
+    
+            BINARY ARCHIVE DATA
+
++ Response 401 (application/json)
+
+        {
+            "error": "API key is invalid.",
+        }
+
++ Response 404 (application/json)
+
+        {
+            "error": "Invalid request id.",
+        }
+        
++ Response 500 (application/json)
+
+        {
+            "error": "Request is not generated yet.",
+        }
+

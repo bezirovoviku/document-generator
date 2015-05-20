@@ -155,7 +155,7 @@
 			<div class="form-group form-group-lg">
 				<input type="text" class="form-control text-center" disabled value="{{ $user->api_key }}">
 			</div>
-			<p>Use this key in your application to make requests. For more informations, read <a href="#">the docs</a> please.</p>
+			<p>Use this key in your application to make requests. For more informations, read <a href="http://docs.docgen.apiary.io">the docs</a> please.</p>
 		</div>
 	</div>
 	{!! Form::close() !!}
