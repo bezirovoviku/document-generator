@@ -79,13 +79,6 @@ Deletes template pernamently.
             "error": "Template ID is invalid."
         }
 
-+ Response 500 (application/json)
-
-        {
-            "error": "Request limit exceeded."
-        }
-
-
 
 ## Requests [/api/v1/request]
 
@@ -159,6 +152,13 @@ Creates new request. Returns its ID. Data are template data, where each item in 
 
         {
             "error": "No data specified.",
+        }
+        
+
++ Response 500 (application/json)
+
+        {
+            "error": "Request limit exceeded."
         }
 
 ## Informations [/api/v1/request/{request_id}]
