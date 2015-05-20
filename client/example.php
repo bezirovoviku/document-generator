@@ -1,6 +1,6 @@
 <?php
-$api = "http://localhost/document-generator/api/v1";
-$key = "6a0caf9a975fa1d1b119a311628c37d9";
+$api = "http://localhost/htdocs/document-generator/web/public/api/v1";
+$key = "4f4a0022f89220add423dbc36228e826";
 $file = "data/template.docx";
 $name = "name";
 
@@ -13,20 +13,22 @@ curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt($ch, CURLOPT_POSTFIELDS, file_get_contents($file));
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 	"X-Auth: $key",
-	"X-Upload-Content-Length: " . filesize($file),                                                                           
-    "Content-Length: " . filesize($file)                    
+	"Accept: application/json",
+	"Content-type: application/json"
 ));
 
 $raw = curl_exec($ch);
 $response = json_decode($raw);
 
-curl_close($ch);
-
 if (!$response) {
 	throw new Exception("JSON Expected: $raw");
 }
 
-if (!$response->template_id) {
+if (isset($response->error)) {
+	throw new Exception("Error: $response->error");
+}
+
+if (!isset($response->template_id)) {
 	throw new Exception("Expected template id. Got nothing");
 }
 
@@ -60,18 +62,9 @@ $data = array(
 	]
 );
 
-$ch = curl_init();
 
 curl_setopt($ch, CURLOPT_URL, "$api/request");
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-curl_setopt($ch, CURLOPT_HEADER, FALSE);
-curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-	"X-Auth: $key",
-	"Accept: application/json",
-	"Content-type: application/json",
-));
 
 $raw = curl_exec($ch);
 $response = json_decode($raw);
@@ -80,9 +73,11 @@ if (!$response) {
 	throw new Exception("JSON Expected: $raw");
 }
 
-var_dump($response);
+if (isset($response->error)) {
+	throw new Exception("Error: $response->error");
+}
 
-if (!$response->request_id) {
+if (!isset($response->request_id)) {
 	throw new Exception("Expected request id. Got nothing");
 }
 
@@ -99,6 +94,14 @@ while(true) {
 
 	if (!$response) {
 		throw new Exception("JSON Expected: $raw");
+	}
+	
+	if (isset($response->error)) {
+		throw new Exception("Error: $response->error");
+	}
+
+	if (!isset($response->status)) {
+		throw new Exception("Expected request status. Got nothing");
 	}
 
 	if ($response->status == "done") {

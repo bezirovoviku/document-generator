@@ -44,7 +44,7 @@ class ApiController extends Controller {
 
 		return [
 			'template_id' => $template->id,
-			'md5' => md5_file($template->getRealPath()),
+			'md5' => md5_file($template->getRealPathname()),
 		];
 	}
 
