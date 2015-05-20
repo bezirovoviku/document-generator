@@ -41,6 +41,8 @@ class Handler extends ExceptionHandler {
 			if ($e instanceof ApiException) {
 				return response($e, $e->getCode() == 401 ? 401 : 500);
 			}
+			return parent::render($request, $e);
+			return response($e, 500);
 			return response(['error' => $e->getMessage()], 500);
 		}
 		return parent::render($request, $e);

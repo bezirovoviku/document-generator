@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
 use App\User;
 use App\Template;
+use App\Request as RequestModel;
 
 class ApiController extends Controller {
 
@@ -61,7 +62,34 @@ class ApiController extends Controller {
 		return response(NULL, 200);
 	}
 
-	public function createRequest() {}
+	/**
+	 * Creates request to generate
+	 */
+	public function createRequest(Request $request) {
+		$user = $this->getUser($request);
+
+		$this->validate($request, [
+			'template_id' => 'required|exists:templates,id,user_id,'.$user->id,
+			'type' => 'required|in:pdf,docx',
+			'data' => 'required',
+			'callback_url' => 'url',
+		]);
+
+		// get template from DB
+		$template = $user->templates()->find($request->input('template_id'));
+		if ($template == NULL) {
+			throw new ApiException('Template not found.');
+		}
+
+		$request = new RequestModel([
+			'type' => $request->input('type'),
+			'data' => json_encode($request->input('data')),
+			'callback_url' => $request->input('callback_url'),
+		]);
+
+		$template->requests()->save($request);
+
+	}
 
 	/**
 	 * Returns request info by its ID
