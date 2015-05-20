@@ -10,6 +10,13 @@
 				</li>
 			@endforeach
 
+			{{-- menu for all users --}}
+			@foreach (['Docs' => action('DocsController@index')] as $text => $url)
+				<li class="{{ Request::url() == $url ? 'active' : '' }}">
+					<a href="{{ $url }}">{{ $text }}</a>
+				</li>
+			@endforeach
+
 			{{-- menu for authenticated users --}}
 			@if (Auth::check())
 				@foreach (['Dashboard' => action('DashboardController@index')] as $text => $url)

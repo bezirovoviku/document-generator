@@ -7,6 +7,7 @@ Route::model('template', 'App\Template');
 
 // home page
 Route::get('/', 'HomeController@index');
+Route::get('docs', 'DocsController@index');
 
 
 // ----------------------------------------------------------------------------

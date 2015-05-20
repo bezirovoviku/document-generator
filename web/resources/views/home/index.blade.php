@@ -7,7 +7,7 @@
 <div class="container">
 
 <h1>Document generator</h1>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam commodi, distinctio sequi beatae inventore vitae possimus libero numquam error ut, ex odio repellat sint et fugit, maiores laborum cumque suscipit!</p>
+<p>Generate batches of DOCX documents based on single template using simple API.</p>
 
 @if (!Auth::check())
 	{!! Form::open(['action' => 'HomeController@loginOrRegister']) !!}
@@ -33,20 +33,17 @@
 
 	<div class="row">
 		<div class="col-md-6">
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			<p>After registering, you will need to create your template. Template must be in DOCX format,
+			so you will probably need to use Microsft Word (2007 or newer). How to create your own tempale,
+			refer to our <a href='#'>template documentation</a>. Once you have your template, upload it using our dashboard.</p>
 		</div>
 		<div class="col-md-6">
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			<p>When you have your template uploaded and ready, you can start using API to send us data for documents you need to be generated.
+			On how to use API, refer to our <a href="http://docs.docgen.apiary.io">Apiary docs</a>. Each batch of documents needs to be
+			transfered as single request containing all required data.</p>
+			<p>Once we get your data, we'll start generating documents you requested.
+			This can take a while, so you won't receive your download link immediately. You will need to either wait and periodically check
+			request status, if it's completed. Once it will be completed, you're free to download your generated documents as zip archive</p>
 		</div>
 	</div>
 
