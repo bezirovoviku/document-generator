@@ -12,7 +12,7 @@ Route::get('/', 'HomeController@index');
 // ----------------------------------------------------------------------------
 // guest only routes
 Route::group(['middleware' => 'guest'], function() {
-	Route::post('register-login', 'HomeController@loginOrRegister');
+	Route::post('register-login', 'HomeController@loginOrRegister', ['middleware' => 'csrf']);
 });
 
 
@@ -21,11 +21,11 @@ Route::group(['middleware' => 'guest'], function() {
 Route::group(['middleware' => 'auth', 'prefix' => 'user'], function() {
 
 	Route::get('dashboard', 'DashboardController@index');
-	Route::post('regenerate-api-key', 'DashboardController@regenerateApiKey');
 	Route::get('logout', 'HomeController@logout');
+	Route::post('regenerate-api-key', 'DashboardController@regenerateApiKey', ['middleware' => 'csrf']);
 
 	// template resource
-	Route::group(['prefix' => 'template'], function() {
+	Route::group(['middleware' => 'csrf', 'prefix' => 'template'], function() {
 		Route::post('upload', 'DashboardController@uploadTemplate');
 		Route::post('{template}/delete', 'DashboardController@deleteTemplate');
 	});
@@ -37,7 +37,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'user'], function() {
 	});
 
 	// admin only
-	Route::post('update-limits', 'DashboardController@updateLimits');
+	Route::post('update-limits', 'DashboardController@updateLimits', ['middleware' => 'csrf']);
 
 });
 

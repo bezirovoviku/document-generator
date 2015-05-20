@@ -61,8 +61,8 @@ class DashboardController extends Controller {
 	public function deleteTemplate(DeleteTemplateRequest $request, Template $template)
 	{
 		// delete from filesystem (and quietly ignore errors)
-		if ($this->storage->exists($template->getPathname())) {
-			$this->storage->delete($template->getPathname());
+		if ($this->storage->exists($template->getStoragePathname())) {
+			$this->storage->delete($template->getStoragePathname());
 		}
 
 		// delete from DB

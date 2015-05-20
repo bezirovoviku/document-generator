@@ -9,7 +9,7 @@ class Template extends Model {
 
 	protected $fillable = ['name'];
 
-	const TEMPLATE_DIR = 'app/templates';
+	const TEMPLATE_DIR = 'templates';
 
 	public function user()
 	{
@@ -40,12 +40,17 @@ class Template extends Model {
 
 	public function getRealPath()
 	{
-		return join(DIRECTORY_SEPARATOR, [storage_path(), static::TEMPLATE_DIR, $this->getPath()]);
+		return join(DIRECTORY_SEPARATOR, [storage_path(), 'app', static::TEMPLATE_DIR, $this->getPath()]);
 	}
 
 	public function getPathname()
 	{
 		return join(DIRECTORY_SEPARATOR, [$this->getPath(), $this->getFilename()]);
+	}
+
+	public function getStoragePathname()
+	{
+		return join(DIRECTORY_SEPARATOR, [static::TEMPLATE_DIR, $this->getPathname()]);
 	}
 
 }
