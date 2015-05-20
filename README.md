@@ -2,6 +2,8 @@
 
 Allows generation of multiple document based on DOCX template
 
+## API Documentation
+API documentation can be found on Apiary: http://docs.docgen.apiary.io/
 
 ## Requirements
 PHP >= 5.4
