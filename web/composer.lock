@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bezirovoviku/docx.git",
-                "reference": "fc8c3df22c21a7a03670ecbe047207a4b04962a7"
+                "reference": "abd6b8f32a0f22c1fab47c10d55ec4d7dbb66d59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bezirovoviku/docx/zipball/fc8c3df22c21a7a03670ecbe047207a4b04962a7",
-                "reference": "fc8c3df22c21a7a03670ecbe047207a4b04962a7",
+                "url": "https://api.github.com/repos/bezirovoviku/docx/zipball/abd6b8f32a0f22c1fab47c10d55ec4d7dbb66d59",
+                "reference": "abd6b8f32a0f22c1fab47c10d55ec4d7dbb66d59",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 "document",
                 "docx"
             ],
-            "time": "2015-05-20 10:35:26"
+            "time": "2015-05-20 17:13:18"
         },
         {
             "name": "classpreloader/classpreloader",

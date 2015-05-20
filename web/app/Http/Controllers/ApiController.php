@@ -112,4 +112,17 @@ class ApiController extends Controller {
 		return $request;
 	}
 
+	/**
+	 * Returns request info by its ID
+	 */
+	public function downloadRequest(Request $request, $request_id) {
+		// get request from DB
+		$request = $this->getUser($request)->requests()->find($request_id);
+		if ($request == NULL) {
+			throw new ApiException('Request not found.');
+		}
+
+		return response()->download($request->getStoragePathname());
+	}
+
 }

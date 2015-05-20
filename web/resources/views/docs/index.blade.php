@@ -19,19 +19,19 @@ where each document is single object containing all the data.</p>
 	<p>Our system simply replaces specified keywords inside document text. Keywords are expected in format <code>{KEYWORD}</code>.<p>
 	<p>When your data are, for example, following:</p>
 	<pre><code class="language-json" data-lang="json">{
-	    'name': 'Hildegard Testimen'
-	}</code></pre>
+	'name': 'Hildegard Testimen'
+}</code></pre>
 	<p>you can then place data name inside document by writing: <code>{name}</code>.</p>
 
 <h3 id="templates-replacing-nested">Nested data</h3>
 	<p>We also support multilevel objects in data. Simple use <code>{OBJ1.OBJ2.KEYWORD}</code>.<p>
 	<p>When your data are, for example, following:</p>
 	<pre><code class="language-json" data-lang="json">{
-	    'person: {
-	        'name': 'Hildegarda Testimenova',
-	        'age': 25
-	    }
-	}</code></pre>
+	'person: {
+		'name': 'Hildegarda Testimenova',
+		'age': 25
+	}
+}</code></pre>
 	<p>you can then place name inside document by writing: <code>{person.name}</code> and age by: <code>{person.age}</code>.</p>
 
 <h3 id="templates-cycles">Multiitem replacing</h3>
@@ -43,11 +43,11 @@ where each document is single object containing all the data.</p>
 	Anything that will be on the same line will be deleted.</p>
 	<p>Example data:</p>
 	<pre><code class="language-json" data-lang="json">{
-	    items: [
-	    	{ name: "Item 1", cost: 5 },
-	    	{ name: "Item 2", cost: 6 }
-	    ]
-	}</code></pre>
+	items: [
+		{ name: "Item 1", cost: 5 },
+		{ name: "Item 2", cost: 6 }
+	]
+}</code></pre>
 	<p>This is how your document would look like:</p>
 	@TODO
 

@@ -6,6 +6,9 @@ use DB;
 
 class Request extends Model {
 
+	const TMP_PATH = '/tmp';
+	const ARCHIVE_DIR = 'archives';
+
 	protected $fillable = ['type', 'data', 'callback_url'];
 	protected $dates = ['created_at', 'updated_at', 'generated_at'];
 	protected $appends = ['status'];
@@ -52,10 +55,34 @@ class Request extends Model {
 	public function generate()
 	{
 		$generator = new Generator();
-		$generator->setTmp('/tmp');
-		$generator->setTemplate($request->template->getRealPathname());
-		$generator->generateArchive(json_decode($request->data, true), storage_path() . '/app/archives/' . md5($request->id) . '.zip');
-		$this->generated_at = $request->freshTimestamp();
+		$generator->setTmp(static::TMP_PATH);
+		$generator->setTemplate($this->template->getRealPathname());
+
+		$generator->generateArchive(json_decode($this->data, true), $this->getStoragePathname());
+		$this->generated_at = $this->freshTimestamp();
+		$this->save();
+	}
+
+	// storage path helpers follows
+
+	public function getPath()
+	{
+		return $this->user->id;
+	}
+
+	public function getFilename()
+	{
+		return $this->id . '.zip';
+	}
+
+	public function getPathname()
+	{
+		return join(DIRECTORY_SEPARATOR, [$this->getPath(), $this->getFilename()]);
+	}
+
+	public function getStoragePathname()
+	{
+		return join(DIRECTORY_SEPARATOR, [storage_path(), static::ARCHIVE_DIR, $this->getPathname()]);
 	}
 
 }

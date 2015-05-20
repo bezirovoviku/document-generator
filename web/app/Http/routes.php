@@ -48,6 +48,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'api/v1'], function() {
 	
 	Route::post('request', 'ApiController@createRequest');
 	Route::get('request/{request_id}', 'ApiController@requestInfo');
+	Route::get('request/{request_id}/download', 'ApiController@downloadRequest');
 });
 
 // ----------------------------------------------------------------------------
