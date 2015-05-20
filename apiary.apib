@@ -11,9 +11,12 @@ For all following actions, API key specified in HTTP header is required.
 
 Templates are used for generation of multiple documents.
 
-### Upload template [POST]
+### Upload template [POST /api/v1/template/?name={name}]
 
 Uploads new template. Returns its ID and MD5 checksum. X-Upload-Content-Length contains file size and file contents should be sent as body.
+
++ Parameters
+    + name (required, string) - template name
 
 + Request
     
@@ -28,8 +31,6 @@ Uploads new template. Returns its ID and MD5 checksum. X-Upload-Content-Length c
 
 + Attributes
     + file (required, array) - POST file type
-
-+ Request (application/x-www-form-urlencoded)
 
 + Response 200 (application/json)
 
