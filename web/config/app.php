@@ -151,6 +151,11 @@ return [
 		 * Composer Service Providers
 		 */
 		'Collective\Html\HtmlServiceProvider',
+		
+		/**
+		 * Custom providers
+		 */
+		'Docx\GeneratorServiceProvider'
 
 	],
 
