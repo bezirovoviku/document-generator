@@ -177,8 +177,7 @@ Returns details about request. When request is completed, it will include link t
             {
                 "id": 10,
                 "template_id": 128,
-                "status": "done",
-                "download_url": "http://..../request-10.zip"
+                "status": "done"
             }
 
 + Response 401 (application/json)
@@ -192,3 +191,43 @@ Returns details about request. When request is completed, it will include link t
         {
             "error": "Invalid request id.",
         }
+        
+## Download [/api/v1/request/{request_id}/download]
+
+Download archive containing generated documents
+
++ Parameters
+    + request_id (number, required) - ID of request
+
+### Download completed request [GET]
+
++ Request
+    
+    + Headers
+        
+            X-Auth: API key
+
++ Response 200 (archive/zip)
+
+    + Body
+    
+            BINARY ARCHIVE DATA
+
++ Response 401 (application/json)
+
+        {
+            "error": "API key is invalid.",
+        }
+
++ Response 404 (application/json)
+
+        {
+            "error": "Invalid request id.",
+        }
+        
++ Response 500 (application/json)
+
+        {
+            "error": "Request is not generated yet.",
+        }
+
