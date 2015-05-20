@@ -68,6 +68,13 @@ class ApiController extends Controller {
 	public function createRequest(Request $request) {
 		$user = $this->getUser($request);
 
+		if ($user->request_limit) {
+			$requestsUsed = $user->requests()->lastMonth()->count();
+			if ($requestsUsed >= $user->request_limit) {
+				throw new ApiException('Request limit exceeded.');
+			}
+		}
+
 		$this->validate($request, [
 			'template_id' => 'required|exists:templates,id,user_id,'.$user->id,
 			'type' => 'required|in:pdf,docx',
