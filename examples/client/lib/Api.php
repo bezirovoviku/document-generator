@@ -48,6 +48,16 @@ class Api {
 
 		return $this->apiJSONRequest("template?name=" . urlencode($name), "POST", file_get_contents($file))->template_id;
 	}
+	
+	/**
+	 * Deletes existing template
+	 *
+	 * @param int $template_id
+	 * @return string
+	 */
+	public function deleteTemplate($template_id) {
+		return $this->apiRequest("template/$template_id", "DELETE");
+	}
 
 	/**
 	 * Adds new document batch to queue
