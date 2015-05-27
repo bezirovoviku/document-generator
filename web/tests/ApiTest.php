@@ -1,6 +1,8 @@
 <?php
 
-class ApiTest extends TestCase {	
+class ApiTest extends TestCase {
+
+	// TODO make independant on instance URL
 	protected $api = "http://localhost/htdocs/document-generator/web/public/api/v1";
 	protected $key;
 	
