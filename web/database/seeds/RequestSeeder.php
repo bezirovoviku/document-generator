@@ -21,7 +21,9 @@ class RequestSeeder extends Seeder {
 				'updated_at' => $created_at,
 				'generated_at' => $faker->optional(0.8)->dateTimeBetween($created_at, $created_at->modify('+3 day')),
 			]);
-			$faker->randomElement($templates)->requests()->save($request);
+			$template = $faker->randomElement($templates);
+			$request->user()->associate($template->user);
+			$template->requests()->save($request);
 		}
 	}
 

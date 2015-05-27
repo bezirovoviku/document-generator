@@ -24,7 +24,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	public function requests()
 	{
-		return $this->hasManyThrough('App\Request', 'App\Template');
+		return $this->hasMany('App\Request');
 	}
 
     public function setPasswordAttribute($value)
