@@ -49,13 +49,13 @@ where each document is single object containing all the data.</p>
 	]
 }</code></pre>
 	<p>This is how your document would look like:</p>
-	@TODO
+	<img src="{{ asset('img/example_01.png') }}" alt="Example of foreach" />
 
 <h3 id="templates-cycles-tables">Multiitem replacing in tables</h3>
 	<p>To repeat table rows you need to write <code>{foreach items as item}</code> to one row, then add rows that will contain items,
 	then add one last row with <code>{/foreach}</code> that will mark end of the mutliitem replacing.</p>
 	<p>This is how your document would look like:</p>
-	@TODO
+	<img src="{{ asset('img/example_02.png') }}" alt="Example of foreach in table" />
 </div>
 
 @endsection
