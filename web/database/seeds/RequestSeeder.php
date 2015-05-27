@@ -15,13 +15,15 @@ class RequestSeeder extends Seeder {
 		for ($i = 0; $i < 100; $i++) { 
 			$request = new Request([
 				'type' => $faker->randomElement(['pdf', 'docx']),
-				'data' => NULL, // TODO
+				'data' => NULL,
 				'callback_url' => $faker->url,
 				'created_at' => ($created_at = $faker->dateTimeThisYear),
 				'updated_at' => $created_at,
 				'generated_at' => $faker->optional(0.8)->dateTimeBetween($created_at, $created_at->modify('+3 day')),
 			]);
-			$faker->randomElement($templates)->requests()->save($request);
+			$template = $faker->randomElement($templates);
+			$request->user()->associate($template->user);
+			$template->requests()->save($request);
 		}
 	}
 

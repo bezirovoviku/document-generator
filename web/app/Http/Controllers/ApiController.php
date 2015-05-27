@@ -93,7 +93,7 @@ class ApiController extends Controller {
 			'data' => json_encode($request->input('data')),
 			'callback_url' => $request->input('callback_url'),
 		]);
-
+		$request->user()->associate($template->user);
 		$template->requests()->save($request);
 
 		// TODO move to cron

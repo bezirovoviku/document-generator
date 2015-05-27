@@ -1,17 +1,11 @@
 @extends('layout.master')
 @section('title', 'Dashboard')
 
-{{-- add Chart.JS to header --}}
-@section('header')
-@parent
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
-@stop
-
 @section('content')
 
 <div class="container">
 
-<h1 class="page-header">Dashboard</h1>
+<h1 class="page-header sr-only">Dashboard</h1>
 
 <div class="row">
 
@@ -24,7 +18,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<div class="pull-right">
-					<button type="submit" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-ok"></span> Apply</button>
+					<button type="submit" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-ok"></span> Apply</button>
 				</div>
 				<h3 class="panel-title">Admin tools</h3>
 			</div>
@@ -42,8 +36,14 @@
 	{{-- templates --}}
 	<div class="panel panel-default">
 		<div class="panel-heading">
+			<div class="pull-right">
+				<button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#addNewTemplate">
+					<span class="glyphicon glyphicon-plus"></span> Add new template
+				</button>
+			</div>
 			<h3 class="panel-title">Templates</h3>
 		</div>
+			
 
 		<div class="table-responsive">
 		<table class="table table-hover">
@@ -75,26 +75,43 @@
 			</tbody>
 		</table>
 		</div>
-
-		{!! Form::open(['action' => 'DashboardController@uploadTemplate', 'class' => 'form-horizontal', 'files' => true]) !!}
-		<div class="panel-body">
-			<fieldset>
-				<legend>
-					<button type="submit" class="btn btn-xs btn-primary pull-right"><span class="glyphicon glyphicon-upload"></span> Upload template</button>
-					Add new template
-				</legend>
-				<div class="form-group">
-					<label for="templateName" class="col-md-4 col-sm-3 control-label">Template name</label>
-					<div class="col-md-8 col-sm-9">{!! Form::text('name', null, ['id' => 'templateName', 'class' => 'form-control']) !!}</div>
-				</div>
-				<div class="form-group">
-					<label for="template" class="col-md-4 col-sm-3 control-label">DOCX template file</label>
-					<div class="col-md-8 col-sm-9">{!! Form::file('template', null, ['id' => 'template']) !!}</div>
-				</div>
-			</fieldset>
-		</div>
-		{!! Form::close() !!}
 	</div>
+
+	{{-- add new template modal --}}
+	{!! Form::open(['action' => 'DashboardController@uploadTemplate', 'class' => 'form-horizontal', 'files' => true]) !!}
+	<div class="modal fade" id="addNewTemplate" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header"><h4 class="modal-title"><span class="glyphicon glyphicon-plus"></span> Add new template</h4></div>
+				<div class="modal-body">
+
+					<div class="form-group">
+						<label for="templateName" class="col-md-4 col-sm-3 control-label">Template name</label>
+						<div class="col-md-8 col-sm-9">{!! Form::text('name', null, ['id' => 'templateName', 'class' => 'form-control']) !!}</div>
+					</div>
+					<div class="form-group form-group-file">
+						<label for="template" class="col-md-4 col-sm-3 control-label">DOCX template file</label>
+						<div class="col-md-8 col-sm-9">
+							<div class="input-group">
+								<span class="input-group-btn">
+									<span class="btn btn-primary btn-file">
+										Select file&hellip; {!! Form::file('template', null, ['id' => 'template']) !!}
+									</span>
+								</span>
+								<input type="text" class="form-control" readonly>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="submit" class="btn btn-primary">Upload template</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	{!! Form::close() !!}
 
 	{{-- requests --}}
 	<div class="panel panel-default">
@@ -144,7 +161,7 @@
 
 	{{-- API key --}}
 	{!! Form::open(['action' => 'DashboardController@regenerateApiKey']) !!}
-	<div class="panel panel-default">
+	<div class="panel panel-default panel-api-key">
 		<div class="panel-heading">
 			<div class="pull-right">
 				<button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-refresh"></span> Regenerate</button>
@@ -167,22 +184,7 @@
 		</div>
 		<div class="panel-body">
 			<canvas id="usageChart" style="width:100%;"></canvas>
-			<script type="text/javascript">
-				var ctx = document.getElementById("usageChart").getContext("2d");
-				var data = {
-					labels: {!! json_encode(array_keys($usageHistory)) !!},
-					datasets: [{
-						data: {!! json_encode(array_values($usageHistory)) !!},
-						fillColor: "rgba(180,180,220,0.5)",
-						strokeColor: "rgba(180,180,220,0.8)",
-						highlightFill: "rgba(180,180,220,0.75)",
-					}]
-				};
-				var usageChart = new Chart(ctx).Bar(data);
-			</script>
-
 			<hr>
-
 			{{-- usage progress bar --}}
 			@if ($user->request_limit)
 				<p>You have used <strong>{{ $requestsUsed }} of {{ $user->request_limit }}</strong> allowed requests this month.</p>
@@ -204,3 +206,22 @@
 </div>
 
 @endsection
+
+{{-- add Chart.JS and setup chart --}}
+@section('scripts')
+@parent
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+	<script type="text/javascript">
+		var ctx = document.getElementById("usageChart").getContext("2d");
+		var data = {
+			labels: {!! json_encode(array_keys($usageHistory)) !!},
+			datasets: [{
+				data: {!! json_encode(array_values($usageHistory)) !!},
+				fillColor: "rgba(121, 151, 181, 0.4)",
+				strokeColor: "rgba(44, 62, 80, 0.4)",
+				highlightFill: "rgba(121, 151, 181, 0.75)",
+			}]
+		};
+		var usageChart = new Chart(ctx).Bar(data);
+	</script>
+@stop

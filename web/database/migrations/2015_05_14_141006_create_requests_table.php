@@ -15,13 +15,15 @@ class CreateRequestsTable extends Migration {
 		Schema::create('requests', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('template_id')->unsigned()->nullable();
+			$table->integer('user_id')->unsigned();
+			$table->integer('template_id')->unsigned();
 			$table->enum('type', ['pdf', 'docx'])->default('pdf');
 			$table->text('data')->nullable();
 			$table->string('callback_url')->nullable();
 			$table->datetime('generated_at')->nullable();
 			$table->timestamps();
 
+			$table->foreign('user_id')->references('id')->on('users');
 			$table->foreign('template_id')->references('id')->on('templates');
 		});
 	}

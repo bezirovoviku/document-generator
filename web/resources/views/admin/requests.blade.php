@@ -5,7 +5,7 @@
 
 <div class="container">
 
-	<h1 class="page-header">All requests</h1>
+	<h1 class="page-header sr-only">All requests</h1>
 
 	<div class="table-responsive">
 	<table class="table table-hover">

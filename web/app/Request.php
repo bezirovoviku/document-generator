@@ -16,7 +16,7 @@ class Request extends Model {
 
 	public function user()
 	{
-		return $this->template->user();
+		return $this->belongsTo('App\User');
 	}
 
 	public function template()
