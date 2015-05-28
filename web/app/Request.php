@@ -7,7 +7,7 @@ use DB;
 class Request extends Model {
 
 	const TMP_PATH = '/tmp';
-	const ARCHIVE_DIR = 'archives';
+	const ARCHIVE_DIR = 'app/archives';
 
 	protected $fillable = ['type', 'data', 'callback_url'];
 	protected $dates = ['created_at', 'updated_at', 'generated_at'];
