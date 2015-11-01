@@ -45,7 +45,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'api/v1'], function() {
 
 	Route::post('template', 'ApiController@uploadTemplate');
 	Route::delete('template/{template_id}', 'ApiController@deleteTemplate');
-	
+
 	Route::post('request', 'ApiController@createRequest');
 	Route::get('request/{request_id}', 'ApiController@requestInfo');
 	Route::get('request/{request_id}/download', 'ApiController@downloadRequest');
@@ -53,7 +53,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'api/v1'], function() {
 
 // ----------------------------------------------------------------------------
 // admin only routes
-Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function() {
+Route::group(['prefix' => 'admin'], function() {
 	Route::get('users', 'AdminController@users');
 	Route::get('requests', 'AdminController@requests');
 });

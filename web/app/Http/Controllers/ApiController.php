@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
@@ -10,18 +9,13 @@ use App\Request as RequestModel;
 
 class ApiController extends Controller {
 
-	public function __construct(Guard $auth, Filesystem $storage)
+	public function __construct(Filesystem $storage, Request $request)
 	{
-		$this->user = $auth->user();
 		$this->storage = $storage;
-	}
 
-	/**
-	 * @return user selected from DB by X-AUTH header
-	 */
-	private function getUser($request) {
+		// selected user from DB by X-AUTH header
 		$token = $request->header('X-AUTH');
-		return User::where(['api_key' => $token])->first();
+		$this->user = User::where(['api_key' => $token])->first();
 	}
 
 	/**
@@ -37,7 +31,7 @@ class ApiController extends Controller {
 		$template = new Template([
 			'name' => $request->input('name')
 		]);
-		$this->getUser($request)->templates()->save($template);
+		$this->user->templates()->save($template);
 
 		// save to filesystem
 		$this->storage->put($template->getStoragePathname(), $request->getContent());
@@ -53,7 +47,7 @@ class ApiController extends Controller {
 	 */
 	public function deleteTemplate(Request $request, $template_id) {
 		// get template from DB
-		$template = $this->getUser($request)->templates()->find($template_id);
+		$template = $this->user->templates()->find($template_id);
 		if ($template == NULL) {
 			throw new ApiException('Template not found.');
 		}
@@ -66,7 +60,7 @@ class ApiController extends Controller {
 	 * Creates request to generate
 	 */
 	public function createRequest(Request $request) {
-		$user = $this->getUser($request);
+		$user = $this->user;
 
 		if ($user->request_limit) {
 			$requestsUsed = $user->requests()->lastMonth()->count();
@@ -111,7 +105,7 @@ class ApiController extends Controller {
 	 */
 	public function requestInfo(Request $request, $request_id) {
 		// get request from DB
-		$request = $this->getUser($request)->requests()->find($request_id);
+		$request = $this->user->requests()->find($request_id);
 		if ($request == NULL) {
 			throw new ApiException('Request not found.');
 		}
@@ -124,7 +118,7 @@ class ApiController extends Controller {
 	 */
 	public function downloadRequest(Request $request, $request_id) {
 		// get request from DB
-		$request = $this->getUser($request)->requests()->find($request_id);
+		$request = $this->user->requests()->find($request_id);
 		if ($request == NULL) {
 			throw new ApiException('Request not found.');
 		}

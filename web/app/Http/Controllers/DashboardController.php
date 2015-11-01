@@ -3,7 +3,6 @@
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateLimitsRequest;
-use App\Http\Requests\DeleteTemplateRequest;
 use App\Template;
 
 class DashboardController extends Controller {
@@ -56,14 +55,23 @@ class DashboardController extends Controller {
 		return redirect()->back()->withSuccess('Template uploaded.');
 	}
 
-	public function deleteTemplate(DeleteTemplateRequest $request, Template $template)
+	public function deleteTemplate(Request $request, Template $template)
 	{
+		$template = $this->user->templates()->find($template->id);
+		if ($template == NULL) {
+			abort(404, 'Template not found.');
+		}
 		$template->delete();
 		return redirect()->back()->withSuccess('Template deleted.');
 	}
 
-	public function updateLimits(UpdateLimitsRequest $request)
+	public function updateLimits(Request $request)
 	{
+		$this->authorize('update-limits');
+		$this->validate($request, [
+			'request_limit' => 'required|numeric|min:0'
+		]);
+
 		$this->user->update($request->all());
 		return redirect()->back()->withSuccess('New limits saved.');
 	}

@@ -13,7 +13,7 @@
 <div class="col-md-7 col-md-push-5">
 
 	{{-- admin --}}
-	@if (Auth::user()->isAdmin())
+	@can('update-limits')
 		{!! Form::model($user, ['action' => 'DashboardController@updateLimits']) !!}
 		<div class="panel panel-default">
 			<div class="panel-heading">
@@ -31,7 +31,7 @@
 			</div>
 		</div>
 		{!! Form::close() !!}
-	@endif
+	@endcan
 
 	{{-- templates --}}
 	<div class="panel panel-default">
@@ -43,7 +43,7 @@
 			</div>
 			<h3 class="panel-title">Templates</h3>
 		</div>
-			
+
 
 		<div class="table-responsive">
 		<table class="table table-hover">
@@ -176,7 +176,7 @@
 		</div>
 	</div>
 	{!! Form::close() !!}
-	
+
 	{{-- usage history --}}
 	<div class="panel panel-default">
 		<div class="panel-heading">

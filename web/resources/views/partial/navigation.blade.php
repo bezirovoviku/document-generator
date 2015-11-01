@@ -27,13 +27,13 @@
 			@endif
 
 			{{-- menu for admin --}}
-			@if (Auth::check() && Auth::user()->isAdmin())
-				@foreach (['All users' => action('AdminController@users'), 'All requests' => action('AdminController@requests')] as $text => $url)
-					<li class="{{ Request::url() == $url ? 'active' : '' }}">
-						<a href="{{ $url }}">{{ $text }}</a>
+			@foreach (['list-users' => ['All users', action('AdminController@users')], 'list-requests' => ['All requests', action('AdminController@requests')]] as $action => $data)
+				@can ($action)
+					<li class="{{ Request::url() == $data[1] ? 'active' : '' }}">
+						<a href="{{ $data[1] }}">{{ $data[0] }}</a>
 					</li>
-				@endforeach
-			@endif
+				@endcan
+			@endforeach
 		</ul>
 
 		{{-- right side for authenticated users --}}
