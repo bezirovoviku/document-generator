@@ -1,23 +1,18 @@
 <?php namespace App\Http\Controllers;
 
+use Validator;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\Registrar;
-use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-use Illuminate\Foundation\Auth\ResetsPasswords;
+use App\User;
 
 class HomeController extends Controller {
 
 	use AuthenticatesAndRegistersUsers;
 
-	public function __construct(Guard $auth, Registrar $registrar)
+	public function __construct()
 	{
 		$this->redirectPath = action('DashboardController@index');
 		$this->loginPath = action('HomeController@index');
-
-		$this->auth = $auth;
-		$this->registrar = $registrar;
 	}
 
 	public function index()
@@ -37,6 +32,34 @@ class HomeController extends Controller {
 	public function logout()
 	{
 		return $this->getLogout();
+	}
+
+	/**
+	 * Get a validator for an incoming registration request.
+	 *
+	 * @param  array  $data
+	 * @return \Illuminate\Contracts\Validation\Validator
+	 */
+	public function validator(array $data)
+	{
+		return Validator::make($data, [
+			'email' => 'required|email|max:255|unique:users',
+			'password' => 'required|min:6',
+		]);
+	}
+
+	/**
+	 * Create a new user instance after a valid registration.
+	 *
+	 * @param  array  $data
+	 * @return User
+	 */
+	public function create(array $data)
+	{
+		return User::create([
+			'email' => $data['email'],
+			'password' => $data['password'],
+		]);
 	}
 
 }

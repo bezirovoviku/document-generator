@@ -5,8 +5,8 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
-		"laravel/framework": "5.0.*",
-		"laravelcollective/html": "^5.0",
+		"laravel/framework": "5.1.*",
+		"laravelcollective/html": "5.1.*",
 		"fzaninotto/Faker": "^1.4",
 		"bezirovoviku/docx": "dev-master"
 	},

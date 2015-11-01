@@ -5,17 +5,17 @@ class ApiTest extends TestCase {
 	// TODO make independant on instance URL
 	protected $api = "http://localhost/htdocs/document-generator/web/public/api/v1";
 	protected $key;
-	
+
 	protected function getApiKey() {
 		if (!$this->key)
 			$this->key = App\User::whereNotNull('api_key')->firstOrFail()->api_key;
 		return $this->key;
 	}
-	
+
 	protected function apiRequest($url, $method = null, $data = null) {
 		$api = $this->api;
 		$key = $this->getApiKey();
-		
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, "$api/$url");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -27,32 +27,32 @@ class ApiTest extends TestCase {
 			"Accept: application/json",
 			"Content-type: application/json"
 		));
-		
+
 		$raw = curl_exec($ch);
 		curl_close($ch);
-		
+
 		return $raw;
 	}
 
 	public function testUpload() {
 		$file = dirname(__FILE__) . "/data/template.docx";
 		$name = "Test template";
-		
+
 		$raw = $this->apiRequest("template?name=" . urlencode($name), 'POST', file_get_contents($file));
 		$response = json_decode($raw);
-		
+
 		$this->assertNotNull($response);
 		$this->assertFalse(isset($response->error));
 		$this->assertTrue(isset($response->template_id));
 	}
-	
+
 	public function testAPI() {
 		$api = $this->api;
 		$key = $this->getApiKey();
 		$file = dirname(__FILE__) . "/data/template.docx";
 		$name = "Test template";
 		$target = dirname(__FILE__) . "/data/downloaded.zip";
-		
+
 		$ch = curl_init();
 
 		curl_setopt($ch, CURLOPT_URL, "$api/template?name=" . urlencode($name));
@@ -68,11 +68,11 @@ class ApiTest extends TestCase {
 
 		$raw = curl_exec($ch);
 		$response = json_decode($raw);
-		
+
 		$this->assertNotNull($response);
 		$this->assertFalse(isset($response->error));
 		$this->assertTrue(isset($response->template_id));
-		
+
 		$template_id = $response->template_id;
 
 		$data = array(
@@ -137,16 +137,16 @@ class ApiTest extends TestCase {
 		file_put_contents($target, $raw);
 
 		curl_close($ch);
-		
+
 		$zip = new \ZipArchive();
-		
+
 		$this->assertTrue($zip->open($target));
 		$this->assertNotFalse($zip->statName('document0.docx'));
 		$this->assertNotFalse($zip->statName('document1.docx'));
 		$this->assertFalse($zip->statName('document2.docx'));
-		
+
 		$zip->close();
-		
+
 		unlink($target);
 	}
 }

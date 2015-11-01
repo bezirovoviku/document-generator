@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Filesystem;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
 use App\User;
@@ -10,7 +10,7 @@ use App\Request as RequestModel;
 
 class ApiController extends Controller {
 
-	public function __construct(Guard $auth, Filesystem\Factory $storage)
+	public function __construct(Guard $auth, Filesystem $storage)
 	{
 		$this->user = $auth->user();
 		$this->storage = $storage;
