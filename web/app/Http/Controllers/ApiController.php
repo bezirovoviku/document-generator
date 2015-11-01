@@ -3,6 +3,7 @@
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
+use App\Jobs\GenerateRequest;
 use App\User;
 use App\Template;
 use App\Request as RequestModel;
@@ -82,22 +83,17 @@ class ApiController extends Controller {
 			throw new ApiException('Template not found.');
 		}
 
-		$request = new RequestModel([
+		$requestModel = new RequestModel([
 			'type' => $request->input('type'),
 			'data' => json_encode($request->input('data')),
 			'callback_url' => $request->input('callback_url'),
 		]);
-		$request->user()->associate($template->user);
-		$template->requests()->save($request);
+		$requestModel->user()->associate($template->user);
+		$template->requests()->save($requestModel);
 
-		// TODO move to cron
-		try {
-			$request->generate();
-		} catch (Exception $e) {
-			throw new ApiException('Generating failed.');
-		}
+		$this->dispatch(new GenerateRequest($requestModel));
 
-		return ['request_id' => $request->id];
+		return ['request_id' => $requestModel->id];
 	}
 
 	/**

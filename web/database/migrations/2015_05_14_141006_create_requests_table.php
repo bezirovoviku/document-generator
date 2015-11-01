@@ -21,6 +21,7 @@ class CreateRequestsTable extends Migration {
 			$table->text('data')->nullable();
 			$table->string('callback_url')->nullable();
 			$table->datetime('generated_at')->nullable();
+			$table->datetime('failed_at')->nullable();
 			$table->timestamps();
 
 			$table->foreign('user_id')->references('id')->on('users');
