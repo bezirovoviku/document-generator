@@ -69,17 +69,22 @@ class Request extends Model {
 		}
 	}
 
+	/**
+	* Generate archive from template and data.
+	*/
 	public function generate()
 	{
 		$generator = new Generator();
 		$generator->setTmp(static::TMP_PATH);
 		$generator->setTemplate($this->template->getRealPathname());
 		$generator->generateArchive(json_decode($this->data, true), $this->getStoragePathname());
+	}
 
-		$this->status = static::STATUS_DONE;
-		$this->save();
-
-		// ping callback url if set
+	/**
+	* Ping callback url if set.
+	*/
+	public function ping()
+	{
 		if ($this->callback_url) {
 			$ch = curl_init($this->callback_url);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 2);
@@ -90,7 +95,7 @@ class Request extends Model {
 		}
 	}
 
-	// storage path helpers follows
+	// storage path helpers
 
 	public function getPath()
 	{
