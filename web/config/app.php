@@ -4,6 +4,8 @@ return [
 
 	'name' => 'Docgen',
 
+	'template_max_size' => 5 * 10e6, # in bytes
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode

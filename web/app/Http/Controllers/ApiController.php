@@ -1,5 +1,7 @@
 <?php namespace App\Http\Controllers;
 
+use Validator;
+use Config;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
@@ -23,10 +25,17 @@ class ApiController extends Controller {
 	 * Saves template to DB and filesystem
 	 */
 	public function uploadTemplate(Request $request) {
-		$this->validate($request, [
+		// not using $this->validate because of filesize is not normal input
+		$validator = Validator::make([
+			'name' => $request->input('name'),
+			'filesize' => $request->header('Content-Length'),
+		], [
 			'name' => 'required|max:255',
-			// TODO maximum filesize check
+			'filesize' => 'required|integer|min:0|max:' . Config::get('app.template_max_size'),
 		]);
+		if ($validator->fails()) {
+			return response(['error' => $validator->errors()], 400);
+		}
 
 		// save to DB
 		$template = new Template([
