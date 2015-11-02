@@ -9,6 +9,10 @@ class Request extends Model {
 	const TMP_PATH = '/tmp';
 	const ARCHIVE_DIR = 'app/archives';
 
+	const STATUS_DONE = 'done';
+	const STATUS_FAILED = 'failed';
+	const STATUS_IN_PROGRESS = 'in_progress';
+
 	protected $fillable = ['type', 'data', 'callback_url'];
 	protected $dates = ['created_at', 'updated_at', 'generated_at'];
 	protected $appends = ['status'];
@@ -46,20 +50,41 @@ class Request extends Model {
 	public function getStatusAttribute()
 	{
 		if ($this->generated_at) {
-			return 'done';
+			return static::STATUS_DONE;
+		} elseif ($this->failed_at) {
+			return static::STATUS_FAILED;
 		} else {
-			return 'in_progress';
+			return static::STATUS_IN_PROGRESS;
 		}
 	}
 
+	public function setStatusAttribute($status)
+	{
+		if ($status == static::STATUS_DONE) {
+			$this->generated_at = $this->freshTimestamp();
+		} elseif ($status == static::STATUS_FAILED) {
+			$this->failed_at = $this->freshTimestamp();
+		} else {
+			throw new Exception('Unknown request status value.');
+		}
+	}
+
+	/**
+	* Generate archive from template and data.
+	*/
 	public function generate()
 	{
 		$generator = new Generator();
 		$generator->setTmp(static::TMP_PATH);
 		$generator->setTemplate($this->template->getRealPathname());
 		$generator->generateArchive(json_decode($this->data, true), $this->getStoragePathname());
+	}
 
-		// ping callback url if set
+	/**
+	* Ping callback url if set.
+	*/
+	public function ping()
+	{
 		if ($this->callback_url) {
 			$ch = curl_init($this->callback_url);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 2);
@@ -68,12 +93,9 @@ class Request extends Model {
 			curl_exec($ch);
 			curl_close($ch);
 		}
-
-		$this->generated_at = $this->freshTimestamp();
-		$this->save();
 	}
 
-	// storage path helpers follows
+	// storage path helpers
 
 	public function getPath()
 	{
