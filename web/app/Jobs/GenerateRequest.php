@@ -36,7 +36,7 @@ class GenerateRequest extends Job implements SelfHandling, ShouldQueue
 		// When exception occurs, job is requeued and failed handler called.
 		$this->request->generate();
 		$this->request->ping();
-		$this->request->status = static::STATUS_DONE;
+		$this->request->status = Request::STATUS_DONE;
 		$this->request->save();
 	}
 
