@@ -42,7 +42,7 @@ class DashboardController extends Controller {
 	{
 		$this->validate($request, [
 			'name' => 'required|max:255',
-			'template' => 'required|mimes:docx|max:2048',
+			'template' => 'required|max:2048',
 		]);
 
 		// save to DB
