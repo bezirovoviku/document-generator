@@ -75,6 +75,7 @@ class Request extends Model {
 	public function generate()
 	{
 		$generator = new Generator();
+		$generator->addFilters();
 		$generator->setTmp(static::TMP_PATH);
 		$generator->setTemplate($this->template->getRealPathname());
 		$generator->generateArchive(json_decode($this->data, true), $this->getStoragePathname());

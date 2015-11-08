@@ -19,7 +19,7 @@ PHPUnit (for test only)
     sudo apt-get install php5-common libapache2-mod-php5 php5-cli mysql-server php5-mcrypt
     sudo php5enmod mcrypt
     ```
-  2. Refer to http://getcomposer.com for installation of Composer
+  2. Refer to http://getcomposer.org for installation of Composer
 2. Clone this repository
 3. Rename .env.example to .env and fill it with correct informations
 4. Go to web folder and run (this will download basic packages)
