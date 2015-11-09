@@ -6,7 +6,7 @@ $root = dirname(__FILE__);
 //Basic values - url of api
 $api = "http://localhost/htdocs/document-generator/web/public/api/v1";
 //And your API KEY
-$key = "4f4a0022f89220add423dbc36228e826";
+$key = "434496ec57e40b56dbdd907c88188b65";
 
 //Path to DOCX template file
 $template_file = "$root/data/template.docx";

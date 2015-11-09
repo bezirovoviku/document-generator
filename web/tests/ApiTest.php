@@ -85,7 +85,10 @@ class ApiTest extends TestCase {
 						array('name' => 'Item 1'),
 						array('name' => 'Item 2'),
 						array('name' => 'Item 3'),
-					)
+					),
+					'date' => time(),
+					'format' => 'd-m-Y H:i:s',
+					'number' => 1236575471.5647
 				),
 				array(
 					'nadpis' => 'Nadpis dokumentu 2',
@@ -97,7 +100,10 @@ class ApiTest extends TestCase {
 						array('name' => 'Meti 5'),
 						array('name' => 'Meti 6'),
 						array('name' => 'Meti 7'),
-					)
+					),
+					'date' => '2015-01-02 15:40:13',
+					'format' => 'Y.m.d H:i:s',
+					'number' => 879872475
 				)
 			]
 		);
