@@ -10,4 +10,9 @@ class DocsController extends Controller {
 	{
 		return view('docs.templates');
 	}
+
+	public function examples()
+	{
+		return view('docs.examples');
+	}
 }
