@@ -5,4 +5,9 @@ class DocsController extends Controller {
 	{
 		return view('docs.index');
 	}
+
+	public function templates()
+	{
+		return view('docs.templates');
+	}
 }
