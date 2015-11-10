@@ -7,6 +7,7 @@
 <ul class="nav nav-tabs">
   <li role="presentation"><a href="{{ action('DocsController@index') }}">API</a></li>
   <li role="presentation" class="active"><a href="{{ action('DocsController@templates') }}">Templates</a></li>
+  <li role="presentation"><a href="{{ action('DocsController@examples') }}">Examles</a></li>
 </ul>
 <h1 class="page-header" id="templates">Templates</h1>
 
