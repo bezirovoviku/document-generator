@@ -27,12 +27,17 @@ PHPUnit (for test only)
   ```
   composer update 
   ```
-5. Now (still in web folder)s run (this will create database tables)
+5. Now (still in web folder)run (this will generate an key for security purposes)
+
+  ```
+  php artisan key:generate
+  ```
+6. Then (still in web folder)run (this will create database tables)
   
   ```
   php artisan migrate
   ```
-6. Setup your web server so it points to public folder inside web folder.
+7. Setup your web server so it points to public folder inside web folder.
   1. In apache you need to have somewhere inside your conf (to enable htaccess)
     
     ```
