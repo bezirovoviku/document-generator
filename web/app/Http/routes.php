@@ -25,8 +25,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'user'], function() {
 
 	// template resource
 	Route::group(['middleware' => 'csrf', 'prefix' => 'template'], function() {
-		Route::post('upload', 'DashboardController@uploadTemplate');
-		Route::post('{template}/delete', 'DashboardController@deleteTemplate');
+		Route::get('{template}/show', 'TemplateController@show');
+		Route::post('{template}/request', 'TemplateController@createRequest');
+		Route::post('upload', 'TemplateController@uploadTemplate');
+		Route::post('{template}/delete', 'TemplateController@deleteTemplate');
 	});
 
 	// request resource

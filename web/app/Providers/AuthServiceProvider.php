@@ -26,7 +26,15 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies($gate);
 
+        $gate->define('show-template', function($user, $template) {
+    		return $template->user->id == $user->id;
+        });
+
         $gate->define('delete-template', function($user, $template) {
+    		return $template->user->id == $user->id;
+        });
+
+        $gate->define('create-request', function($user, $template) {
     		return $template->user->id == $user->id;
         });
 

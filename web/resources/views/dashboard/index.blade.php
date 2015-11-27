@@ -62,7 +62,8 @@
 					<td class="text-right">{{ $template->getUsageCount() }} &times;</td>
 					<td>{{ $template->name }}</td>
 					<td class="text-right">
-						{!! Form::open(['action' => ['DashboardController@deleteTemplate', $template->id]]) !!}
+						{!! Form::open(['action' => ['TemplateController@deleteTemplate', $template->id]]) !!}
+							<a href="{{ action('TemplateController@show', $template->id) }}" class="btn btn-xs btn-link">details</a>
 							<button type="submit" class="btn btn-xs btn-link">delete</button>
 						{!! Form::close() !!}
 					</td>
@@ -78,7 +79,7 @@
 	</div>
 
 	{{-- add new template modal --}}
-	{!! Form::open(['action' => 'DashboardController@uploadTemplate', 'class' => 'form-horizontal', 'files' => true]) !!}
+	{!! Form::open(['action' => 'TemplateController@uploadTemplate', 'class' => 'form-horizontal', 'files' => true]) !!}
 	<div class="modal fade" id="addNewTemplate" tabindex="-1" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">

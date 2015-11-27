@@ -38,33 +38,6 @@ class DashboardController extends Controller {
 		return redirect()->back()->withSuccess('API key regenerated.');
 	}
 
-	public function uploadTemplate(Request $request)
-	{
-		$this->validate($request, [
-			'name' => 'required|max:255',
-			'template' => 'required|max:2048',
-		]);
-
-		// save to DB
-		$template = new Template($request->only('name'));
-		$this->user->templates()->save($template);
-
-		// save to filesystem
-		$request->file('template')->move($template->getRealPath(), $template->getFilename());
-
-		return redirect()->back()->withSuccess('Template uploaded.');
-	}
-
-	public function deleteTemplate(Request $request, Template $template)
-	{
-		$template = $this->user->templates()->find($template->id);
-		if ($template == NULL) {
-			abort(404, 'Template not found.');
-		}
-		$template->delete();
-		return redirect()->back()->withSuccess('Template deleted.');
-	}
-
 	public function updateLimits(Request $request)
 	{
 		$this->authorize('update-limits');
