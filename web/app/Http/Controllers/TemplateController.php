@@ -26,11 +26,8 @@ class TemplateController extends Controller {
 	public function createRequest(Request $request, Template $template) {
 		$this->authorize('create-request', $template);
 
-		if ($this->user->request_limit) {
-			$requestsUsed = $this->user->requests()->lastMonth()->count();
-			if ($requestsUsed >= $this->user->request_limit) {
-				return redirect()->back()->withError('Request limit exceeded.');
-			}
+		if ($this->user->isOverRequestLimit()) {
+			return redirect()->back()->withDanger('Request limit exceeded.');
 		}
 
 		$this->validate($request, [

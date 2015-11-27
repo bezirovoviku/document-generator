@@ -7,41 +7,41 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 
 class AuthServiceProvider extends ServiceProvider
 {
-    /**
-     * The policy mappings for the application.
-     *
-     * @var array
-     */
-    protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
-    ];
+	/**
+	 * The policy mappings for the application.
+	 *
+	 * @var array
+	 */
+	protected $policies = [
+		'App\Model' => 'App\Policies\ModelPolicy',
+	];
 
-    /**
-     * Register any application authentication / authorization services.
-     *
-     * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
-     * @return void
-     */
-    public function boot(GateContract $gate)
-    {
-        $this->registerPolicies($gate);
+	/**
+	 * Register any application authentication / authorization services.
+	 *
+	 * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
+	 * @return void
+	 */
+	public function boot(GateContract $gate)
+	{
+		$this->registerPolicies($gate);
 
-        $gate->define('show-template', function($user, $template) {
-    		return $template->user->id == $user->id;
-        });
+		$gate->define('show-template', function($user, $template) {
+			return $template->user->id == $user->id;
+		});
 
-        $gate->define('delete-template', function($user, $template) {
-    		return $template->user->id == $user->id;
-        });
+		$gate->define('delete-template', function($user, $template) {
+			return $template->user->id == $user->id;
+		});
 
-        $gate->define('create-request', function($user, $template) {
-    		return $template->user->id == $user->id;
-        });
+		$gate->define('create-request', function($user, $template) {
+			return $template->user->id == $user->id;
+		});
 
-        $gate->before(function ($user, $ability) {
-            if ($user->isAdmin()) {
-                return true;
-            }
-        });
-    }
+		$gate->before(function ($user, $ability) {
+			if ($user->isAdmin()) {
+				return true;
+			}
+		});
+	}
 }

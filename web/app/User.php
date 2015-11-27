@@ -51,6 +51,11 @@ class User extends Model implements AuthenticatableContract,
 		return $res;
 	}
 
+    public function isOverRequestLimit()
+    {
+		return $this->requests()->lastMonth()->count() >= $this->request_limit;
+    }
+
 	public function regenerateApiKey()
 	{
 		$this->attributes['api_key'] = md5($this->id . microtime());
