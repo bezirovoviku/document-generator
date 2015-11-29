@@ -4,6 +4,7 @@ use App\Exceptions\ApiException;
 
 // home page
 Route::get('/', 'HomeController@index');
+Route::get('register', 'HomeController@register');
 Route::get('docs', 'DocsController@index');
 Route::get('docs/templates', 'DocsController@templates');
 Route::get('docs/examples', 'DocsController@examples');

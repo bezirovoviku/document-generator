@@ -20,6 +20,12 @@ class HomeController extends Controller {
 		return view('home.index');
 	}
 
+	public function register()
+	{
+		return view('home.register');
+	}
+
+
 	public function loginOrRegister(Request $request)
 	{
 		if ($request->has('register')) {
@@ -44,7 +50,8 @@ class HomeController extends Controller {
 	{
 		return Validator::make($data, [
 			'email' => 'required|email|max:255|unique:users',
-			'password' => 'required|min:6',
+			'password' => 'required|min:6|confirmed',
+			'password_confirmation' => 'required|min:6'
 		]);
 	}
 

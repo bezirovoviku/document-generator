@@ -13,16 +13,17 @@
 	{!! Form::open(['action' => 'HomeController@loginOrRegister']) !!}
 
 <ul class="nav nav-tabs2">
-	<li role="presentation" class="active"><a href="{{ action('HomeController@index') }}">Login</a></li>
- 	<li role="presentation"><a href="{{ action('HomeController@register') }}">Register</a></li>
+	<li role="presentation"><a href="{{ action('HomeController@index') }}">Login</a></li>
+ 	<li role="presentation" class="active"><a href="{{ action('HomeController@register') }}">Register</a></li>
 </ul>
 
 <div class="tab-content">
-	<div id="Login">
+  	<div id="Register">
 		  	<p>
-			<div class="form-group">{!! Form::email('email', Request::old('email'), ['class' => 'form-control', 'placeholder' => 'email', 'required']) !!}</div>
+		    <div class="form-group">{!! Form::email('email', Request::old('email'), ['class' => 'form-control', 'placeholder' => 'email', 'required']) !!}</div>
 			<div class="form-group">{!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'password', 'required']) !!}</div>
-			<div class="form-group">{!! Form::button('Login', ['name' => 'login', 'value' => 1, 'type' => 'submit', 'class' => 'btn btn-block btn-primary']) !!}</div>
+			<div class="form-group">{!! Form::password('password_confirmation', ['class' => 'form-control', 'placeholder' => 'confirm password', 'required']) !!}</div>
+			<div class="form-group">{!! Form::button('Register', ['name' => 'register', 'value' => 1, 'type' => 'submit', 'class' => 'btn btn-block btn-primary']) !!}</div>
 			</p>
   	</div>
 </div>
@@ -52,6 +53,7 @@
 			request status, if it's completed. Once it will be completed, you're free to download your generated documents as zip archive</p>
 		</div>
 	</div>
+
 </div>
 
 @endsection
