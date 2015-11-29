@@ -153,6 +153,11 @@ return [
 		 * Composer Service Providers
 		 */
 		Collective\Html\HtmlServiceProvider::class,
+		
+		/*
+		 * Used to parse template data
+		 */
+		Nathanmac\Utilities\Parser\ParserServiceProvider::class
 
     ],
 
@@ -206,7 +211,8 @@ return [
 		// composer
 		'Form' => Collective\Html\FormFacade::class,
 		'Html' => Collective\Html\HtmlFacade::class,
-
+		
+		'Parser' => Nathanmac\Utilities\Parser\Facades\Parser::class
     ],
 
 ];

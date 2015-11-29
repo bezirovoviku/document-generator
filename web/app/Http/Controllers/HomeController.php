@@ -3,12 +3,13 @@
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Nathanmac\Utilities\Parser\Facades\Parser;
 use App\User;
 
 class HomeController extends Controller {
 
 	use AuthenticatesAndRegistersUsers;
-
+	
 	public function __construct()
 	{
 		$this->redirectPath = action('DashboardController@index');

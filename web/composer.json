@@ -8,7 +8,9 @@
 		"laravel/framework": "5.1.*",
 		"laravelcollective/html": "5.1.*",
 		"fzaninotto/Faker": "^1.4",
-		"bezirovoviku/docx": "dev-master"
+		"bezirovoviku/docx": "dev-master",
+		"Nathanmac/Parser": "3.*",
+		"league/csv": "^7.2"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",

@@ -63,7 +63,8 @@ echo "Template uploaded.\n";
 $data = array(
 	'template_id' => $template_id,
 	'type' => 'docx',
-	'data' => json_decode(file_get_contents($data_file), true)
+	'data_type' => pathinfo($data_file, PATHINFO_EXTENSION),
+	'data' => file_get_contents($data_file)
 );
 
 
