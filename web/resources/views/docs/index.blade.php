@@ -121,9 +121,9 @@ where each document is single object containing all the data.</p>
 	<p>num = 1111; {num|number} // => 1,111</p>
 	</code></pre>
 	<h2 id="examples">Examples</h1>
-	<p>Your template may look like this:</p>
+	<h3>Document</h3>
 		<div style="margin:0;auto;width:100%;text-align:center;"><img src="{{ asset('examples/template.png') }}" width="70%" height="70%" /></div>
-			<p>Data for this template:</p>
+	<h3>Data</h3>
 			<pre><code class="language-json" data-lang="json">{
 	[
 	{
@@ -154,9 +154,9 @@ where each document is single object containing all the data.</p>
 	}
 ]
 }</code></pre>
-
-<p>Download example template <a href="/examples/template.docx"><i class="glyphicon glyphicon-floppy-save"></i></a></p>
-<p>Download data <a href="/examples/data.json"><i class="glyphicon glyphicon-floppy-save"></i></a></p>
+<h3>Download</h3>
+<p><a href="/examples/template.docx">template.docx - example template <i class="glyphicon glyphicon-floppy-save"></i></a></p>
+<p><a href="/examples/data.json">data.json - example data <i class="glyphicon glyphicon-floppy-save"></i></a></p>
 </div>
 @endsection
 @section('footer')
