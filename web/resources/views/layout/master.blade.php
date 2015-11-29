@@ -16,10 +16,13 @@
 		@yield('content')
 	</div>
 
-	<div id="footer">
+	@section('footer')
 		<div class="container">
 			© {{ Config::get('app.name') }} {{ date('Y') }}
 		</div>
+	@endsection
+	<div id="footer">
+		@yield('footer')
 	</div>
 
 	@section('scripts')
