@@ -62,13 +62,15 @@ class Api {
 	/**
 	 * Adds new document batch to queue
 	 *
-	 * @param int $template_id ID of existing template
-	 * @param array $data      Documents data (array of assoc arrays)
+	 * @param int          $template_id ID of existing template
+	 * @param array|string $data        Documents data in specified format
+	 * @param string       $data_type   Data format, json, csv or xml. Default json
 	 * @return int request id
 	 */
-	public function sendRequest($template_id, $data) {
+	public function sendRequest($template_id, $data, $data_type = 'json') {
 		$request = array(
 			'template_id' => $template_id,
+			'data_type' => $data_type,
 			'data' => $data,
 			'type' => 'docx'
 		);
