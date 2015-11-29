@@ -103,23 +103,23 @@ where each document is single object containing all the data.</p>
 	<p>Use this filter to format a date value to a specific format. For supported formats see <a target="_blank" href="http://php.net/manual/en/function.date.php">available formats</a>.
 	As a date value you can use a unix timestamp or dates supported by PHP function <a target="_blank" href="http://php.net/manual/en/function.strtotime.php">strtotime</a>.</p>
 	<p>Examples:</p>
-	<code><p>date = 1447137857; format = "Y-m-d:H-i-s"; {date|format} // => 2015-11-10:06-44-17</p>
-	      <p>date = "2015-11-10"; format = "d/m/Y"; {date|format} // => 10/11/2015</p></code>
+	<pre><code><p>date = 1447137857; format = "Y-m-d:H-i-s"; {date|format} // => 2015-11-10:06-44-17</p>
+	      <p>date = "2015-11-10"; format = "d/m/Y"; {date|format} // => 10/11/2015</p></code></pre>
 	<h4>String filters</h4>
 	<p>To convert strings to uppercase letters use <code>{string|upper}</code> For lowercase letters use <code>{string|lower}</code>.</p>
 	<p>Examples:</p>
-	<code><p>string = "Hello World"; {string|upper} // => "HELLO WORLD"</p>
-	      <p>string = "Hello World"; {string|lower} // => "hello world"</p></code>
+	<pre><code><p>string = "Hello World"; {string|upper} // => "HELLO WORLD"</p>
+	      <p>string = "Hello World"; {string|lower} // => "hello world"</p></code></pre>
 	<h4>Number filter</h4>
 	With this filter you can use EU format or US format by default. Usage id <code>{value|number standard [number of digits after decimal point]} // => 1 111<p></code>
 	<p>Examples:</p>
-	<code>
+	<pre><code class="language-json" data-lang="json">
 	<p>num = 1111; {num|number eu 2} // => 1 111,00</p>
 	<p>num = 1111; {num|number us 2} // => 1,111.00</p>
 	<p>num = 1111; {num|number eu} // => 1 111</p>
 	<p>num = 1111; {num|number us} // => 1,111</p>
 	<p>num = 1111; {num|number} // => 1,111</p>
-	</code>
+	</code></pre>
 	<h2 id="examples">Examples</h1>
 	<p>Your template may look like this:</p>
 		<div style="margin:0;auto;width:100%;text-align:center;"><img src="{{ asset('examples/template.png') }}" width="70%" height="70%" /></div>
@@ -155,7 +155,8 @@ where each document is single object containing all the data.</p>
 ]
 }</code></pre>
 
-Download example template <a href="/examples/template.docx"><i class="glyphicon glyphicon-floppy-save"></i></a> and data <a href="/examples/data.json"><i class="glyphicon glyphicon-floppy-save"></i></a>
+<p>Download example template <a href="/examples/template.docx"><i class="glyphicon glyphicon-floppy-save"></i></a></p>
+<p>Download data <a href="/examples/data.json"><i class="glyphicon glyphicon-floppy-save"></i></a></p>
 </div>
 @endsection
 @section('footer')
