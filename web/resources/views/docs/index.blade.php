@@ -41,7 +41,7 @@
 <div class="col-md-10">
 <h1 class="page-header" id="doc">Documentation</h1>
 
-<p>On this page you find documentation to our docgen.</p>
+<p>On this page you find documentation to our document generator.</p>
 
 <h2 id="api">Api</h1>
 
