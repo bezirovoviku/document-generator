@@ -6588,3 +6588,43 @@ button.close {
 }
 
 /*# sourceMappingURL=main.css.map */
+
+/* This section is added manualy. I was not able to install gulp for recompiling styles and javascripts. */
+#leftMenu a {
+  display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 5px;
+  color: #ECF0F1;
+  text-decoration: none;
+}
+
+#leftMenu #collapseTwo a {
+  color: #2C3E50;
+}
+
+#collapseTwo li {
+  margin: 0;
+  padding-left: 5px;
+}
+
+#leftMenu {
+  background-color: #2C3E50;
+  color: #ECF0F1;
+}
+
+#collapseTwo ul {
+  list-style-type: none;
+  background-color: #ECF0F1;
+  color: #2C3E50;
+  margin: 0;
+  padding-left: 0;
+}
+
+#leftMenu div.accordion-heading.active_heading {
+  background-color: #3A526A;
+}
+
+#collapseTwo ul li.active_link {
+  background-color: #95A5A6;
+}

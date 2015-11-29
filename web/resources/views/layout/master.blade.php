@@ -16,17 +16,19 @@
 		@yield('content')
 	</div>
 
+	@section('footer')
 	<div id="footer">
 		<div class="container">
 			© {{ Config::get('app.name') }} {{ date('Y') }}
 		</div>
 	</div>
-
+	@endsection
+	@yield('footer')
 	@section('scripts')
 	<script type="text/javascript" src="https://code.jquery.com/jquery.js"></script>
 	<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
 	@show
-
+	@yield('custom_scripts')
 </body>
 </html>
