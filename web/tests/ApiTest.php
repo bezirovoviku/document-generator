@@ -1,83 +1,80 @@
 <?php
 
-class ApiTest extends TestCase {
-
-	// TODO make independant on instance URL
-	protected $api = "http://localhost/htdocs/document-generator/web/public/api/v1";
+/**
+ * Tests used for determining correct functionality of API
+ */
+class ApiTest extends TestCase
+{
+	///@var string $key cached api key
 	protected $key;
 
+	/**
+	 * Returns first avaible API key
+	 * @return string api key
+	 */
 	protected function getApiKey() {
 		if (!$this->key)
 			$this->key = App\User::whereNotNull('api_key')->firstOrFail()->api_key;
 		return $this->key;
 	}
 
-	protected function apiRequest($url, $method = null, $data = null) {
-		$api = $this->api;
-		$key = $this->getApiKey();
-
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, "$api/$url");
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_HEADER, FALSE);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-		curl_setopt($ch, CURLOPT_POST, $method == 'POST');
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-			"X-Auth: $key",
-			"Accept: application/json",
-			"Content-type: application/json"
-		));
-
-		$raw = curl_exec($ch);
-		curl_close($ch);
-
-		return $raw;
+	/**
+	 * Helper function for api requests
+	 */
+	protected function apiRequest($url, $method = 'GET', $data = null, $type = 'application/json') {
+		$server = ['HTTP_X-Auth' => $this->getApiKey(), 'HTTP_Content-length' => strlen($data)];
+		if ($type)
+			$server['CONTENT_TYPE'] = $type;
+		
+		return $this->call($method, '/api/v1/' . $url, [], [], [], $server, $data);
 	}
 
+	/**
+	 * Tests template upload
+	 */
 	public function testUpload() {
 		$file = dirname(__FILE__) . "/data/template.docx";
 		$name = "Test template";
 
-		$raw = $this->apiRequest("template?name=" . urlencode($name), 'POST', file_get_contents($file));
-		$response = json_decode($raw);
+		$response = $this->apiRequest("template?name=" . urlencode($name), 'POST', file_get_contents($file), null);
+		//$response = $this->call('POST', '/api/v1/template?name=' .  urlencode($name), file_get_contents($file), [], ['HTTP_X-Auth' => $this->getApiKey()], [], file_get_contents($file));
+		$json = json_decode($response->content());
 
-		$this->assertNotNull($response);
-		$this->assertFalse(isset($response->error));
-		$this->assertTrue(isset($response->template_id));
+		$this->assertEquals(200, $response->status());
+		$this->assertNotNull($json);
+		$this->assertFalse(isset($json->error));
+		$this->assertTrue(isset($json->template_id));
 	}
 
+	/**
+	 * Tests complete process of API usage
+	 */
 	public function testAPI() {
-		$api = $this->api;
-		$key = $this->getApiKey();
+		//Prepare template values
 		$file = dirname(__FILE__) . "/data/template.docx";
 		$name = "Test template";
-		$target = dirname(__FILE__) . "/data/downloaded.zip";
+		
+		//$response = $this->call('POST', '/api/v1/template?name=' .  urlencode($name), file_get_contents($file), [], ['HTTP_X-Auth' => $this->getApiKey()], [], file_get_contents($file));
+		
+		/** Upload template and save its ID **/
+		
+		$response = $this->apiRequest("template?name=" . urlencode($name), 'POST', file_get_contents($file));
+		$json = json_decode($response->content());
 
-		$ch = curl_init();
+		$this->assertEquals(200, $response->status());
+		
+		$this->assertNotNull($json);
+		$this->assertFalse(isset($json->error));
+		$this->assertTrue(isset($json->template_id));
 
-		curl_setopt($ch, CURLOPT_URL, "$api/template?name=" . urlencode($name));
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_HEADER, FALSE);
-		curl_setopt($ch, CURLOPT_POST, TRUE);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, file_get_contents($file));
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-			"X-Auth: $key",
-			"Accept: application/json",
-			"Content-type: application/json"
-		));
+		$template_id = $json->template_id;
 
-		$raw = curl_exec($ch);
-		$response = json_decode($raw);
-
-		$this->assertNotNull($response);
-		$this->assertFalse(isset($response->error));
-		$this->assertTrue(isset($response->template_id));
-
-		$template_id = $response->template_id;
-
+		/** Create request and save its ID **/
+		
 		$data = array(
 			'template_id' => $template_id,
 			'type' => 'docx',
+			'data_type' => 'json',
 			'data' => [
 				array(
 					'nadpis' => 'Nadpis dokumentu 1',
@@ -107,52 +104,48 @@ class ApiTest extends TestCase {
 				)
 			]
 		);
+		
+		$response = $this->apiRequest('request/', 'POST', json_encode($data));
+		$json = json_decode($response->content());
 
-		curl_setopt($ch, CURLOPT_URL, "$api/request");
-		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+		$this->assertEquals(200, $response->status());
+		$this->assertNotNull($json);
+		$this->assertFalse(isset($json->error));
+		$this->assertTrue(isset($json->request_id));
 
-		$raw = curl_exec($ch);
-		$response = json_decode($raw);
+		$request_id = $json->request_id;
 
-		$this->assertNotNull($response);
-		$this->assertFalse(isset($response->error));
-		$this->assertTrue(isset($response->request_id));
-
-		$request_id = $response->request_id;
-
-		curl_setopt($ch, CURLOPT_POSTFIELDS, null);
-		curl_setopt($ch, CURLOPT_POST, FALSE);
-		curl_setopt($ch, CURLOPT_URL, "$api/request/$request_id");
-
+		/** Wait for request to finish **/
+		
 		while(true) {
-			$raw = curl_exec($ch);
-			$response = json_decode($raw, false);
+			$response = $this->apiRequest("request/$request_id", 'GET', json_encode($data));
+			$json = json_decode($response->content());
+			
+			$this->assertEquals(200, $response->status());
+			$this->assertNotNull($json);
+			$this->assertFalse(isset($json->error));
+			$this->assertTrue(isset($json->status));
 
-			$this->assertNotNull($response);
-			$this->assertFalse(isset($response->error));
-			$this->assertTrue(isset($response->status));
-
-			if ($response->status == "done") {
+			if ($json->status == "done") {
 				break;
 			}
 		}
 
-		curl_setopt($ch, CURLOPT_URL, "$api/request/$request_id/download");
+		//Download resulting file and save it to result folder
+		$response = $this->apiRequest("request/$request_id/download", 'GET');
+		
+		$this->assertTrue($response instanceof \Symfony\Component\HttpFoundation\BinaryFileResponse);
+		
+		$archive = $response->getFile()->getRealPath();
 
-		$raw = curl_exec($ch);
-		file_put_contents($target, $raw);
-
-		curl_close($ch);
-
+		//Check for correct archive contents
 		$zip = new \ZipArchive();
 
-		$this->assertTrue($zip->open($target));
+		$this->assertTrue($zip->open($archive));
 		$this->assertNotFalse($zip->statName('document0.docx'));
 		$this->assertNotFalse($zip->statName('document1.docx'));
 		$this->assertFalse($zip->statName('document2.docx'));
 
 		$zip->close();
-
-		unlink($target);
 	}
 }
