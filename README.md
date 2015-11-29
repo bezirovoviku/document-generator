@@ -7,8 +7,11 @@ API documentation can be found on Apiary: http://docs.docgen.apiary.io/
 
 ## Requirements
 PHP >= 5.4
+
 MySQL
+
 Composer
+
 PHPUnit (for test only)
 
 ## Installation
@@ -47,4 +50,19 @@ PHPUnit (for test only)
     
     ```
     a2enmod rewrite
+    ```
+
+## Running tests
+
+Running tests requires PHPUnit installed
+
+1. Go to web folder
+    
+    ```
+    cd web
+    ```
+2. Run phpunit tests
+    
+    ```
+    phpunit
     ```
