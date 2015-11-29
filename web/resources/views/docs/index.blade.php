@@ -155,7 +155,7 @@ where each document is single object containing all the data.</p>
 ]
 }</code></pre>
 
-Download example template <a href="/examples/template.docx"><i class="fa fa-file-word-o"></i></a> and data <a href="/examples/data.json"><i class="fa fa-file-zip-o"></i></a>
+Download example template <a href="/examples/template.docx"><i class="glyphicon glyphicon-floppy-save"></i></a> and data <a href="/examples/data.json"><i class="glyphicon glyphicon-floppy-save"></i></a>
 </div>
 @endsection
 @section('footer')
