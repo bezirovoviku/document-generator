@@ -66,7 +66,7 @@
 		}
 		$(document).ready(function () {
 			active_links($('.accordion-heading a'), 'active_heading', 'white', '#ECF0F1');
-			active_links($('ul a'), 'active_link', 'white', '#2C3E50');
+			active_links($('#collapseTwo ul a'), 'active_link', 'white', '#2C3E50');
 		});
 </script>
 @endsection
