@@ -22,8 +22,16 @@
 		  	<p>
 			<div class="form-group">{!! Form::email('email', Request::old('email'), ['class' => 'form-control', 'placeholder' => 'email', 'required']) !!}</div>
 			<div class="form-group">{!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'password', 'required']) !!}</div>
-			<div class="form-group">{!! Form::button('Login', ['name' => 'login', 'value' => 1, 'type' => 'submit', 'class' => 'btn btn-block btn-primary']) !!}</div>
 			</p>
+			<div class="row">
+				<div class="col-sm-4 col-sm-push-8">
+					<a href="{{ action('PasswordController@getEmail') }}" class="btn btn-block btn-default" role="button">Forgot password</a>
+				</div>
+				<div class="col-sm-8 col-sm-pull-4">
+					<div class="form-group">{!! Form::button('Login', ['name' => 'login', 'value' => 1, 'type' => 'submit', 'class' => 'btn btn-block btn-primary']) !!}</div>
+				</div>
+			</div>
+			
   	</div>
 </div>
 
