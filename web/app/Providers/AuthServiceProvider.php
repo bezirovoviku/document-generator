@@ -38,6 +38,10 @@ class AuthServiceProvider extends ServiceProvider
 			return $template->user->id == $user->id;
 		});
 
+		$gate->define('show-request', function($user, $template) {
+			return $template->user->id == $user->id;
+		});
+		
 		$gate->before(function ($user, $ability) {
 			if ($user->isAdmin()) {
 				return true;

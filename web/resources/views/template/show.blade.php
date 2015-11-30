@@ -42,6 +42,7 @@
 					<tr>
 						<th class="text-right">ID</th>
 						<th>Status</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -49,6 +50,7 @@
 					<tr>
 						<td class="text-right">{{ $request->id }}</td>
 						<td>@include('partial.request_status', ['request' => $request])</td>
+						<td><a href="{{ action('RequestController@show', $request->id) }}" class="btn btn-xs btn-link">details</a></td>
 					</tr>
 					@empty
 					<tr>
