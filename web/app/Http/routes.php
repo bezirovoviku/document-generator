@@ -43,8 +43,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'user'], function() {
 
 	// request resource
 	Route::group(['prefix' => 'request/{request}'], function() {
+		Route::get('show', 'RequestController@show');
 		Route::get('download', 'RequestController@download');
-		Route::get('cancel', 'RequestController@cancel');
+		//Route::get('cancel', 'RequestController@cancel');
 	});
 
 	// admin only
