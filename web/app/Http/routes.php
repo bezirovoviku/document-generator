@@ -15,6 +15,15 @@ Route::group(['middleware' => 'guest'], function() {
 	Route::post('register-login', 'HomeController@loginOrRegister', ['middleware' => 'csrf']);
 });
 
+// ----------------------------------------------------------------------------
+// password reset link request routes
+Route::get('password/email', 'PasswordController@getEmail');
+Route::post('password/email', 'PasswordController@postEmail');
+
+// ----------------------------------------------------------------------------
+// password reset routes
+Route::get('password/reset/{token}', 'PasswordController@getReset');
+Route::post('password/reset', 'PasswordController@postReset');
 
 // ----------------------------------------------------------------------------
 // user routes
