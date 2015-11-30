@@ -13,6 +13,7 @@ class RequestController extends Controller {
 		$this->user = $auth->user();
 	}
 
+	//@TODO: This should be somewhere inside lavarel. Failed to find it. At least move this somewhere more appropriate
 	protected function human_filesize($bytes, $decimals = 2) {
 		$size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
 		$factor = floor((strlen($bytes) - 1) / 3);
