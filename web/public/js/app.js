@@ -12,4 +12,9 @@ $(document).ready( function() {
 		input.val(label);
 	});
 });
+$('.nav-tabs a').click(function(e) {
+	e.preventDefault();
+	$(this).tab('show');
+});
+
 //# sourceMappingURL=app.js.map

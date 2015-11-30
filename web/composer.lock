@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bezirovoviku/docx.git",
-                "reference": "c34177d45e2fd24c9d666765f16866a1b80a7466"
+                "reference": "4c9bd3163f9b167085fb7b558f817655bf73318d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bezirovoviku/docx/zipball/c34177d45e2fd24c9d666765f16866a1b80a7466",
-                "reference": "c34177d45e2fd24c9d666765f16866a1b80a7466",
+                "url": "https://api.github.com/repos/bezirovoviku/docx/zipball/4c9bd3163f9b167085fb7b558f817655bf73318d",
+                "reference": "4c9bd3163f9b167085fb7b558f817655bf73318d",
                 "shasum": ""
             },
             "require": {
@@ -47,7 +47,7 @@
                 "document",
                 "docx"
             ],
-            "time": "2015-11-29 21:25:13"
+            "time": "2015-11-29 23:02:42"
         },
         {
             "name": "classpreloader/classpreloader",
@@ -2583,16 +2583,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.18",
+            "version": "4.8.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "fa33d4ad96481b91df343d83e8c8aabed6b1dfd3"
+                "reference": "b2caaf8947aba5e002d42126723e9d69795f32b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/fa33d4ad96481b91df343d83e8c8aabed6b1dfd3",
-                "reference": "fa33d4ad96481b91df343d83e8c8aabed6b1dfd3",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b2caaf8947aba5e002d42126723e9d69795f32b4",
+                "reference": "b2caaf8947aba5e002d42126723e9d69795f32b4",
                 "shasum": ""
             },
             "require": {
@@ -2651,7 +2651,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-11-11 11:32:49"
+            "time": "2015-11-30 08:18:59"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

@@ -1,6 +1,84 @@
 @import "bootstrap/bootstrap";
 @import "variables.less";  // override bootstrap variables (apply custom theme)
 
+// HOME --------------------------------------------------------------------------------------------
+
+// TODO better way to style tabs (use bootstrap mixin?)
+
+.nav-tabs2 {
+  border-bottom: 1px solid #d5dee1;
+}
+.nav-tabs2 > li {
+  float: left;
+  margin-bottom: -1px;
+}
+.nav-tabs2 > li > a {
+  margin-right: 2px;
+  line-height: 1.42857143;
+  border: 1px solid transparent;
+  border-radius: 4px 4px 0 0;
+}
+.nav-tabs2 > li > a:hover {
+  border-color: #ecf0f1 #ecf0f1 #ecf0f1;
+}
+.nav-tabs2 > li.active > a,
+.nav-tabs2 > li.active > a:hover,
+.nav-tabs2 > li.active > a:focus {
+  color: #2c3e50;
+  background-color: #ecf0f1;
+  border: 1px solid #d5dee1;
+  border-bottom-color: transparent;
+  cursor: default;
+}
+.nav-tabs2.nav-justified {
+  width: 100%;
+  border-bottom: 0;
+}
+.nav-tabs2.nav-justified > li {
+  float: none;
+}
+.nav-tabs2.nav-justified > li > a {
+  text-align: center;
+  margin-bottom: 5px;
+}
+.nav-tabs2.nav-justified > .dropdown .dropdown-menu {
+  top: auto;
+  left: auto;
+}
+@media (min-width: 768px) {
+  .nav-tabs2.nav-justified > li {
+    display: table-cell;
+    width: 1%;
+  }
+  .nav-tabs2.nav-justified > li > a {
+    margin-bottom: 0;
+  }
+}
+.nav-tabs2.nav-justified > li > a {
+  margin-right: 0;
+  border-radius: 4px;
+}
+.nav-tabs2.nav-justified > .active > a,
+.nav-tabs2.nav-justified > .active > a:hover,
+.nav-tabs2.nav-justified > .active > a:focus {
+  border: 1px solid #ecf0f1;
+}
+@media (min-width: 768px) {
+  .nav-tabs2.nav-justified > li > a {
+    border-bottom: 1px solid #ecf0f1;
+    border-radius: 4px 4px 0 0;
+  }
+  .nav-tabs2.nav-justified > .active > a,
+  .nav-tabs2.nav-justified > .active > a:hover,
+  .nav-tabs2.nav-justified > .active > a:focus {
+    border-bottom-color: #ffffff;
+  }
+}
+
+
+
+// DASHBOARD ----------------------------------------------------------------------------------------
+
 
 .panel-heading {
 	position: relative;
@@ -46,4 +124,63 @@
 	input[disabled] {
 		cursor: default;
 	}
+}
+
+// DOCS --------------------------------------------------------------------------------------------
+
+.example {
+	padding: 1em 0;
+	border-bottom: 1px solid rgb(238, 238, 238);
+
+	@media (max-width: @screen-sm-max) {
+		box-shadow: inset 0 3px 6px rgba(0,0,0,.15);
+		padding: 1em 15px 15px;
+		margin: 0 -15px 15px;
+	}
+
+	.tab-content {
+		padding: 1em 0 0 0;
+	}
+}
+
+
+// TODO remove this after replacing accordion with Bootstrap's scrollspy
+
+#leftMenu a {
+	display: block;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 5px;
+	color: #ECF0F1;
+	text-decoration: none;
+}
+
+#leftMenu #collapseTwo a {
+	color: #2C3E50;
+}
+
+#collapseTwo li {
+	margin: 0;
+	padding-left: 5px;
+}
+
+#leftMenu {
+	background-color: #2C3E50;
+	color: #ECF0F1;
+}
+
+#collapseTwo ul {
+	list-style-type: none;
+	background-color: #ECF0F1;
+	color: #2C3E50;
+	margin: 0;
+	padding-left: 0;
+}
+
+#leftMenu div.accordion-heading.active_heading {
+	background-color: #3A526A;
+}
+
+#collapseTwo ul li.active_link {
+	background-color: #95A5A6;
 }

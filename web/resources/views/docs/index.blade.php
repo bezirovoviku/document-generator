@@ -55,11 +55,8 @@ where each document is single object containing all the data.</p>
 
 <h3 id="templates-replacing">Word replacing</h3>
 	<p>Our system simply replaces specified keywords inside document text. Keywords are expected in format <code>{KEYWORD}</code>.<p>
-	<p>When your data are, for example, following:</p>
-	<pre><code class="language-json" data-lang="json">{
-	'name': 'Hildegard Testimen'
-}</code></pre>
-	<p>you can then place data name inside document by writing: <code>{name}</code>.</p>
+
+	@include('partial.example', ['request' => '{name: "Hildegard Testimen"}', 'template' => '{name}', 'result' => 'Hildegard Testimen'])
 
 <h3 id="templates-replacing-nested">Nested replacing</h3>
 	<p>We also support multilevel objects in data. Simple use <code>{OBJ1.OBJ2.KEYWORD}</code>.<p>
@@ -122,7 +119,7 @@ where each document is single object containing all the data.</p>
 	</code></pre>
 	<h2 id="examples">Examples</h1>
 	<h3>Document</h3>
-		<div style="margin:0;auto;width:100%;text-align:center;"><img src="{{ asset('examples/template.png') }}" width="70%" height="70%" /></div>
+		<img src="{{ asset('examples/template.png') }}" class="img img-responsive" />
 	<h3>Data</h3>
 			<pre><code class="language-json" data-lang="json">{
 	[
@@ -192,7 +189,7 @@ where each document is single object containing all the data.</p>
 		}
 		function scroll_menu()
 		{
-			var $sidebar   = $("#leftMenu"), 
+			var $sidebar   = $("#leftMenu"),
         		$window    = $(window),
         		offset     = $sidebar.offset(),
         		topPadding = 15;
