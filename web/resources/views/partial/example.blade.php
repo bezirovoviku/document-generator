@@ -3,7 +3,7 @@ global $counter;
 @$counter++;
 ?>
 
-<div class="example">
+<div class="example" data-counter="{{ $counter }}">
 
     <ul class="nav nav-tabs">
         <li class="active"><a href="#request{{ $counter }}">Request</a></li>
@@ -13,16 +13,20 @@ global $counter;
 
     <div class="tab-content">
         <div class="tab-pane active" id="request{{ $counter }}">
-            <pre><code>{{ $request or '' }}</code></pre>
-
+            <pre id="json{{ $counter }}"><code>{{ $requests['json'] or '' }}</code></pre>
+            <pre id="csv{{ $counter }}"><code>{{ $requests['csv'] or '' }}</code></pre>
+            <pre id="xml{{ $counter }}"><code>{{ $requests['xml'] or '' }}</code></pre>
+            <pre id="full-json{{ $counter }}"><code>{{ $requests['xml'] or '' }}</code></pre>
+            <pre id="full-csv{{ $counter }}"><code>{{ $requests['xml'] or '' }}</code></pre>
+            <pre id="full-xml{{ $counter }}"><code>{{ $requests['xml'] or '' }}</code></pre>
             <div class="btn-toolbar">
                 <div class="btn-group pull-right">
                     <button type="button" class="btn btn-default active">Full request</button>
                     <button type="button" class="btn btn-default">Only data</button>
-                </div> <div class="btn-group">
-                    <button type="button" class="btn btn-default active">JSON</button>
-                    <button type="button" class="btn btn-default">CSV</button>
-                    <button type="button" class="btn btn-default">XML</button>
+                </div> <div class="btn-group" data-counter="{{ $counter }}">
+                    <button type="button" class="btn btn-default active" data-id="#data-json">JSON</button>
+                    <button type="button" class="btn btn-default" data-id="#data-csv{{ $counter }}">CSV</button>
+                    <button type="button" class="btn btn-default" data-id="#data-xml{{ $counter }}">XML</button>
                 </div>
             </div>
         </div>
