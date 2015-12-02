@@ -2,7 +2,29 @@
 @section('title', 'Documentation')
 
 @section('content')
-<div class="col-md-2">
+
+<nav class="col-md-2 bs-docs-sidebar">
+	<ul id="sidebar" class="nav nav-stacked fixed">
+        <li>
+            <a href="#api">API</a>
+        </li>
+        <li>
+            <a href="#templates">Templates</a>
+            <ul class="nav nav-stacked">
+            	<li><a href="#templates-replacing">Word Replacing</a></li>
+				<li><a href="#templates-replacing-nested">Nested Replacing</a></li>
+				<li><a href="#templates-cycles">Multiitem Replacing</a></li>
+				<li><a href="#templates-cycles-tables">Multiitem Replacing In Tables</a></li>
+				<li><a href="#templates-filters">Template Filters</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#examples">Examples</a>
+        </li>
+    </ul>
+</nav>
+
+<!--<div class="col-md-2">
 	<div class="accordion navbar navbar-default" role="navigation" id="leftMenu">
         <div class="accordion-group">
             <div class="accordion-heading">
@@ -37,8 +59,9 @@
             </div>
         </div>
     </div>
-</div>
-<div class="col-md-10">
+</div>-->
+
+<div class="col-md-6">
 <h1 class="page-header" id="doc">Documentation</h1>
 
 <p>On this page you find documentation to our document generator.</p>
@@ -57,23 +80,23 @@ where each document is single object containing all the data.</p>
 	<p>Our system simply replaces specified keywords inside document text. Keywords are expected in format <code>{KEYWORD}</code>.<p>
 
 	@include('partial.example', ['request' => [
-									'json' => '\'{name: "Hildegard Testimen"}\'',
-									'csv' => '\'name\r\nHildegard Testimen\'',
-									'xml' => '\'<root><name>Hildegard Testimen</name></root>\''
-									],
-								 'template' => '{name}',
+									'json' => '{name: "Hildegard Testimen"}',
+									'csv' => "name\r\nHildegard Testimen",
+									'xml' => '<name>Hildegard Testimen</name>'
+								],
+								'template' => '{name}',
 								 'result' => 'Hildegard Testimen'])
 
 <h3 id="templates-replacing-nested">Nested replacing</h3>
 	<p>We also support multilevel objects in data. Simple use <code>{OBJ1.OBJ2.KEYWORD}</code>.<p>
-	<p>When your data are, for example, following:</p>
-	<pre><code class="language-json" data-lang="json">{
-	person: {
-		'name': 'Hildegarda Testimenova',
-		'age': 25
-	}
-}</code></pre>
-	<p>you can then place name inside document by writing: <code>{person.name}</code> and age by: <code>{person.age}</code>.</p>
+
+	@include('partial.example', ['request' => [
+									'json' => '{ person: { name: "Hildegard Testimen", age: 25 } }',
+									'csv' => "person.name;person.age\r\nHildegard Testimen;25",
+									'xml' => '<person><name>Hildegard Testimen</name><age>25</age></person>'
+								],
+								'template' => '{person.name} ({person.age})',
+								'result' => 'Hildegard Testimen (25)'])
 
 <h3 id="templates-cycles">Multiitem replacing</h3>
 	<p>You can also have repeated items inside your data. To insert them,
@@ -83,14 +106,13 @@ where each document is single object containing all the data.</p>
 	<p>It's vitaly important, that both <code>{foreach}</code> and <code>{/foreach}</code> tags must be on own line.
 	Anything that will be on the same line will be deleted.</p>
 	<p>Example data:</p>
-	<pre><code class="language-json" data-lang="json">{
-	items: [
-		{ name: "Item 1", cost: 5 },
-		{ name: "Item 2", cost: 6 }
-	]
-}</code></pre>
-	<p>This is how your document would look like:</p>
-	<img src="{{ asset('img/example_01.png') }}" alt="Example of foreach" />
+	
+	@include('partial.example', ['request' => [
+									'json' => '{ items: [ { name: "Item 1", cost: 5 }, { name: "Item 2", cost: 6 } ]',
+									'xml' => '<items><name>Item 1</name><cost>5</cost></items><items><name>Item 2</name><cost>6</cost></items>'
+								],
+								'template' => "{foreach items as item}\r\n{item.name} ({item.cost})\r\n{/foreach}",
+								'result' => "Item 1 (5)\r\nItem 2 (6)"])
 
 <h3 id="templates-cycles-tables">Multiitem replacing in tables</h3>
 	<p>To repeat table rows you need to write <code>{foreach items as item}</code> to one row, then add rows that will contain items,
@@ -105,9 +127,15 @@ where each document is single object containing all the data.</p>
 	<h4>Date filter</h4>
 	<p>Use this filter to format a date value to a specific format. For supported formats see <a target="_blank" href="http://php.net/manual/en/function.date.php">available formats</a>.
 	As a date value you can use a unix timestamp or dates supported by PHP function <a target="_blank" href="http://php.net/manual/en/function.strtotime.php">strtotime</a>.</p>
-	<p>Examples:</p>
-	<pre><code><p>date = 1447137857; format = "Y-m-d:H-i-s"; {date|format} // => 2015-11-10:06-44-17</p>
-	      <p>date = "2015-11-10"; format = "d/m/Y"; {date|format} // => 10/11/2015</p></code></pre>
+
+		@include('partial.example', ['request' => [
+									'json' => '{ date1: 1447137857, format1: "Y-m-d:H-i-s", date2: "2015-11-10", format2 = "d/m/Y" }',
+									'csv' => "date1;format1;date2;format2\r\n1447137857;Y-m-d:H-i-s;2015-11-10;d/m/Y",
+									'xml' => '<date1>1447137857</date1><format1>Y-m-d:H-i-s</format1><date2>2015-11-10</date2><format2>d/m/Y</format2>'
+								],
+								'template' => "{date1|format1}\r\n{date2|format2}",
+								'result' => "2015-11-10:06-44-17\r\n10/11/2015"])
+
 	<h4>String filters</h4>
 	<p>To convert strings to uppercase letters use <code>{string|upper}</code> For lowercase letters use <code>{string|lower}</code>.</p>
 	<p>Examples:</p>
@@ -168,164 +196,12 @@ where each document is single object containing all the data.</p>
 	</div>
 @overwrite
 @section('custom_scripts')
-	<script type="text/javascript">
-		function active_links(links, activeClass, activeColor, originalColor)
-		{
-			links.click(function (e) {
-				var that = $(this);
-				that.parent().addClass(activeClass);
-				that.css('color', activeColor);
-				links.each(function () {
-					var thatt = $(this);
-					if (!thatt.is(that)) {
-						thatt.parent().removeClass(activeClass);
-						thatt.css('color', originalColor);
-					}
-				});
-			});
-		}
-		function scroll_with_click()
-		{
-			$('#leftMenu a').click(function() {
-				var id = $(this).data('id');
-				$('html, body').animate({
-        			scrollTop: $(id).offset().top
-    			}, 100);
-			});
-		}
-		function scroll_menu()
-		{
-			var $sidebar   = $("#leftMenu"),
-        		$window    = $(window),
-        		offset     = $sidebar.offset(),
-        		topPadding = 15;
-    		$window.scroll(function() {
-        		if ($window.scrollTop() > offset.top) {
-            		$sidebar.stop().animate({
-                		marginTop: $window.scrollTop() - offset.top + topPadding
-            		});
-        		} else {
-           			$sidebar.stop().animate({
-                		marginTop: 0
-            		});
-        		}
-    		});
-		}
-		$(document).ready(function () {
-			active_links($('.accordion-heading a'), 'active_heading', 'white', '#ECF0F1');
-			active_links($('#collapseTwo ul a'), 'active_link', 'white', '#2C3E50');
-			scroll_with_click();
-			scroll_menu();
+<script type="text/javascript">
 
-function showRequestDataType(dataType, requestType, counter)
-{
-	var request = $('#' + requestType + '-' + dataType + '-' + counter);
-		request.show();
-	return request;
-}
-function hideOtherRequestDataTypes(showedRequest)
-{
-	showedRequest.siblings('pre').hide();
-}
+	$('body').scrollspy({
+    	target: '.bs-docs-sidebar',
+    	offset: 100
+	});
 
-function disableOtherButtons(enabledButton, otherButtons)
-{
-	otherButtons.removeClass('active');
-}
-			/* Manages data types and requests for each example */
-function RequestDataTypesHandler()
-{	
-	/* Array of valid data types */
-	var dataTypes = ['json', 'csv', 'xml'];
-
-	/* Array of valid request types */
-	var requestTypes = ['data', 'full'];
-
-	/* Array used to hold which of valid data type and request type is used for an example(counter) */
-	var currentRequestDataTypesByExample = [];
-
-	/* Initialization of dataTypes for each example. Default dataType is json */
-	(function () {
-		$('div.example').each(function () {
-			var counter = parseInt($(this).data('counter'), 10);
-			if (counter >= 0) {
-				currentRequestDataTypesByExample[counter] = {requestType: 'full', dataType: 'json'};
-				hideOtherRequestDataTypes(showRequestDataType('json', 'full', counter));
-			} else {
-				throw "Invalid Example";
-			}
-		});		
-	}());
-
-	/* Checks if dataType id valid */
-	var validDataType = function (dataType) {
-		return $.inArray(dataType, dataTypes) !== -1;
-	};
-
-	/* Checks if requestType id valid */
-	var validRequestType = function (requestType) {
-		return $.inArray(requestType, requestTypes) !== -1;
-	};
-
-	/* Checks if counter is valid */
-	var validCounter = function (counter) {
-		return counter >= 0 && counter < currentRequestDataTypesByExample.length;
-	};
-
-	/* Returns object with current data type and request type used for example(counter). */
-	this.getCurrentRequestDataTypeByExample = function (counter) {
-		var intCounter = parseInt(counter, 10);
-		if (validCounter(intCounter)) {
-			return currentRequestDataTypesByExample[intCounter];
-		}
-		throw "Invalid Example";
-	};
-
-	/* Sets dataType used for example(counter). */
-	this.setCurrentDataTypeByExample = function (counter, dataType) {
-		var intCounter = parseInt(counter, 10);
-		if (validDataType(dataType) && validCounter(intCounter)) {
-			currentRequestDataTypesByExample[intCounter].dataType = dataType;
-		} else {
-			throw "Invalid Example Or DataType";
-		}
-	};
-
-	/* Sets dataType used for example(counter). */
-	this.setCurrentRequestTypeByExample = function (counter, requestType) {
-		var intCounter = parseInt(counter, 10);
-		if (validRequestType(requestType) && validCounter(intCounter)) {
-			currentRequestDataTypesByExample[intCounter].requestType = requestType;
-		} else {
-			throw "Invalid Example Or RequestType";
-		}
-	};
-}
-var requestDataTypesHandler = new RequestDataTypesHandler();
-$('div.example button.data-type').click(function () {
-	var $this = $(this);
-	var counter = $this.parent().data('counter');
-	var dataType = $this.data('datatype');
-	var requestType = requestDataTypesHandler.getCurrentRequestDataTypeByExample(counter).requestType;
-	requestDataTypesHandler.setCurrentDataTypeByExample(counter, dataType);
-	hideOtherRequestDataTypes(showRequestDataType(dataType, requestType, counter));
-	$this.addClass('active');
-	disableOtherButtons($this, $this.siblings('button.data-type'));
-});
-$('div.example button.request-type').click(function () {
-	var $this = $(this);
-	var counter = $this.parent().data('counter');
-	var requestType = $this.data('requesttype');
-	var dataType = requestDataTypesHandler.getCurrentRequestDataTypeByExample(counter).dataType;
-	requestDataTypesHandler.setCurrentRequestTypeByExample(counter, requestType);
-	hideOtherRequestDataTypes(showRequestDataType(dataType, requestType, counter));
-	$this.addClass('active');
-	disableOtherButtons($this, $this.siblings('button.request-type'));
-});
-$('.nav-tabs a').click(function(e) {
-	e.preventDefault();
-	$(this).tab('show');
-});
-		});
 </script>
 @endsection

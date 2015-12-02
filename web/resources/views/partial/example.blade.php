@@ -19,17 +19,17 @@ global $counter;
             <pre id="full-json-{{ $counter }}"><code class="language-json" data-lang="json">{
     template_id: 1,
     data_type: 'json',
-    data: {{ $request['json'] }}
+    data: '{{ $request['json'] or '' }}'
 }</code></pre>
             <pre id="full-csv-{{ $counter }}"><code class="language-json" data-lang="json">{
     template_id: 1,
     data_type: 'csv',
-    data: {{ $request['csv'] }}
+    data: '{{ $request['csv'] or '' }}'
 }</code></pre>
             <pre id="full-xml-{{ $counter }}"><code class="language-json" data-lang="json">{
     template_id: 1,
     data_type: 'xml',
-    data: {{ $request['xml'] }}
+    data: '&lt;root&gt;&lt;document&gt;{{ $request['xml'] or '' }}&lt;/document&gt;&lt;/root&gt;'
 }</code></pre>
             <div class="btn-toolbar">
                 <div class="btn-group pull-right" data-counter="{{ $counter }}">
@@ -37,7 +37,9 @@ global $counter;
                     <button type="button" class="btn btn-default request-type" data-requesttype="data">Only data</button>
                 </div> <div class="btn-group" data-counter="{{ $counter }}">
                     <button type="button" class="btn btn-default active data-type" data-datatype="json">JSON</button>
+                    @if (isset($request['csv']))
                     <button type="button" class="btn btn-default data-type" data-datatype="csv">CSV</button>
+                    @endif
                     <button type="button" class="btn btn-default data-type" data-datatype="xml">XML</button>
                 </div>
             </div>
