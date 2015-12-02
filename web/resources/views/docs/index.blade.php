@@ -101,19 +101,26 @@ where each document is single object containing all the data.</p>
 
 	<h4>String filters</h4>
 	<p>To convert strings to uppercase letters use <code>{string|upper}</code> For lowercase letters use <code>{string|lower}</code>.</p>
-	<p>Examples:</p>
-	<pre><code><p>string = "Hello World"; {string|upper} // => "HELLO WORLD"</p>
-	      <p>string = "Hello World"; {string|lower} // => "hello world"</p></code></pre>
+			
+		@include('partial.example', ['request' => [
+									'json' => '{ string: "Hello World" }',
+									'csv' => "string\r\nHello Wordl",
+									'xml' => '<string>Hello World</string>'
+								],
+								'template' => "{string|upper}\r\n{string|lower}",
+								'result' => "HELLO WORLD\r\nhello world"])
+
 	<h4>Number filter</h4>
 	With this filter you can use EU format or US format by default. Usage id <code>{value|number standard [number of digits after decimal point]} // => 1 111<p></code>
-	<p>Examples:</p>
-	<pre><code class="language-json" data-lang="json">
-	<p>num = 1111; {num|number eu 2} // => 1 111,00</p>
-	<p>num = 1111; {num|number us 2} // => 1,111.00</p>
-	<p>num = 1111; {num|number eu} // => 1 111</p>
-	<p>num = 1111; {num|number us} // => 1,111</p>
-	<p>num = 1111; {num|number} // => 1,111</p>
-	</code></pre>
+	
+	@include('partial.example', ['request' => [
+									'json' => '{ num: "1111" }',
+									'csv' => "num\r\n1111",
+									'xml' => '<num>1111</num>'
+								],
+								'template' => "{num|number eu 2}\r\n{num|number us 2}\r\n{num|number eu}\r\n{num|number us}\r\n{num|number}",
+								'result' => "1 111,00\r\n1,111.00\r\n1 111\r\n1,111\r\n1,111"])
+
 	<h2 id="examples">Examples</h1>
 	<h3>Document</h3>
 		<img src="{{ asset('examples/template.png') }}" class="img img-responsive" />
