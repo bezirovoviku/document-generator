@@ -57,10 +57,30 @@ where each document is single object containing all the data.</p>
 	<p>Our system simply replaces specified keywords inside document text. Keywords are expected in format <code>{KEYWORD}</code>.<p>
 
 	@include('partial.example', ['requests' => [
-									'json' => '{name: "Hildegard Testimen"}',
-									'csv' => "name\n\"Hildegard Testimen\"",
-									'xml' => '<name>Hildegard Testimen</name>'],
-								 'template' => '{name}', 'result' => 'Hildegard Testimen'])
+									'data' => [
+										'json' => '{name: "Hildegard Testimen"}',
+										'csv' => "name\n\"Hildegard Testimen\"",
+										'xml' => '<root><name>Hildegard Testimen</name></root>'],
+									],
+									'full' => [
+										'json' => "{\n
+   														template_id: 1,\n
+   														data_type: 'json',\n
+   														data: {name: 'Hildegard Testimen'}\n
+													}",
+										'csv' => "{\n
+   														template_id: 1,\n
+   														data_type: 'csv',\n
+   														data: 'name\r\nHildegard Testimen'\n
+												    }",
+										'xml' => "{\n
+   														template_id: 1,\n
+   														data_type: 'xml',\n
+   														data: '<root><name>Hildegard Testimen</name></root>'\n
+													}"]
+									]],
+								 'template' => '{name}',
+								 'result' => 'Hildegard Testimen'])
 
 <h3 id="templates-replacing-nested">Nested replacing</h3>
 	<p>We also support multilevel objects in data. Simple use <code>{OBJ1.OBJ2.KEYWORD}</code>.<p>
