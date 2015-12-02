@@ -24,43 +24,6 @@
     </ul>
 </nav>
 
-<!--<div class="col-md-2">
-	<div class="accordion navbar navbar-default" role="navigation" id="leftMenu">
-        <div class="accordion-group">
-            <div class="accordion-heading">
-            	<a class="accordion-toggle" data-toggle="collapse" data-parent="#leftMenu" href="#" data-id="#api">
-                    API
-                </a>
-            </div>
-        </div>
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#leftMenu" href="#collapseTwo" data-id="#templates">
-                    TEMPLATES
-                </a>
-            </div>
-            <div id="collapseTwo" class="accordion-body collapse" style="height: 0px; ">
-            	<div class="accordion-inner">
-                    <ul>
-                        <li><a href="#" data-id="#templates-replacing">Word Replacing</a></li>
-                        <li><a href="#" data-id="#templates-replacing-nested">Nested Replacing</a></li>
-                        <li><a href="#" data-id="#templates-cycles">Multiitem Replacing</a></li>
-                        <li><a href="#" data-id="#templates-cycles-tables">Multiitem Replacing In Tables</a></li>
-                        <li><a href="#" data-id="#templates-filters">Template Filters</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#leftMenu" href="#collapseThree" data-id="#examples">
-                    EXAMPLES
-                </a>
-            </div>
-        </div>
-    </div>
-</div>-->
-
 <div class="col-md-6">
 <h1 class="page-header" id="doc">Documentation</h1>
 
