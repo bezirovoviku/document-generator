@@ -1,4 +1,19 @@
-/* Manages data types and requests for each example */
+function showRequestDataType(dataType, requestType, counter)
+{
+	var request = $('#' + requestType + '-' + dataType + '-' + counter);
+		request.show();
+	return request;
+}
+function hideOtherRequestDataTypes(showedRequest)
+{
+	showedRequest.siblings('pre').hide();
+}
+
+function disableOtherButtons(enabledButton, otherButtons)
+{
+	otherButtons.removeClass('active');
+}
+			/* Manages data types and requests for each example */
 function RequestDataTypesHandler()
 {	
 	/* Array of valid data types */
@@ -16,8 +31,10 @@ function RequestDataTypesHandler()
 			var counter = parseInt($(this).data('counter'), 10);
 			if (counter >= 0) {
 				currentRequestDataTypesByExample[counter] = {requestType: 'full', dataType: 'json'};
+				hideOtherRequestDataTypes(showRequestDataType('json', 'full', counter));
+			} else {
+				throw "Invalid Example";
 			}
-			throw "Invalid Example";
 		});		
 	}());
 
@@ -27,13 +44,13 @@ function RequestDataTypesHandler()
 	};
 
 	/* Checks if requestType id valid */
-	var validDataType = function (requestType) {
+	var validRequestType = function (requestType) {
 		return $.inArray(requestType, requestTypes) !== -1;
 	};
 
 	/* Checks if counter is valid */
 	var validCounter = function (counter) {
-		return counter >= 0 && counter < currentDataTypesByExample.length;
+		return counter >= 0 && counter < currentRequestDataTypesByExample.length;
 	};
 
 	/* Returns object with current data type and request type used for example(counter). */
@@ -50,61 +67,42 @@ function RequestDataTypesHandler()
 		var intCounter = parseInt(counter, 10);
 		if (validDataType(dataType) && validCounter(intCounter)) {
 			currentRequestDataTypesByExample[intCounter].dataType = dataType;
+		} else {
+			throw "Invalid Example Or DataType";
 		}
-		throw "Invalid Example Or DataType";	
 	};
 
 	/* Sets dataType used for example(counter). */
 	this.setCurrentRequestTypeByExample = function (counter, requestType) {
 		var intCounter = parseInt(counter, 10);
-		if (validRequestType(dataType) && validCounter(intCounter)) {
+		if (validRequestType(requestType) && validCounter(intCounter)) {
 			currentRequestDataTypesByExample[intCounter].requestType = requestType;
+		} else {
+			throw "Invalid Example Or RequestType";
 		}
-		throw "Invalid Example Or RequestType";	
 	};
 }
 var requestDataTypesHandler = new RequestDataTypesHandler();
-
-function showRequestDataType(dataType, requestType, counter)
-{
-	var request = $(requestType + '-' + dataType + '-' + counter);
-		request.show();
-	return request;
-}
-function hideOtherRequestDataTypes(showedRequest)
-{
-	showedRequest.siblings('pre').hide();
-}
-
-function disableOtherButtons(enabledButton, otherButtons)
-{
-	otherButtons.removeClass('active');
-}
-
-function manageExamples()
-{
-	$('div.example button.data-type').click(function () {
-		var $this = $(this);
-		var counter = $this.parent().data('counter');
-		var dataType = $this.data('dataType');
-		var requestType = requestDataTypesHandler.getCurrentRequestDataTypeByExample(counter).requestType;
-		requestDataTypesHandler.setCurrentDataTypeByExample(counter, dataType);
-		hideOtherRequestDataTypes(showRequestDataType(dataType, requestType, counter));
-		$this.addClass('active');
-		disableOtherButtons($this, $this.siblings('button.data-type'));
-	});
-	$('div.example button.request-type').click(function () {
-		var $this = $(this);
-		var counter = $this.parent().data('counter');
-		var requestType = $this.data('requestType');
-		var dataType = requestDataTypesHandler.getCurrentRequestDataTypeByExample(counter).dataType;
-		requestDataTypesHandler.setCurrentRequestTypeByExample(counter, requestType);
-		hideOtherRequestDataTypes(showRequestDataType(dataType, requestType, counter));
-		$this.addClass('active');
-		disableOtherButtons($this, $this.siblings('button.request-type'));
-	});
-}
-
+$('div.example button.data-type').click(function () {
+	var $this = $(this);
+	var counter = $this.parent().data('counter');
+	var dataType = $this.data('datatype');
+	var requestType = requestDataTypesHandler.getCurrentRequestDataTypeByExample(counter).requestType;
+	requestDataTypesHandler.setCurrentDataTypeByExample(counter, dataType);
+	hideOtherRequestDataTypes(showRequestDataType(dataType, requestType, counter));
+	$this.addClass('active');
+	disableOtherButtons($this, $this.siblings('button.data-type'));
+});
+$('div.example button.request-type').click(function () {
+	var $this = $(this);
+	var counter = $this.parent().data('counter');
+	var requestType = $this.data('requesttype');
+	var dataType = requestDataTypesHandler.getCurrentRequestDataTypeByExample(counter).dataType;
+	requestDataTypesHandler.setCurrentRequestTypeByExample(counter, requestType);
+	hideOtherRequestDataTypes(showRequestDataType(dataType, requestType, counter));
+	$this.addClass('active');
+	disableOtherButtons($this, $this.siblings('button.request-type'));
+});
 $('.nav-tabs a').click(function(e) {
 	e.preventDefault();
 	$(this).tab('show');
