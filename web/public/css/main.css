@@ -6598,6 +6598,9 @@ button.close {
 .example .tab-content {
   padding: 1em 0 0 0;
 }
+.example .btn-toolbar {
+  padding: 1em 0 0 0;
+}
 .scrollspy {
   position: fixed;
   /* hide inactive nested list */

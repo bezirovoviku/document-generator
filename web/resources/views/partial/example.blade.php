@@ -11,6 +11,19 @@ global $counter;
         <li><a href="#result{{ $counter }}">Result</a></li>
     </ul>
 
+    <div class="btn-toolbar">
+        <div class="btn-group pull-right" data-counter="{{ $counter }}">
+            <button type="button" class="btn btn-default btn-sm active request-type" data-requesttype="full">Full request</button>
+            <button type="button" class="btn btn-default btn-sm request-type" data-requesttype="data">Only data</button>
+        </div> <div class="btn-group" data-counter="{{ $counter }}">
+            <button type="button" class="btn btn-default btn-sm active data-type" data-datatype="json">JSON</button>
+            @if (isset($request['csv']))
+            <button type="button" class="btn btn-default btn-sm data-type" data-datatype="csv">CSV</button>
+            @endif
+            <button type="button" class="btn btn-default btn-sm data-type" data-datatype="xml">XML</button>
+        </div>
+    </div>
+
     <div class="tab-content">
         <div class="tab-pane active" id="request{{ $counter }}">
             <pre id="data-json-{{ $counter }}"><code class="language-json" data-lang="json">{{ $request['json'] or '' }}</code></pre>
@@ -31,18 +44,6 @@ global $counter;
     data_type: 'xml',
     data: '&lt;root&gt;&lt;document&gt;{{ $request['xml'] or '' }}&lt;/document&gt;&lt;/root&gt;'
 }</code></pre>
-            <div class="btn-toolbar">
-                <div class="btn-group pull-right" data-counter="{{ $counter }}">
-                    <button type="button" class="btn btn-default active request-type" data-requesttype="full">Full request</button>
-                    <button type="button" class="btn btn-default request-type" data-requesttype="data">Only data</button>
-                </div> <div class="btn-group" data-counter="{{ $counter }}">
-                    <button type="button" class="btn btn-default active data-type" data-datatype="json">JSON</button>
-                    @if (isset($request['csv']))
-                    <button type="button" class="btn btn-default data-type" data-datatype="csv">CSV</button>
-                    @endif
-                    <button type="button" class="btn btn-default data-type" data-datatype="xml">XML</button>
-                </div>
-            </div>
         </div>
 
         <div class="tab-pane" id="template{{ $counter }}">
