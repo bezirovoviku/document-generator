@@ -6598,99 +6598,27 @@ button.close {
 .example .tab-content {
   padding: 1em 0 0 0;
 }
-#leftMenu a {
-  display: block;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 5px;
-  color: #ECF0F1;
-  text-decoration: none;
-}
-#leftMenu #collapseTwo a {
-  color: #2C3E50;
-}
-#collapseTwo li {
-  margin: 0;
-  padding-left: 5px;
-}
-#leftMenu {
-  background-color: #2C3E50;
-  color: #ECF0F1;
-}
-#collapseTwo ul {
-  list-style-type: none;
-  background-color: #ECF0F1;
-  color: #2C3E50;
-  margin: 0;
-  padding-left: 0;
-}
-#leftMenu div.accordion-heading.active_heading {
-  background-color: #3A526A;
-}
-#collapseTwo ul li.active_link {
-  background-color: #95A5A6;
-}
-.group {
-  background: yellow;
-  width: 200px;
-  height: 500px;
-}
-.group .subgroup {
-  background: orange;
-  width: 150px;
-  height: 200px;
-}
-.fixed {
+.scrollspy {
   position: fixed;
+  /* hide inactive nested list */
+  /* show active nested list */
 }
-/* sidebar */
-.bs-docs-sidebar {
+.scrollspy .nav > .active:focus > a,
+.scrollspy .nav > .active:hover > a,
+.scrollspy .nav > .active > a {
+  padding-left: 18px;
+  font-weight: 700;
+  color: #222222;
+  border-left: 2px solid #2c3e50;
+}
+.scrollspy .nav > li > a {
   padding-left: 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-/* all links */
-.bs-docs-sidebar .nav > li > a {
-  color: #999;
-  border-left: 2px solid transparent;
-  padding: 4px 20px;
-  font-size: 13px;
   font-weight: 400;
 }
-/* nested links */
-.bs-docs-sidebar .nav .nav > li > a {
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-left: 30px;
-  font-size: 12px;
-}
-/* active & hover links */
-.bs-docs-sidebar .nav > .active > a,
-.bs-docs-sidebar .nav > li > a:hover,
-.bs-docs-sidebar .nav > li > a:focus {
-  color: #563d7c;
-  text-decoration: none;
-  background-color: transparent;
-  border-left-color: #563d7c;
-}
-/* all active links */
-.bs-docs-sidebar .nav > .active > a,
-.bs-docs-sidebar .nav > .active:hover > a,
-.bs-docs-sidebar .nav > .active:focus > a {
-  font-weight: 700;
-}
-/* nested active links */
-.bs-docs-sidebar .nav .nav > .active > a,
-.bs-docs-sidebar .nav .nav > .active:hover > a,
-.bs-docs-sidebar .nav .nav > .active:focus > a {
-  font-weight: 500;
-}
-/* hide inactive nested list */
-.bs-docs-sidebar .nav ul.nav {
+.scrollspy ul.nav {
   display: none;
 }
-/* show active nested list */
-.bs-docs-sidebar .nav > .active > ul.nav {
+.scrollspy .active > ul.nav {
   display: block;
 }
 

@@ -3,28 +3,30 @@
 
 @section('content')
 
-<nav class="col-md-2 bs-docs-sidebar">
-	<ul id="sidebar" class="nav nav-stacked fixed">
-        <li>
-            <a href="#api">API</a>
-        </li>
-        <li>
-            <a href="#templates">Templates</a>
-            <ul class="nav nav-stacked">
-            	<li><a href="#templates-replacing">Word Replacing</a></li>
+<div class="container">
+<div class="row">
+<nav class="col-md-3 hidden-sm hidden-xs">
+	<ul class="nav nav-stacked scrollspy">
+		<li>
+			<a href="#api">API</a>
+		</li>
+		<li>
+			<a href="#templates">Templates</a>
+			<ul class="nav nav-stacked">
+				<li><a href="#templates-replacing">Word Replacing</a></li>
 				<li><a href="#templates-replacing-nested">Nested Replacing</a></li>
 				<li><a href="#templates-cycles">Multiitem Replacing</a></li>
 				<li><a href="#templates-cycles-tables">Multiitem Replacing In Tables</a></li>
 				<li><a href="#templates-filters">Template Filters</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="#examples">Examples</a>
-        </li>
-    </ul>
+			</ul>
+		</li>
+		<li>
+			<a href="#examples">Examples</a>
+		</li>
+	</ul>
 </nav>
 
-<div class="col-md-6">
+<div class="col-md-9 col-sm-12">
 <h1 class="page-header" id="doc">Documentation</h1>
 
 <p>On this page you find documentation to our document generator.</p>
@@ -69,7 +71,7 @@ where each document is single object containing all the data.</p>
 	<p>It's vitaly important, that both <code>{foreach}</code> and <code>{/foreach}</code> tags must be on own line.
 	Anything that will be on the same line will be deleted.</p>
 	<p>Example data:</p>
-	
+
 	@include('partial.example', ['request' => [
 									'json' => '{ items: [ { name: "Item 1", cost: 5 }, { name: "Item 2", cost: 6 } ]',
 									'xml' => '<items><name>Item 1</name><cost>5</cost></items><items><name>Item 2</name><cost>6</cost></items>'
@@ -101,7 +103,7 @@ where each document is single object containing all the data.</p>
 
 	<h4>String filters</h4>
 	<p>To convert strings to uppercase letters use <code>{string|upper}</code> For lowercase letters use <code>{string|lower}</code>.</p>
-			
+
 		@include('partial.example', ['request' => [
 									'json' => '{ string: "Hello World" }',
 									'csv' => "string\r\nHello Wordl",
@@ -112,7 +114,7 @@ where each document is single object containing all the data.</p>
 
 	<h4>Number filter</h4>
 	With this filter you can use EU format or US format by default. Usage id <code>{value|number standard [number of digits after decimal point]} // => 1 111<p></code>
-	
+
 	@include('partial.example', ['request' => [
 									'json' => '{ num: "1111" }',
 									'csv' => "num\r\n1111",
@@ -159,18 +161,28 @@ where each document is single object containing all the data.</p>
 <p><a href="/examples/template.docx"><i class="glyphicon glyphicon-floppy-save"></i> template.docx - example template</a></p>
 <p><a href="/examples/data.json"><i class="glyphicon glyphicon-floppy-save"></i> data.json - example data</a></p>
 </div>
+
+</div> {{-- end .row --}}
+</div> {{-- end .container --}}
+
 @endsection
+
 @section('footer')
-	<div id="footer" class="col-md-10 pull-right">
-		© {{ Config::get('app.name') }} {{ date('Y') }}
+	<div class="container">
+		<div class="row">
+			<div id="footer" class="col-xs-12">
+				<p>© {{ Config::get('app.name') }} {{ date('Y') }}</p>
+			</div>
+		</div>
 	</div>
 @overwrite
+
 @section('custom_scripts')
 <script type="text/javascript">
 
 	$('body').scrollspy({
-    	target: '.bs-docs-sidebar',
-    	offset: 100
+		target: '.scrollspy',
+		offset: 100
 	});
 
 </script>
