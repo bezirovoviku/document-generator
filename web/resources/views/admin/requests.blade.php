@@ -28,6 +28,7 @@
 					<td class="text-muted"><s>{{ $request->template->name }}</s></td>
 				@endif
 				<td>@include('partial.request_status', ['request' => $request])</td>
+				<td><a href="{{ action('RequestController@show', $request->id) }}" class="btn btn-xs btn-link">details</a></td>
 			</tr>
 			@empty
 			<tr>
