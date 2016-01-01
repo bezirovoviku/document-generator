@@ -69,73 +69,6 @@ class ApiController extends Controller {
 	}
 
 	/**
-	 * Parses request data
-	 * @param string $type data type, csv/json/xml expected.
-	 * @param string|object $data data content
-	 * @return array|null result data or null when parsing failed
-	 */
-	private function parseData($type, $data) {
-		//json in json
-		if (is_object($data) || is_array($data)) {
-			return $type == 'json' ? $data : null;
-		}
-		
-		//text data, possibly json too
-		if (is_string($data)) {
-			//@TODO: Better way to tree this?
-			switch($type) {
-				case 'xml':
-					$xml = Parser::xml($data);
-					if (!$xml)
-						return null;
-					
-					$data = array();
-					foreach($xml as $key => $value) {
-						if (is_array($value))
-							$data = array_merge($data, $value);
-						else
-							$data[] = $value;
-					}
-					
-					return $data;
-				case 'json':
-					return Parser::json($data);
-				case 'csv':
-					$reader = Reader::createFromString($data);
-					$reader->setDelimiter(';');
-					
-					//Load header, which is required
-					$header = $reader->fetchOne();
-					if (!$header || count($header) == 0) {
-						return null;
-					}
-					
-					//Parse each row
-					$data = array();
-					foreach($reader as $index => $row) {
-						if ($index == 0)
-							continue;
-						
-						$columns = array();
-						foreach($row as $column => $value) {
-							if (!isset($header[$column]))
-								return null;
-								
-							$columns[$header[$column]] = $value;
-						}
-						$data[] = $columns;
-					}
-					
-					return $data;
-				default:
-					return null;
-			}
-		}
-		
-		return null;
-	}
-
-	/**
 	 * Creates request to generate
 	 */
 	public function createRequest(Request $request) {
@@ -159,24 +92,20 @@ class ApiController extends Controller {
 			throw new ApiException('Template not found.');
 		}
 
-		//Validate and parse input data
-		$data_type = $request->input('data_type', 'json');
-		$data = $request->input('data');
-		
-		//json in json
-		$data = $this->parseData($data_type, $data);
-		
-		//No data or parsing failed
-		if (is_null($data) || count($data) == 0) {
-			throw new ApiException('Data are empty or in invalid format.');
-		}
-		
 		$requestModel = new RequestModel([
 			'type' => $request->input('type'),
-			'data' => json_encode($data),
 			'callback_url' => $request->input('callback_url'),
 		]);
-		
+
+		// try to set data for the request
+		try {
+			$data = $request->input('data');
+			$data_type = $request->input('data_type', 'json');
+			$requestModel->setData($data, $data_type);
+		} catch (Exception $e) {
+			throw new ApiException('Invalid data format.', 0, $e);
+		}
+
 		$requestModel->user()->associate($template->user);
 		$template->requests()->save($requestModel);
 

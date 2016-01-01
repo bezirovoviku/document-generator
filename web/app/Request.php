@@ -13,7 +13,7 @@ class Request extends Model {
 	const STATUS_FAILED = 'failed';
 	const STATUS_IN_PROGRESS = 'in_progress';
 
-	protected $fillable = ['type', 'data', 'callback_url'];
+	protected $fillable = ['type', 'callback_url'];
 	protected $dates = ['created_at', 'updated_at', 'generated_at'];
 	protected $appends = ['status'];
 	protected $visible = ['id', 'template_id', 'status'];
@@ -66,6 +66,72 @@ class Request extends Model {
 			$this->failed_at = $this->freshTimestamp();
 		} else {
 			throw new Exception('Unknown request status value.');
+		}
+	}
+
+	/**
+	 * Set request data
+	 * @param string|object $data data content
+	 * @param string $type data type, csv/json/xml expected.
+	 * @return array|null result data or null when parsing failed
+	 */
+	public function setData($data, $type = 'json') {
+		switch($type) {
+			case 'json':
+				if (is_object($data) || is_array($data)) {
+					$this->data = json_encode($data);
+				} elseif (is_string($data)) {
+					$this->data = json_encode(Parser::json($data));
+				} else {
+					throw new Exception('Unknown JSON data format.');
+				}
+				break;
+
+			case 'xml':
+				$xml = Parser::xml($data);
+				if (!$xml) {
+					throw new Exception('Cannot parse XML.');
+				}
+
+				$data = [];
+				foreach($xml as $key => $value) {
+					if (is_array($value))
+						$data = array_merge($data, $value);
+					else
+						$data[] = $value;
+				}
+				$this->data = json_encode($data);
+				break;
+
+			case 'csv':
+				$reader = Reader::createFromString($data);
+				$reader->setDelimiter(';');
+
+				// load header, which is required
+				$header = $reader->fetchOne();
+				if (!$header || count($header) == 0) {
+					throw new Exception('Missing header in CSV file.');
+				}
+
+				// parse each row
+				$data = [];
+				foreach($reader as $index => $row) {
+					if ($index == 0) continue; // skip header
+					$columns = [];
+					foreach($row as $column => $value) { // parse each column in each row
+						if (!isset($header[$column])) {
+							throw new Exception('Unknown column in CSV file.');
+						}
+						$columns[$header[$column]] = $value;
+					}
+					$data[] = $columns;
+				}
+
+				$this->data = json_encode($data);
+				break;
+
+			default:
+				throw new Exception('Unknown data format.');
 		}
 	}
 
