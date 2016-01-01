@@ -15,7 +15,6 @@ class RequestSeeder extends Seeder {
 		for ($i = 0; $i < 100; $i++) {
 			$request = new Request([
 				'type' => $faker->randomElement(['pdf', 'docx']),
-				'data' => NULL,
 				'callback_url' => $faker->url,
 				'created_at' => ($created_at = $faker->dateTimeThisYear),
 				'updated_at' => $created_at,
