@@ -29,7 +29,7 @@ function disableOtherButtons(enabledButton, otherButtons)
 }
 			/* Manages data types and requests for each example */
 function RequestDataTypesHandler()
-{	
+{
 	/* Array of valid data types */
 	var dataTypes = ['json', 'csv', 'xml'];
 
@@ -49,7 +49,7 @@ function RequestDataTypesHandler()
 			} else {
 				throw "Invalid Example";
 			}
-		});		
+		});
 	}());
 
 	/* Checks if dataType id valid */
