@@ -127,6 +127,7 @@
 					<th class="text-right">ID</th>
 					<th>Template</th>
 					<th>Status</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -139,6 +140,7 @@
 						<td class="text-muted"><s>{{ $request->template->name }}</s></td>
 					@endif
 					<td>@include('partial.request_status', ['request' => $request])</td>
+					<td><a href="{{ action('RequestController@show', $request->id) }}" class="btn btn-xs btn-link">details</a></td>
 				</tr>
 				@empty
 				<tr>
@@ -209,7 +211,7 @@
 @endsection
 
 {{-- add Chart.JS and setup chart --}}
-@section('scripts')
+@section('custom_scripts')
 @parent
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 	<script type="text/javascript">
