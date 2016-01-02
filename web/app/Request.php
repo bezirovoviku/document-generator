@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Docx\Generator;
+use Docx\Converter\OPDF;
 use DB;
 
 class Request extends Model {
@@ -75,10 +76,14 @@ class Request extends Model {
 	public function generate()
 	{
 		$generator = new Generator();
+		$converter = null;
+		if ($this->type == 'pdf')
+			$converter = new OPDF();
+		
 		$generator->addFilters();
 		$generator->setTmp(static::TMP_PATH);
 		$generator->setTemplate($this->template->getRealPathname());
-		$generator->generateArchive(json_decode($this->data, true), $this->getStoragePathname());
+		$generator->generateArchive(json_decode($this->data, true), $this->getStoragePathname(), $converter);
 	}
 
 	/**
