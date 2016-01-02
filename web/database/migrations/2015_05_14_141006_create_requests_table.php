@@ -17,7 +17,7 @@ class CreateRequestsTable extends Migration {
 			$table->increments('id');
 			$table->integer('user_id')->unsigned();
 			$table->integer('template_id')->unsigned();
-			$table->enum('type', ['docx', 'pdf'])->default('pdf');
+			$table->enum('type', ['pdf', 'docx'])->default('pdf');
 			$table->text('data')->nullable();
 			$table->string('callback_url')->nullable();
 			$table->datetime('generated_at')->nullable();
