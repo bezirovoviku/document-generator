@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider {
 		Validator::extend('xml', function($attribute, $value, $parameters, $validator) {
 			libxml_use_internal_errors(true);
 			simplexml_load_string($value);
-			return count(libxml_get_errors()) > 0;
+			return empty(libxml_get_errors());
 		});
 	}
 

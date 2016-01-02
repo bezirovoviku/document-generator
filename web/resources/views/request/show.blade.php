@@ -12,8 +12,8 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">Request data</div>
 			<div class="panel-body">
-				<div id="document-tree">
-				</div>
+				<pre><code>{{ json_encode($request->data, JSON_PRETTY_PRINT) }}</code></pre>
+				{{-- <div id="document-tree"></div> --}}
 			</div>
 		</div>
 	</div>
@@ -61,30 +61,31 @@
 
 @section('custom_scripts')
 <script type="text/javascript">
-	//@TODO: Convert this to interactive tree
+	// TODO: Convert this to interactive tree
+	// FIXME: values are not HTML safe! (in meantime use plain json display - see above)
 
-	var data = {!! $request->data !!},
-		$target = $("#document-tree");
-
-	function make_tree(data, prefix) {
-		var html = "<ul>";
-		for(var i in data) {
-			var item = data[i];
-			if (prefix)
-				i = prefix + i;
-
-			html += "<li><span class='var'>" + i + "</span>";
-			if (typeof item === typeof 0 || typeof item === typeof "") {
-				html += "<span class='value pull-right'>" + item + "</span>";
-			} else {
-				html += make_tree(item);
-			}
-			html += "</li>";
-		}
-		html += "</ul>";
-		return html;
-	}
-
-	$target.append(make_tree(data, 'document'));
+	// var data = {!! json_encode($request->data) !!},
+	// 	$target = $("#document-tree");
+	//
+	// function make_tree(data, prefix) {
+	// 	var html = "<ul>";
+	// 	for(var i in data) {
+	// 		var item = data[i];
+	// 		if (prefix)
+	// 			i = prefix + i;
+	//
+	// 		html += "<li><span class='var'>" + i + "</span>";
+	// 		if (typeof item === typeof 0 || typeof item === typeof "") {
+	// 			html += "<span class='value pull-right'>" + item + "</span>";
+	// 		} else {
+	// 			html += make_tree(item);
+	// 		}
+	// 		html += "</li>";
+	// 	}
+	// 	html += "</ul>";
+	// 	return html;
+	// }
+	//
+	// $target.append(make_tree(data, 'document'));
 </script>
 @endsection

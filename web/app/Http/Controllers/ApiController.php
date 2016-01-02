@@ -9,8 +9,6 @@ use App\Jobs\GenerateRequest;
 use App\User;
 use App\Template;
 use App\Request as RequestModel;
-use League\Csv\Reader;
-use Nathanmac\Utilities\Parser\Facades\Parser;
 
 class ApiController extends Controller {
 
@@ -102,7 +100,7 @@ class ApiController extends Controller {
 			$data = $request->input('data');
 			$data_type = $request->input('data_type', 'json');
 			$requestModel->setData($data, $data_type);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			throw new ApiException('Invalid data format.', 0, $e);
 		}
 

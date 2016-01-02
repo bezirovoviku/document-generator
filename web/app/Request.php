@@ -1,8 +1,10 @@
 <?php namespace App;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 use Docx\Generator;
-use DB;
+use League\Csv\Reader;
+use Nathanmac\Utilities\Parser\Facades\Parser;
 
 class Request extends Model {
 
@@ -65,8 +67,16 @@ class Request extends Model {
 		} elseif ($status == static::STATUS_FAILED) {
 			$this->failed_at = $this->freshTimestamp();
 		} else {
-			throw new Exception('Unknown request status value.');
+			throw new \Exception('Unknown request status value.');
 		}
+	}
+
+	public function getDataAttribute() {
+		return json_decode($this->attributes['data'], true);
+	}
+
+	public function setDataAttribute($data) {
+		$this->attributes['data'] = (is_object($data) || is_array($data)) ? json_encode($data) : $data;
 	}
 
 	/**
@@ -79,18 +89,18 @@ class Request extends Model {
 		switch($type) {
 			case 'json':
 				if (is_object($data) || is_array($data)) {
-					$this->data = json_encode($data);
+					$this->data = $data;
 				} elseif (is_string($data)) {
-					$this->data = json_encode(Parser::json($data));
+					$this->data = Parser::json($data);
 				} else {
-					throw new Exception('Unknown JSON data format.');
+					throw new \Exception('Unknown JSON data format.');
 				}
 				break;
 
 			case 'xml':
 				$xml = Parser::xml($data);
 				if (!$xml) {
-					throw new Exception('Cannot parse XML.');
+					throw new \Exception('Cannot parse XML.');
 				}
 
 				$data = [];
@@ -100,7 +110,7 @@ class Request extends Model {
 					else
 						$data[] = $value;
 				}
-				$this->data = json_encode($data);
+				$this->data = $data;
 				break;
 
 			case 'csv':
@@ -110,7 +120,7 @@ class Request extends Model {
 				// load header, which is required
 				$header = $reader->fetchOne();
 				if (!$header || count($header) == 0) {
-					throw new Exception('Missing header in CSV file.');
+					throw new \Exception('Missing header in CSV file.');
 				}
 
 				// parse each row
@@ -120,18 +130,18 @@ class Request extends Model {
 					$columns = [];
 					foreach($row as $column => $value) { // parse each column in each row
 						if (!isset($header[$column])) {
-							throw new Exception('Unknown column in CSV file.');
+							throw new \Exception('Unknown column in CSV file.');
 						}
 						$columns[$header[$column]] = $value;
 					}
 					$data[] = $columns;
 				}
 
-				$this->data = json_encode($data);
+				$this->data = $data;
 				break;
 
 			default:
-				throw new Exception('Unknown data format.');
+				throw new \Exception('Unknown data format.');
 		}
 	}
 
@@ -144,7 +154,7 @@ class Request extends Model {
 		$generator->addFilters();
 		$generator->setTmp(static::TMP_PATH);
 		$generator->setTemplate($this->template->getRealPathname());
-		$generator->generateArchive(json_decode($this->data, true), $this->getStoragePathname());
+		$generator->generateArchive($this->data, $this->getStoragePathname());
 	}
 
 	/**
