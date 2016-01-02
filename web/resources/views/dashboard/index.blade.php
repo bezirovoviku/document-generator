@@ -211,7 +211,7 @@
 @endsection
 
 {{-- add Chart.JS and setup chart --}}
-@section('scripts')
+@section('custom_scripts')
 @parent
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 	<script type="text/javascript">

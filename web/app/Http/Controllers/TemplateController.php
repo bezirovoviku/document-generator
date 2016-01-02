@@ -1,5 +1,8 @@
 <?php namespace App\Http\Controllers;
 
+use Log;
+use File;
+use Validator;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateLimitsRequest;
@@ -30,20 +33,57 @@ class TemplateController extends Controller {
 			return redirect()->back()->withDanger('Request limit exceeded.');
 		}
 
-		$this->validate($request, [
-			'data' => 'required|json',
+		// common validation rules
+		$validator = Validator::make($request->all(), [
+			'data_type' => 'required|in:json,xml,csv',
+			'input_type' => 'required|in:direct,file',
+			'callback_url' => 'url',
+			'data' => 'required_if:input_type,direct',
+			'data_file' => 'sometimes|required_if:input_type,file|max:1024', // max 1MB
 		], [
-			'json' => 'Request data is not a valid JSON.'
+			'json' => 'Request data is not a valid JSON.',
+			'xml' => 'Request data is not a valid XML.',
 		]);
+		// direct input validation rules
+		if ($request->input('input_type') == 'direct') {
+			$validator->sometimes('data', 'json', function($input) { return $input->data_type == 'json'; });
+			$validator->sometimes('data', 'xml', function($input) { return $input->data_type == 'xml'; });
+		}
+		// file validation rules
+		if ($request->input('input_type') == 'file') {
+			$validator->sometimes('data_file', 'mimes:json,txt', function($input) { return $input->data_type == 'json'; });
+			$validator->sometimes('data_file', 'mimes:csv,txt', function($input) { return $input->data_type == 'csv'; });
+			$validator->sometimes('data_file', 'mimes:xml,txt', function($input) { return $input->data_type == 'xml'; });
+		}
+		// validate
+		if ($validator->fails()) {
+			return redirect()->back()->withErrors($validator)->withInput();
+		}
 
 		$requestModel = new RequestModel([
-			'data' => $request->input('data'),
+			'type' => 'docx',
+			'callback_url' => $request->input('callback_url'),
 		]);
+
+		// load request payload into $data (directly from form or from a file)
+		if ($request->input('input_type') == 'direct') {
+			$data = $request->input('data');
+		} else {
+			$data = File::get($request->file('data_file')->getRealPath());
+		}
+
+		// try to set data for the request
+		try {
+			$requestModel->setData($data, $request->input('data_type'));
+		} catch (\Exception $e) {
+			Log::error($e);
+			return redirect()->back()->withDanger($e->getMessage())->withInput();
+		}
+
 		$requestModel->user()->associate($template->user);
 		$template->requests()->save($requestModel);
 
 		$this->dispatch(new GenerateRequest($requestModel));
-
 		return redirect()->back()->withSuccess('Request generated.');
 	}
 
