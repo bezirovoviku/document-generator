@@ -3,13 +3,9 @@
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Docx\Generator;
-<<<<<<< HEAD
 use Docx\Converter\OPDF;
-use DB;
-=======
 use League\Csv\Reader;
 use Nathanmac\Utilities\Parser\Facades\Parser;
->>>>>>> master
 
 class Request extends Model {
 
