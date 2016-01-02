@@ -127,11 +127,3 @@
 </div>
 
 @endsection
-
-{{-- add script for switching between direct and file input  --}}
-@section('scripts')
-@parent
-	<script type="text/javascript">
-
-	</script>
-@stop

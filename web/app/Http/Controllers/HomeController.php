@@ -9,7 +9,7 @@ use App\User;
 class HomeController extends Controller {
 
 	use AuthenticatesAndRegistersUsers;
-	
+
 	public function __construct()
 	{
 		$this->redirectPath = action('DashboardController@index');
@@ -21,15 +21,14 @@ class HomeController extends Controller {
 		return view('home.index');
 	}
 
-	public function register()
+	public function docs()
 	{
-		return view('home.register');
+		return view('home.docs');
 	}
-
 
 	public function loginOrRegister(Request $request)
 	{
-		if ($request->has('register')) {
+		if ($request->input('action') == 'register') {
 			return $this->postRegister($request)->withSuccess('Welcome to your new account.');
 		} else {
 			return $this->postLogin($request);
