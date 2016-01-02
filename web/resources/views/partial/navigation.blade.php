@@ -11,7 +11,7 @@
 			@endforeach
 
 			{{-- menu for all users --}}
-			@foreach (['Docs' => action('DocsController@index')] as $text => $url)
+			@foreach (['Documentation' => action('HomeController@docs')] as $text => $url)
 				<li class="{{ Request::url() == $url ? 'active' : '' }}">
 					<a href="{{ $url }}">{{ $text }}</a>
 				</li>
