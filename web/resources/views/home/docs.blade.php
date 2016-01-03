@@ -49,7 +49,7 @@ where each document is single object containing all the data.</p>
 	@include('partial.example', ['request' => [
 									'json' => '{"name":"Hildegard Testimen"}',
 									'csv' => "name\r\nHildegard Testimen",
-									'xml' => '<root><name>Hildegard Testimen</name></root>'
+									'xml' => '<root><document><name>Hildegard Testimen</name></document></root>'
 								],
 								'template' => '{name}',
 								 'result' => 'Hildegard Testimen'])
@@ -60,7 +60,7 @@ where each document is single object containing all the data.</p>
 	@include('partial.example', ['request' => [
 									'json' => '{"person":{"name":"Hildegard Testimen","age":25}}',
 									'csv' => "person.name;person.age\r\nHildegard Testimen;25",
-									'xml' => '<root><person><name>Hildegard Testimen</name><age>25</age></person></root>'
+									'xml' => '<root><document><person><name>Hildegard Testimen</name><age>25</age></person></document></root>'
 								],
 								'template' => '{person.name} ({person.age})',
 								'result' => 'Hildegard Testimen (25)'])
@@ -75,8 +75,8 @@ where each document is single object containing all the data.</p>
 	<p>Example data:</p>
 
 	@include('partial.example', ['request' => [
-									'json' => '{"items":[{"name":"Item 1","cost":5},{"name":"Item 2","cost":6}]',
-									'xml' => '<root><items><name>Item 1</name><cost>5</cost></items><items><name>Item 2</name><cost>6</cost></items></root>'
+									'json' => '{"items":[{"name":"Item 1","cost":5},{"name":"Item 2","cost":6}]}',
+									'xml' => '<root><document><items><name>Item 1</name><cost>5</cost></items><items><name>Item 2</name><cost>6</cost></items></document></root>'
 								],
 								'template' => "{foreach items as item}\r\n{item.name} ({item.cost})\r\n{/foreach}",
 								'result' => "Item 1 (5)\r\nItem 2 (6)"])
@@ -99,7 +99,7 @@ where each document is single object containing all the data.</p>
 		@include('partial.example', ['request' => [
 									'json' => '{"date1":1447137857,"format1":"Y-m-d:H-i-s","date2":"2015-11-10","format2":"d/m/Y"}',
 									'csv' => "date1;format1;date2;format2\r\n1447137857;Y-m-d:H-i-s;2015-11-10;d/m/Y",
-									'xml' => '<root><date1>1447137857</date1><format1>Y-m-d:H-i-s</format1><date2>2015-11-10</date2><format2>d/m/Y</format2></root>'
+									'xml' => '<root><document><date1>1447137857</date1><format1>Y-m-d:H-i-s</format1><date2>2015-11-10</date2><format2>d/m/Y</format2></document></root>'
 								],
 								'template' => "{date1|format1}\r\n{date2|format2}",
 								'result' => "2015-11-10:06-44-17\r\n10/11/2015"])
@@ -110,7 +110,7 @@ where each document is single object containing all the data.</p>
 		@include('partial.example', ['request' => [
 									'json' => '{"string":"Hello World"}',
 									'csv' => "string\r\nHello Wordl",
-									'xml' => '<root><string>Hello World</string></root>'
+									'xml' => '<root><document><string>Hello World</string></document></root>'
 								],
 								'template' => "{string|upper}\r\n{string|lower}",
 								'result' => "HELLO WORLD\r\nhello world"])
@@ -121,7 +121,7 @@ where each document is single object containing all the data.</p>
 	@include('partial.example', ['request' => [
 									'json' => '{"num":1111}',
 									'csv' => "num\r\n1111",
-									'xml' => '<root><num>1111</num></root>'
+									'xml' => '<root><document><num>1111</num></document></root>'
 								],
 								'template' => "{num|number eu 2}\r\n{num|number us 2}\r\n{num|number eu}\r\n{num|number us}\r\n{num|number}",
 								'result' => "1 111,00\r\n1,111.00\r\n1 111\r\n1,111\r\n1,111"])
