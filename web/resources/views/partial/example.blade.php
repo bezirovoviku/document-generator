@@ -26,23 +26,32 @@ global $counter;
 
     <div class="tab-content">
         <div class="tab-pane active" id="request{{ $counter }}">
-            <pre id="data-json-{{ $counter }}"><code class="language-json" data-lang="json">{{ $request['json'] or '' }}</code></pre>
+            <?php $json = json_encode(json_decode($request['json']), JSON_PRETTY_PRINT); ?>
+            <?php $dom = new \DOMDocument();
+                  $dom->preserveWhiteSpace = FALSE;
+                  $dom->loadXML($request['xml']);
+                  $dom->formatOutput = TRUE;
+                  $xml = "";
+                  foreach ($dom->childNodes as $node) {
+                    $xml .= $dom->saveXML($node);
+                  } ?>
+            <pre id="data-json-{{ $counter }}"><code class="language-json" data-lang="json">{{ $json or '' }}</code></pre>
             <pre id="data-csv-{{ $counter }}"><code class="language-csv" data-lang="csv">{{ $request['csv'] or '' }}</code></pre>
-            <pre id="data-xml-{{ $counter }}"><code class="language-xml" data-lang="xml">{{ $request['xml'] or '' }}</code></pre>
+            <pre id="data-xml-{{ $counter }}"><code class="language-xml" data-lang="xml">{{ $xml or '' }}</code></pre>
             <pre id="full-json-{{ $counter }}"><code class="language-json" data-lang="json">{
-    template_id: 1,
-    data_type: 'json',
-    data: '{{ $request['json'] or '' }}'
+    "template_id": 1,
+    "data_type": "json",
+    "data": '{{ $request['json'] or '' }}'
 }</code></pre>
             <pre id="full-csv-{{ $counter }}"><code class="language-json" data-lang="json">{
-    template_id: 1,
-    data_type: 'csv',
-    data: '{{ $request['csv'] or '' }}'
+    "template_id": 1,
+    "data_type": "csv",
+    "data": '{{ $request['csv'] or '' }}'
 }</code></pre>
             <pre id="full-xml-{{ $counter }}"><code class="language-json" data-lang="json">{
-    template_id: 1,
-    data_type: 'xml',
-    data: '&lt;root&gt;&lt;document&gt;{{ $request['xml'] or '' }}&lt;/document&gt;&lt;/root&gt;'
+    "template_id": 1,
+    "data_type": "xml",
+    "data": '&lt;root&gt;&lt;document&gt;{{ $request['xml'] or '' }}&lt;/document&gt;&lt;/root&gt;'
 }</code></pre>
         </div>
 

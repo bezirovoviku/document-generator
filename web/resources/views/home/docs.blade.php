@@ -47,9 +47,9 @@ where each document is single object containing all the data.</p>
 	<p>Our system simply replaces specified keywords inside document text. Keywords are expected in format <code>{KEYWORD}</code>.<p>
 
 	@include('partial.example', ['request' => [
-									'json' => '{name: "Hildegard Testimen"}',
+									'json' => '{"name":"Hildegard Testimen"}',
 									'csv' => "name\r\nHildegard Testimen",
-									'xml' => '<name>Hildegard Testimen</name>'
+									'xml' => '<root><name>Hildegard Testimen</name></root>'
 								],
 								'template' => '{name}',
 								 'result' => 'Hildegard Testimen'])
@@ -58,9 +58,9 @@ where each document is single object containing all the data.</p>
 	<p>We also support multilevel objects in data. Simple use <code>{OBJ1.OBJ2.KEYWORD}</code>.<p>
 
 	@include('partial.example', ['request' => [
-									'json' => '{ person: { name: "Hildegard Testimen", age: 25 } }',
+									'json' => '{"person":{"name":"Hildegard Testimen","age":25}}',
 									'csv' => "person.name;person.age\r\nHildegard Testimen;25",
-									'xml' => '<person><name>Hildegard Testimen</name><age>25</age></person>'
+									'xml' => '<root><person><name>Hildegard Testimen</name><age>25</age></person></root>'
 								],
 								'template' => '{person.name} ({person.age})',
 								'result' => 'Hildegard Testimen (25)'])
@@ -75,8 +75,8 @@ where each document is single object containing all the data.</p>
 	<p>Example data:</p>
 
 	@include('partial.example', ['request' => [
-									'json' => '{ items: [ { name: "Item 1", cost: 5 }, { name: "Item 2", cost: 6 } ]',
-									'xml' => '<items><name>Item 1</name><cost>5</cost></items><items><name>Item 2</name><cost>6</cost></items>'
+									'json' => '{"items":[{"name":"Item 1","cost":5},{"name":"Item 2","cost":6}]',
+									'xml' => '<root><items><name>Item 1</name><cost>5</cost></items><items><name>Item 2</name><cost>6</cost></items></root>'
 								],
 								'template' => "{foreach items as item}\r\n{item.name} ({item.cost})\r\n{/foreach}",
 								'result' => "Item 1 (5)\r\nItem 2 (6)"])
@@ -97,9 +97,9 @@ where each document is single object containing all the data.</p>
 	As a date value you can use a unix timestamp or dates supported by PHP function <a target="_blank" href="http://php.net/manual/en/function.strtotime.php">strtotime</a>.</p>
 
 		@include('partial.example', ['request' => [
-									'json' => '{ date1: 1447137857, format1: "Y-m-d:H-i-s", date2: "2015-11-10", format2 = "d/m/Y" }',
+									'json' => '{"date1":1447137857,"format1":"Y-m-d:H-i-s","date2":"2015-11-10","format2":"d/m/Y"}',
 									'csv' => "date1;format1;date2;format2\r\n1447137857;Y-m-d:H-i-s;2015-11-10;d/m/Y",
-									'xml' => '<date1>1447137857</date1><format1>Y-m-d:H-i-s</format1><date2>2015-11-10</date2><format2>d/m/Y</format2>'
+									'xml' => '<root><date1>1447137857</date1><format1>Y-m-d:H-i-s</format1><date2>2015-11-10</date2><format2>d/m/Y</format2></root>'
 								],
 								'template' => "{date1|format1}\r\n{date2|format2}",
 								'result' => "2015-11-10:06-44-17\r\n10/11/2015"])
@@ -108,9 +108,9 @@ where each document is single object containing all the data.</p>
 	<p>To convert strings to uppercase letters use <code>{string|upper}</code> For lowercase letters use <code>{string|lower}</code>.</p>
 
 		@include('partial.example', ['request' => [
-									'json' => '{ string: "Hello World" }',
+									'json' => '{"string":"Hello World"}',
 									'csv' => "string\r\nHello Wordl",
-									'xml' => '<string>Hello World</string>'
+									'xml' => '<root><string>Hello World</string></root>'
 								],
 								'template' => "{string|upper}\r\n{string|lower}",
 								'result' => "HELLO WORLD\r\nhello world"])
@@ -119,9 +119,9 @@ where each document is single object containing all the data.</p>
 	<p>With this filter you can use EU format or US format by default. Usage id <code>{value|number standard [number of digits after decimal point]} // => 1 111</code><p>
 
 	@include('partial.example', ['request' => [
-									'json' => '{ num: "1111" }',
+									'json' => '{"num":1111}',
 									'csv' => "num\r\n1111",
-									'xml' => '<num>1111</num>'
+									'xml' => '<root><num>1111</num></root>'
 								],
 								'template' => "{num|number eu 2}\r\n{num|number us 2}\r\n{num|number eu}\r\n{num|number us}\r\n{num|number}",
 								'result' => "1 111,00\r\n1,111.00\r\n1 111\r\n1,111\r\n1,111"])
