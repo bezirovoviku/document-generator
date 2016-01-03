@@ -12,6 +12,8 @@ MySQL
 
 Composer
 
+Libreoffice (for PDF support)
+
 PHPUnit (for test only)
 
 ## Installation
