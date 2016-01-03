@@ -107,8 +107,12 @@ class ApiController extends Controller {
 		$requestModel->user()->associate($template->user);
 		$template->requests()->save($requestModel);
 
-		$this->dispatch(new GenerateRequest($requestModel));
-
+		$requ = new GenerateRequest($requestModel);
+		$requ->handle();
+		
+		//$this->dispatch(new GenerateRequest($requestModel));
+		
+		
 		return ['request_id' => $requestModel->id];
 	}
 

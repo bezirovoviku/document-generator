@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "998b716ef7b0cd6e7da5347b36a19d4a",
-    "content-hash": "c2da8d818652afb18ba9df14cf3cad4e",
+    "hash": "2cebdbc418f452a5586d5837c01be1b7",
+    "content-hash": "526484e36276d526b77864c7f0a49df1",
     "packages": [
         {
-            "name": "bezirovoviku/docx",
+            "name": "bezirovoviku/temgen",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/bezirovoviku/docx.git",
-                "reference": "1c2e7fb3879b3027b5ff94450ebb0d1072cb87f4"
+                "url": "https://github.com/bezirovoviku/temgen.git",
+                "reference": "161dea587fe2bc424e7c59d619d3a9e43b3f541c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bezirovoviku/docx/zipball/1c2e7fb3879b3027b5ff94450ebb0d1072cb87f4",
-                "reference": "1c2e7fb3879b3027b5ff94450ebb0d1072cb87f4",
+                "url": "https://api.github.com/repos/bezirovoviku/temgen/zipball/161dea587fe2bc424e7c59d619d3a9e43b3f541c",
+                "reference": "161dea587fe2bc424e7c59d619d3a9e43b3f541c",
                 "shasum": ""
             },
             "require": {
@@ -30,7 +30,7 @@
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Docx": "src/"
+                    "Temgen": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -42,12 +42,13 @@
                     "name": "Bezirovoviku"
                 }
             ],
-            "description": "DOCX Template generator",
+            "description": "Template generator",
             "keywords": [
                 "document",
-                "docx"
+                "docx",
+                "template"
             ],
-            "time": "2016-01-02 23:37:40"
+            "time": "2016-01-03 19:36:45"
         },
         {
             "name": "classpreloader/classpreloader",
@@ -3197,7 +3198,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "bezirovoviku/docx": 20
+        "bezirovoviku/temgen": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
