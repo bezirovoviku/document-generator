@@ -5,15 +5,15 @@
 
 <div class="container">
 
-	<h1 class="page-header sr-only">{{ trans('admin.AllRequests') }}</h1>
+	<h1 class="page-header sr-only">All requests</h1>
 
 	<div class="table-responsive">
 	<table class="table table-hover">
 		<thead>
 			<tr>
 				<th class="text-right">ID</th>
-				<th>{{ trans('admin.User') }}</th>
-				<th>{{ trans('admin.Template') }}</th>
+				<th>User</th>
+				<th>Template</th>
 				<th>Status</th>
 			</tr>
 		</thead>
@@ -28,11 +28,11 @@
 					<td class="text-muted"><s>{{ $request->template->name }}</s></td>
 				@endif
 				<td>@include('partial.request_status', ['request' => $request])</td>
-				<td><a href="{{ action('RequestController@show', $request->id) }}" class="btn btn-xs btn-link">{{ trans('admin.details') }}</a></td>
+				<td><a href="{{ action('RequestController@show', $request->id) }}" class="btn btn-xs btn-link">details</a></td>
 			</tr>
 			@empty
 			<tr>
-				<td colspan="3" class="text-center text-muted">{{ trans('admin.NoRequests') }}</td>
+				<td colspan="3" class="text-center text-muted">No requests</td>
 			</tr>
 			@endforelse
 		</tbody>

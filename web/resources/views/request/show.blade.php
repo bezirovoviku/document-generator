@@ -5,15 +5,15 @@
 
 <div class="container">
 
-<h1 class="page-header">{{ $request->template->name }} #{{ $request->id }} <small>({{ trans('request.request') }})</small></h1>
+<h1 class="page-header">{{ $request->template->name }} #{{ $request->id }} <small>(request)</small></h1>
 
 <div class="row">
 	<div class="col-xs-12 col-sm-8">
 		<div class="panel panel-default">
-			<div class="panel-heading">{{ trans('request.RequestData') }}</div>
+			<div class="panel-heading">Request data</div>
 			<div class="panel-body">
-				<div id="document-tree">
-				</div>
+				<pre><code>{{ json_encode($request->data, JSON_PRETTY_PRINT) }}</code></pre>
+				{{-- <div id="document-tree"></div> --}}
 			</div>
 		</div>
 	</div>
@@ -23,7 +23,7 @@
 			<div class="panel-heading">Info</div>
 			<table class="table">
 				<tr>
-					<th>{{ trans('request.Template') }}</th>
+					<th>Template</th>
 					<td>
 						@if (!$request->template->deleted_at)
 							<a href="{{ action('TemplateController@show', $request->template->id) }}">{{ $request->template->name }}</a>
@@ -34,7 +34,7 @@
 				</tr>
 
 				<tr>
-					<th>{{ trans('request.Created') }}</th>
+					<th>Created</th>
 					<td>{{ $request->created_at }}</td>
 				</tr>
 
@@ -44,7 +44,7 @@
 				</tr>
 				@if ($request->status == App\Request::STATUS_DONE)
 				<tr>
-					<th>{{ trans('request.Download') }}</th>
+					<th>Download</th>
 					<td><a href="{{action('RequestController@download', ['request' => $request->id ])}}"><i class="glyphicon glyphicon-floppy-save"></i> Package <small>{{ $archive_size }}</small></a></td>
 				</tr>
 				@endif
@@ -61,30 +61,31 @@
 
 @section('custom_scripts')
 <script type="text/javascript">
-	//@TODO: Convert this to interactive tree
+	// TODO: Convert this to interactive tree
+	// FIXME: values are not HTML safe! (in meantime use plain json display - see above)
 
-	var data = {!! $request->data !!},
-		$target = $("#document-tree");
-
-	function make_tree(data, prefix) {
-		var html = "<ul>";
-		for(var i in data) {
-			var item = data[i];
-			if (prefix)
-				i = prefix + i;
-
-			html += "<li><span class='var'>" + i + "</span>";
-			if (typeof item === typeof 0 || typeof item === typeof "") {
-				html += "<span class='value pull-right'>" + item + "</span>";
-			} else {
-				html += make_tree(item);
-			}
-			html += "</li>";
-		}
-		html += "</ul>";
-		return html;
-	}
-
-	$target.append(make_tree(data, 'document'));
+	// var data = {!! json_encode($request->data) !!},
+	// 	$target = $("#document-tree");
+	//
+	// function make_tree(data, prefix) {
+	// 	var html = "<ul>";
+	// 	for(var i in data) {
+	// 		var item = data[i];
+	// 		if (prefix)
+	// 			i = prefix + i;
+	//
+	// 		html += "<li><span class='var'>" + i + "</span>";
+	// 		if (typeof item === typeof 0 || typeof item === typeof "") {
+	// 			html += "<span class='value pull-right'>" + item + "</span>";
+	// 		} else {
+	// 			html += make_tree(item);
+	// 		}
+	// 		html += "</li>";
+	// 	}
+	// 	html += "</ul>";
+	// 	return html;
+	// }
+	//
+	// $target.append(make_tree(data, 'document'));
 </script>
 @endsection

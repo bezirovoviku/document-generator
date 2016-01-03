@@ -9,11 +9,16 @@ use App\Jobs\GenerateRequest;
 use App\User;
 use App\Template;
 use App\Request as RequestModel;
-use League\Csv\Reader;
-use Nathanmac\Utilities\Parser\Facades\Parser;
 
 class ApiController extends Controller {
 
+	/**
+    * Create a new api controller instance.
+    *
+    * @param  \Illuminate\Contracts\Filesystem\Filesystem $storage
+    * @param  \Illuminate\Http\Request $request
+    * @return void
+    */
 	public function __construct(Filesystem $storage, Request $request)
 	{
 		$this->storage = $storage;
@@ -24,15 +29,20 @@ class ApiController extends Controller {
 	}
 
 	/**
-	 * Saves template to DB and filesystem
+	 * Saves template to DB and filesystem.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @return result array
 	 */
 	public function uploadTemplate(Request $request) {
 		// not using $this->validate because of filesize is not normal input
 		$validator = Validator::make([
 			'name' => $request->input('name'),
+			'type' => $request->input('type'),
 			'filesize' => $request->header('Content-Length'),
 		], [
 			'name' => 'required|max:255',
+			'type' => 'in:docx,md,html',
 			'filesize' => 'required|integer|min:0|max:' . Config::get('app.template_max_size'),
 		]);
 		if ($validator->fails()) {
@@ -41,7 +51,8 @@ class ApiController extends Controller {
 
 		// save to DB
 		$template = new Template([
-			'name' => $request->input('name')
+			'name' => $request->input('name'),
+			'type' => $request->input('type')
 		]);
 		$this->user->templates()->save($template);
 
@@ -55,7 +66,11 @@ class ApiController extends Controller {
 	}
 
 	/**
-	 * Deletes template by its ID
+	 * Deletes template by its ID.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  string $template_id
+	 * @return \Illuminate\Http\Response
 	 */
 	public function deleteTemplate(Request $request, $template_id) {
 		// get template from DB
@@ -69,74 +84,10 @@ class ApiController extends Controller {
 	}
 
 	/**
-	 * Parses request data
-	 * @param string $type data type, csv/json/xml expected.
-	 * @param string|object $data data content
-	 * @return array|null result data or null when parsing failed
-	 */
-	private function parseData($type, $data) {
-		//json in json
-		if (is_object($data) || is_array($data)) {
-			return $type == 'json' ? $data : null;
-		}
-		
-		//text data, possibly json too
-		if (is_string($data)) {
-			//@TODO: Better way to tree this?
-			switch($type) {
-				case 'xml':
-					$xml = Parser::xml($data);
-					if (!$xml)
-						return null;
-					
-					$data = array();
-					foreach($xml as $key => $value) {
-						if (is_array($value))
-							$data = array_merge($data, $value);
-						else
-							$data[] = $value;
-					}
-					
-					return $data;
-				case 'json':
-					return Parser::json($data);
-				case 'csv':
-					$reader = Reader::createFromString($data);
-					$reader->setDelimiter(';');
-					
-					//Load header, which is required
-					$header = $reader->fetchOne();
-					if (!$header || count($header) == 0) {
-						return null;
-					}
-					
-					//Parse each row
-					$data = array();
-					foreach($reader as $index => $row) {
-						if ($index == 0)
-							continue;
-						
-						$columns = array();
-						foreach($row as $column => $value) {
-							if (!isset($header[$column]))
-								return null;
-								
-							$columns[$header[$column]] = $value;
-						}
-						$data[] = $columns;
-					}
-					
-					return $data;
-				default:
-					return null;
-			}
-		}
-		
-		return null;
-	}
-
-	/**
-	 * Creates request to generate
+	 * Creates request to generate.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @return result array
 	 */
 	public function createRequest(Request $request) {
 		$user = $this->user;
@@ -147,7 +98,7 @@ class ApiController extends Controller {
 
 		$this->validate($request, [
 			'template_id' => 'required|exists:templates,id,user_id,'.$user->id,
-			'type' => 'required|in:pdf,docx',
+			'type' => 'required|in:pdf,docx,html,md',
 			'data' => 'required',
 			'data_type' => 'in:json,xml,csv',
 			'callback_url' => 'url',
@@ -158,35 +109,48 @@ class ApiController extends Controller {
 		if ($template == NULL) {
 			throw new ApiException('Template not found.');
 		}
+		
+		$allowed = [
+			'md' => ['md', 'html', 'pdf'],
+			'html' => ['html', 'pdf'],
+			'docx' => ['docx', 'pdf']
+		];
+		
+		if (!in_array($request->input('type'), $allowed[$template->type]))
+			throw new ApiException("Specified template can't be converted to requested type.");
 
-		//Validate and parse input data
-		$data_type = $request->input('data_type', 'json');
-		$data = $request->input('data');
-		
-		//json in json
-		$data = $this->parseData($data_type, $data);
-		
-		//No data or parsing failed
-		if (is_null($data) || count($data) == 0) {
-			throw new ApiException('Data are empty or in invalid format.');
-		}
-		
 		$requestModel = new RequestModel([
 			'type' => $request->input('type'),
-			'data' => json_encode($data),
 			'callback_url' => $request->input('callback_url'),
 		]);
-		
+
+		// try to set data for the request
+		try {
+			$data = $request->input('data');
+			$data_type = $request->input('data_type', 'json');
+			$requestModel->setData($data, $data_type);
+		} catch (\Exception $e) {
+			throw new ApiException('Invalid data format.', 0, $e);
+		}
+
 		$requestModel->user()->associate($template->user);
 		$template->requests()->save($requestModel);
 
-		$this->dispatch(new GenerateRequest($requestModel));
-
+		$requ = new GenerateRequest($requestModel);
+		$requ->handle();
+		
+		//$this->dispatch(new GenerateRequest($requestModel));
+		
+		
 		return ['request_id' => $requestModel->id];
 	}
 
 	/**
 	 * Returns request info by its ID
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  string $request_id
+	 * @return \Illuminate\Http\Request $request
 	 */
 	public function requestInfo(Request $request, $request_id) {
 		// get request from DB
@@ -200,6 +164,10 @@ class ApiController extends Controller {
 
 	/**
 	 * Returns request info by its ID
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  string $request_id
+	 * @return \Illuminate\Http\Response
 	 */
 	public function downloadRequest(Request $request, $request_id) {
 		// get request from DB

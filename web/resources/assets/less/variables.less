@@ -26,10 +26,10 @@
 @link-color: @brand-primary;
 
 //** Link hover color set via `darken()` function.
-@link-hover-color: @link-color;
+@link-hover-color: darken(@link-color, 10%);
 
 //** Link hover decoration.
-@link-hover-decoration: underline;
+@link-hover-decoration: none;
 
 //== Typography
 @font-family-sans-serif: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -742,4 +742,3 @@
 
 //** Horizontal line color.
 @hr-border: @gray-lighter;
-

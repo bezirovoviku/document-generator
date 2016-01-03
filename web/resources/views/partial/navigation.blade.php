@@ -1,17 +1,17 @@
-<a href="#content" class="sr-only sr-only-focusable">{{ trans('partial.skipToContent') }}</a>
+<a href="#content" class="sr-only sr-only-focusable">skip to content</a>
 <nav class="navbar navbar-inverse" role="navigation">
 	<div class="container">
 
 		<ul class="nav navbar-nav">
 			{{-- menu for all users --}}
-			@foreach ([trans('partial.Home') => action('HomeController@index')] as $text => $url)
+			@foreach (['Home' => action('HomeController@index')] as $text => $url)
 				<li class="{{ Request::url() == $url ? 'active' : '' }}">
 					<a href="{{ $url }}">{{ $text }}</a>
 				</li>
 			@endforeach
 
 			{{-- menu for all users --}}
-			@foreach (['Docs' => action('DocsController@index')] as $text => $url)
+			@foreach (['Documentation' => action('HomeController@docs')] as $text => $url)
 				<li class="{{ Request::url() == $url ? 'active' : '' }}">
 					<a href="{{ $url }}">{{ $text }}</a>
 				</li>
@@ -19,7 +19,7 @@
 
 			{{-- menu for authenticated users --}}
 			@if (Auth::check())
-				@foreach ([trans('partial.Dashboard') => action('DashboardController@index')] as $text => $url)
+				@foreach (['Dashboard' => action('DashboardController@index')] as $text => $url)
 					<li class="{{ Request::url() == $url ? 'active' : '' }}">
 						<a href="{{ $url }}">{{ $text }}</a>
 					</li>
@@ -39,7 +39,7 @@
 		{{-- right side for authenticated users --}}
 		@if (Auth::check())
 			<div class="navbar-right">
-				<p class="navbar-text">{{ trans('partial.LoggedInAs') }} {{ Auth::user()->email }}, <a href="{{ action('HomeController@logout') }}" class="navbar-link">{{ trans('partial.logout') }}</a></p>
+				<p class="navbar-text">Logged in as {{ Auth::user()->email }}, <a href="{{ action('HomeController@logout') }}" class="navbar-link">logout</a></p>
 			</div>
 		@endif
 	</div>
