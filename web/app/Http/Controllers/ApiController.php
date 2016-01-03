@@ -2,7 +2,7 @@
 
 use Validator;
 use Config;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
 use App\Jobs\GenerateRequest;
@@ -12,13 +12,9 @@ use App\Request as RequestModel;
 
 class ApiController extends Controller {
 
-	public function __construct(Filesystem $storage, Request $request)
+	public function __construct(Guard $auth)
 	{
-		$this->storage = $storage;
-
-		// selected user from DB by X-AUTH header
-		$token = $request->header('X-AUTH');
-		$this->user = User::where(['api_key' => $token])->first();
+		$this->user = $auth->user();
 	}
 
 	/**
@@ -42,9 +38,7 @@ class ApiController extends Controller {
 			'name' => $request->input('name')
 		]);
 		$this->user->templates()->save($template);
-
-		// save to filesystem
-		$this->storage->put($template->getStoragePathname(), $request->getContent());
+		$template->saveContents($request->getContent());
 
 		return [
 			'template_id' => $template->id,
@@ -55,14 +49,10 @@ class ApiController extends Controller {
 	/**
 	 * Deletes template by its ID
 	 */
-	public function deleteTemplate(Request $request, $template_id) {
-		// get template from DB
-		$template = $this->user->templates()->find($template_id);
-		if ($template == NULL) {
-			throw new ApiException('Template not found.');
-		}
-
-		$template->delete();
+ 	public function deleteTemplate(Request $request, Template $template)
+ 	{
+ 		$this->authorize('delete-template', $template);
+ 		$template->delete();
 		return response(NULL, 200);
 	}
 
@@ -115,26 +105,16 @@ class ApiController extends Controller {
 	/**
 	 * Returns request info by its ID
 	 */
-	public function requestInfo(Request $request, $request_id) {
-		// get request from DB
-		$request = $this->user->requests()->find($request_id);
-		if ($request == NULL) {
-			throw new ApiException('Request not found.');
-		}
-
+	public function getRequestInfo(RequestModel $request) {
+		$this->authorize('show-request', $request);
 		return $request;
 	}
 
 	/**
 	 * Returns request info by its ID
 	 */
-	public function downloadRequest(Request $request, $request_id) {
-		// get request from DB
-		$request = $this->user->requests()->find($request_id);
-		if ($request == NULL) {
-			throw new ApiException('Request not found.');
-		}
-
+	public function downloadRequest(RequestModel $request) {
+		$this->authorize('download-request', $request);
 		return response()->download($request->getStoragePathname());
 	}
 
