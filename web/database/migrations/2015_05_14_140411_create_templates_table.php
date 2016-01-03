@@ -17,7 +17,6 @@ class CreateTemplatesTable extends Migration {
 			$table->increments('id');
 			$table->integer('user_id')->unsigned();
 			$table->string('name');
-			$table->enum('type', ['html', 'md', 'docx'])->default('docx');
 			$table->timestamps();
 			$table->softDeletes();
 

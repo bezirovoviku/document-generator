@@ -1,55 +1,81 @@
 @import "bootstrap/bootstrap";
 @import "variables.less";  // override bootstrap variables (apply custom theme)
 
-// MIXINS ------------------------------------------------------------------------------------------
-
-.columns(@params) {
-    -webkit-columns: @params;
-    -moz-columns: @params;
-    columns: @params;
-    -webkit-column-gap: @grid-gutter-width;
-    -moz-column-gap: @grid-gutter-width;
-    column-gap: @grid-gutter-width;
-}
-
-// GENERAL -----------------------------------------------------------------------------------------
-
-@footer-height: 50px;
-
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-body {
-    margin-bottom: @footer-height + 20px;
-}
-
-#footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: @footer-height;
-    padding: 1em;
-    background-color: @gray-lighter;
-}
-
-p a {
-    text-decoration: underline;
-}
-
-
 // HOME --------------------------------------------------------------------------------------------
 
-.jumbotron form {
-    margin: 1em 0;
+// TODO better way to style tabs (use bootstrap mixin?)
+
+.nav-tabs2 {
+  border-bottom: 1px solid #d5dee1;
+}
+.nav-tabs2 > li {
+  float: left;
+  margin-bottom: -1px;
+}
+.nav-tabs2 > li > a {
+  margin-right: 2px;
+  line-height: 1.42857143;
+  border: 1px solid transparent;
+  border-radius: 4px 4px 0 0;
+}
+.nav-tabs2 > li > a:hover {
+  border-color: #ecf0f1 #ecf0f1 #ecf0f1;
+}
+.nav-tabs2 > li.active > a,
+.nav-tabs2 > li.active > a:hover,
+.nav-tabs2 > li.active > a:focus {
+  color: #2c3e50;
+  background-color: #ecf0f1;
+  border: 1px solid #d5dee1;
+  border-bottom-color: transparent;
+  cursor: default;
+}
+.nav-tabs2.nav-justified {
+  width: 100%;
+  border-bottom: 0;
+}
+.nav-tabs2.nav-justified > li {
+  float: none;
+}
+.nav-tabs2.nav-justified > li > a {
+  text-align: center;
+  margin-bottom: 5px;
+}
+.nav-tabs2.nav-justified > .dropdown .dropdown-menu {
+  top: auto;
+  left: auto;
+}
+@media (min-width: 768px) {
+  .nav-tabs2.nav-justified > li {
+    display: table-cell;
+    width: 1%;
+  }
+  .nav-tabs2.nav-justified > li > a {
+    margin-bottom: 0;
+  }
+}
+.nav-tabs2.nav-justified > li > a {
+  margin-right: 0;
+  border-radius: 4px;
+}
+.nav-tabs2.nav-justified > .active > a,
+.nav-tabs2.nav-justified > .active > a:hover,
+.nav-tabs2.nav-justified > .active > a:focus {
+  border: 1px solid #ecf0f1;
+}
+@media (min-width: 768px) {
+  .nav-tabs2.nav-justified > li > a {
+    border-bottom: 1px solid #ecf0f1;
+    border-radius: 4px 4px 0 0;
+  }
+  .nav-tabs2.nav-justified > .active > a,
+  .nav-tabs2.nav-justified > .active > a:hover,
+  .nav-tabs2.nav-justified > .active > a:focus {
+    border-bottom-color: #ffffff;
+  }
 }
 
-.columns {
-    @media (min-width: @screen-sm-min) { .columns(2); }
-    @media (min-width: @screen-md-min) { .columns(3); }
-    // @media (min-width: @screen-lg-min) { .columns(4); }
-}
+
 
 // DASHBOARD ----------------------------------------------------------------------------------------
 
@@ -102,10 +128,6 @@ p a {
 
 // DOCS --------------------------------------------------------------------------------------------
 
-h4 {
-    margin-top: 1em;
-}
-
 .example {
 	padding: 1em 0;
 	border-bottom: 1px solid rgb(238, 238, 238);
@@ -126,26 +148,26 @@ h4 {
 }
 
 .scrollspy {
-    width: 250px;
     position: fixed;
 
-    &.nav a, .nav a {
-        padding-left: 20px;
-    }
-
-    &.nav>.active:focus>a, &.nav>.active:hover>a, &.nav>.active>a, &.nav a:hover,
-    .nav>.active:focus>a, .nav>.active:hover>a, .nav>.active>a, .nav a:hover {
+    .nav>.active:focus>a, .nav>.active:hover>a, .nav>.active>a {
         padding-left: 18px;
+        font-weight: 700;
         color: @gray-darker;
         border-left: 2px solid @brand-primary;
     }
 
+    .nav>li>a {
+        padding-left: 20px;
+        font-weight: 400;
+    }
+
     /* hide inactive nested list */
-    .nav .nav {
+    ul.nav {
         display: none;
     }
     /* show active nested list */
-    .active>.nav {
+    .active>ul.nav {
         display: block;
     }
 }

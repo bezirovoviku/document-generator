@@ -3,8 +3,12 @@
 use App\Exceptions\ApiException;
 
 // home page
+Route::get('lang/{lang}', ['as'=>'lang.switch', 'uses'=>'LanguageController@switchLang']);
 Route::get('/', 'HomeController@index');
-Route::get('docs', 'HomeController@docs');
+Route::get('register', 'HomeController@register');
+Route::get('docs', 'DocsController@index');
+Route::get('docs/templates', 'DocsController@templates');
+Route::get('docs/examples', 'DocsController@examples');
 
 // ----------------------------------------------------------------------------
 // guest only routes

@@ -1,6 +1,5 @@
 <?php namespace App\Providers;
 
-use Validator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider {
@@ -12,11 +11,7 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		Validator::extend('xml', function($attribute, $value, $parameters, $validator) {
-			libxml_use_internal_errors(true);
-			simplexml_load_string($value);
-			return empty(libxml_get_errors());
-		});
+		//
 	}
 
 	/**

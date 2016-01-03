@@ -14,9 +14,7 @@ class ApiTest extends TestCase
 	 */
 	protected function getApiKey() {
 		if (!$this->key)
-			$this->key = App\User::whereNotNull('api_key')->get()->first(function($key, $user) {
-				return !$user->isOverRequestLimit();
-			})->api_key;
+			$this->key = App\User::whereNotNull('api_key')->firstOrFail()->api_key;
 		return $this->key;
 	}
 
@@ -27,7 +25,7 @@ class ApiTest extends TestCase
 		$server = ['HTTP_X-Auth' => $this->getApiKey(), 'HTTP_Content-length' => strlen($data)];
 		if ($type)
 			$server['CONTENT_TYPE'] = $type;
-
+		
 		return $this->call($method, '/api/v1/' . $url, [], [], [], $server, $data);
 	}
 
@@ -55,16 +53,16 @@ class ApiTest extends TestCase
 		//Prepare template values
 		$file = dirname(__FILE__) . "/data/template.docx";
 		$name = "Test template";
-
+		
 		//$response = $this->call('POST', '/api/v1/template?name=' .  urlencode($name), file_get_contents($file), [], ['HTTP_X-Auth' => $this->getApiKey()], [], file_get_contents($file));
-
+		
 		/** Upload template and save its ID **/
-
+		
 		$response = $this->apiRequest("template?name=" . urlencode($name), 'POST', file_get_contents($file));
 		$json = json_decode($response->content());
 
 		$this->assertEquals(200, $response->status());
-
+		
 		$this->assertNotNull($json);
 		$this->assertFalse(isset($json->error));
 		$this->assertTrue(isset($json->template_id));
@@ -72,7 +70,7 @@ class ApiTest extends TestCase
 		$template_id = $json->template_id;
 
 		/** Create request and save its ID **/
-
+		
 		$data = array(
 			'template_id' => $template_id,
 			'type' => 'docx',
@@ -106,7 +104,7 @@ class ApiTest extends TestCase
 				)
 			]
 		);
-
+		
 		$response = $this->apiRequest('request/', 'POST', json_encode($data));
 		$json = json_decode($response->content());
 
@@ -118,11 +116,11 @@ class ApiTest extends TestCase
 		$request_id = $json->request_id;
 
 		/** Wait for request to finish **/
-
+		
 		while(true) {
 			$response = $this->apiRequest("request/$request_id", 'GET', json_encode($data));
 			$json = json_decode($response->content());
-
+			
 			$this->assertEquals(200, $response->status());
 			$this->assertNotNull($json);
 			$this->assertFalse(isset($json->error));
@@ -135,9 +133,9 @@ class ApiTest extends TestCase
 
 		//Download resulting file and save it to result folder
 		$response = $this->apiRequest("request/$request_id/download", 'GET');
-
+		
 		$this->assertTrue($response instanceof \Symfony\Component\HttpFoundation\BinaryFileResponse);
-
+		
 		$archive = $response->getFile()->getRealPath();
 
 		//Check for correct archive contents
