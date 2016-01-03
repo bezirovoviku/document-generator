@@ -8,7 +8,7 @@
 		"laravel/framework": "5.1.*",
 		"laravelcollective/html": "5.1.*",
 		"fzaninotto/Faker": "^1.4",
-		"bezirovoviku/docx": "dev-master",
+		"bezirovoviku/temgen": "dev-master",
 		"Nathanmac/Parser": "3.*",
 		"league/csv": "^7.2"
 	},

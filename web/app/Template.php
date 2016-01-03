@@ -8,7 +8,7 @@ class Template extends Model {
 
 	use SoftDeletes;
 
-	protected $fillable = ['name'];
+	protected $fillable = ['name', 'type'];
 
 	const TEMPLATE_DIR = 'templates';
 
@@ -48,7 +48,7 @@ class Template extends Model {
 
 	public function getFilename()
 	{
-		return $this->id . '.docx';
+		return $this->id . '.' . $this->type;
 	}
 
 	public function getRealPath()

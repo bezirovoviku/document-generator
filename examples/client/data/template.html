@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+</head>
+<body>
+	<h1>{nadpis} – {$date | date *d-m-Y H:i:s* }</h1>
+
+	<p>{$number|number eu 4}</p>
+
+	<p>{$date|date $format}</p>
+
+	{if $condition}
+	<p><b>Condition is true</b></p>
+	{/if}
+
+	<table>
+	{foreach items as item}
+		<tr><td>{index}</td><td>{item.name}</td>
+	{/foreach}
+	</table>
+</body>
+</html>
