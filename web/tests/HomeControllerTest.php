@@ -71,7 +71,10 @@ class HomeControllerTest extends TestCase
 		// test visibility of key components
 		$this->visit('/docs')
 			->see('Documentation')
-			->see('Contents') // TOC is presented
+
+			// TOC is presented
+			->see('Contents')
+
 			// main headings
 			->see('API')
 			->see('Templates')
