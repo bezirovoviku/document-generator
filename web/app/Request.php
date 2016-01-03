@@ -152,15 +152,33 @@ class Request extends Model {
 	*/
 	public function generate()
 	{
-		$generator = new Generator\Docx();
-		
+		$generator = null;
 		$converter = null;
-		if ($this->type == 'pdf')
-			$converter = new Converter\OPDF();
+		
+		if ($this->template->type == 'docx') {
+			$generator = new Generator\Docx();
+			$generator->setTemplate(new Document\Docx($this->template->getRealPathname()));
+		} else {
+			$generator = new Generator();
+			$generator->setTemplate(new Document($this->template->getRealPathname()));
+		}
+		
+		if ($this->type == 'html' && $this->template->type == 'md') {
+			$converter = new Converter\MD();
+		} else if ($this->type == 'pdf') {
+			if ($this->template->type == 'docx')
+				$converter = new Converter\OPDF();
+			else if ($this->template->type == 'html')
+				$converter = new Converter\PPDF();
+			else if ($this->template->type == 'md')
+				$converter = new Converter\Composite([
+					new Converter\MD,
+					new Converter\PPDF
+				]);
+		}
 		
 		$generator->addFilters();
 		$generator->setTmp(static::TMP_PATH);
-		$generator->setTemplate(new Document\Docx($this->template->getRealPathname()));
 		$generator->generateArchive($this->data, $this->getStoragePathname(), $converter);
 	}
 

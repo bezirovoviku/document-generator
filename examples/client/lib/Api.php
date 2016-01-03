@@ -38,15 +38,17 @@ class Api {
 	 * Uploads new template
 	 *
 	 * @param string $name template name
-	 * @param string $file path to template file (docx document)
+	 * @param string $file path to template file
 	 * @return int uploaded template ID
 	 */
-	public function uploadTemplate($name, $file) {
+	public function uploadTemplate($name, $file, $type = null) {
 		if (!file_exists($file)) {
 			throw new \Exception("File '$file' doesn't exists.");
 		}
+		if ($type === null)
+			$type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
-		return $this->apiJSONRequest("template?name=" . urlencode($name), "POST", file_get_contents($file))->template_id;
+		return $this->apiJSONRequest("template?name=" . urlencode($name) . "&type=" . urlencode($type), "POST", file_get_contents($file))->template_id;
 	}
 	
 	/**
@@ -64,15 +66,16 @@ class Api {
 	 *
 	 * @param int          $template_id ID of existing template
 	 * @param array|string $data        Documents data in specified format
+	 * @param string       $type        Result type (pdf / html / md / docx)
 	 * @param string       $data_type   Data format, json, csv or xml. Default json
 	 * @return int request id
 	 */
-	public function sendRequest($template_id, $data, $data_type = 'json') {
+	public function sendRequest($template_id, $data, $type = 'docx', $data_type = 'json') {
 		$request = array(
 			'template_id' => $template_id,
 			'data_type' => $data_type,
 			'data' => $data,
-			'type' => 'docx'
+			'type' => $type
 		);
 
 		$raw = json_encode($request);

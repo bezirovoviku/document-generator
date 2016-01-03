@@ -13,15 +13,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bezirovoviku/temgen.git",
-                "reference": "83d0bad3c0f03cbfc4c1af9f62e51fa311213451"
+                "reference": "353f24111a2b79eb40856da792aaeca1225f4cb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bezirovoviku/temgen/zipball/83d0bad3c0f03cbfc4c1af9f62e51fa311213451",
-                "reference": "83d0bad3c0f03cbfc4c1af9f62e51fa311213451",
+                "url": "https://api.github.com/repos/bezirovoviku/temgen/zipball/353f24111a2b79eb40856da792aaeca1225f4cb1",
+                "reference": "353f24111a2b79eb40856da792aaeca1225f4cb1",
                 "shasum": ""
             },
             "require": {
+                "cebe/markdown": "~1.0.1",
                 "php": ">=5.3.2"
             },
             "require-dev": {
@@ -48,7 +49,67 @@
                 "docx",
                 "template"
             ],
-            "time": "2016-01-03 19:56:59"
+            "time": "2016-01-03 20:39:49"
+        },
+        {
+            "name": "cebe/markdown",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cebe/markdown.git",
+                "reference": "f681fee8303310415b746f3758eeda0a7ad08bda"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cebe/markdown/zipball/f681fee8303310415b746f3758eeda0a7ad08bda",
+                "reference": "f681fee8303310415b746f3758eeda0a7ad08bda",
+                "shasum": ""
+            },
+            "require": {
+                "lib-pcre": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "cebe/indent": "*",
+                "facebook/xhprof": "*@dev",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "bin": [
+                "bin/markdown"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "cebe\\markdown\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Carsten Brandt",
+                    "email": "mail@cebe.cc",
+                    "homepage": "http://cebe.cc/",
+                    "role": "Creator"
+                }
+            ],
+            "description": "A super fast, highly extensible markdown parser for PHP",
+            "homepage": "https://github.com/cebe/markdown#readme",
+            "keywords": [
+                "extensible",
+                "fast",
+                "gfm",
+                "markdown",
+                "markdown-extra"
+            ],
+            "time": "2015-03-06 05:21:16"
         },
         {
             "name": "classpreloader/classpreloader",

@@ -95,7 +95,7 @@ class TemplateController extends Controller {
 		]);
 
 		// save to DB
-		$template = new Template($request->only('name'));
+		$template = new Template($request->only('name'), 'docx');
 		$this->user->templates()->save($template);
 
 		// save to filesystem

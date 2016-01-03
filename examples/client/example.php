@@ -62,7 +62,7 @@ echo "Template uploaded.\n";
 //Request data
 $data = array(
 	'template_id' => $template_id,
-	'type' => 'docx',
+	'type' => 'pdf',
 	'data_type' => pathinfo($data_file, PATHINFO_EXTENSION),
 	'data' => file_get_contents($data_file)
 );

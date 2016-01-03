@@ -28,9 +28,11 @@ class ApiController extends Controller {
 		// not using $this->validate because of filesize is not normal input
 		$validator = Validator::make([
 			'name' => $request->input('name'),
+			'type' => $request->input('type'),
 			'filesize' => $request->header('Content-Length'),
 		], [
 			'name' => 'required|max:255',
+			'type' => 'in:docx,md,html',
 			'filesize' => 'required|integer|min:0|max:' . Config::get('app.template_max_size'),
 		]);
 		if ($validator->fails()) {
@@ -39,7 +41,8 @@ class ApiController extends Controller {
 
 		// save to DB
 		$template = new Template([
-			'name' => $request->input('name')
+			'name' => $request->input('name'),
+			'type' => $request->input('type')
 		]);
 		$this->user->templates()->save($template);
 
@@ -78,7 +81,7 @@ class ApiController extends Controller {
 
 		$this->validate($request, [
 			'template_id' => 'required|exists:templates,id,user_id,'.$user->id,
-			'type' => 'required|in:pdf,docx',
+			'type' => 'required|in:pdf,docx,html,md',
 			'data' => 'required',
 			'data_type' => 'in:json,xml,csv',
 			'callback_url' => 'url',
@@ -89,6 +92,15 @@ class ApiController extends Controller {
 		if ($template == NULL) {
 			throw new ApiException('Template not found.');
 		}
+		
+		$allowed = [
+			'md' => ['md', 'html', 'pdf'],
+			'html' => ['html', 'pdf'],
+			'docx' => ['docx', 'pdf']
+		];
+		
+		if (!in_array($request->input('type'), $allowed[$template->type]))
+			throw new ApiException("Specified template can't be converted to requested type.");
 
 		$requestModel = new RequestModel([
 			'type' => $request->input('type'),

@@ -2,9 +2,9 @@
 require_once('lib/Api.php');
 
 $root = dirname(__FILE__);
-$key = "9294e029e9fefcb8a0e4f6914ab8bf47";
-$url = "http://localhost/document-generator/web/public/api/v1";
-$template_file = "$root/data/template.docx";
+$key = "434496ec57e40b56dbdd907c88188b65";
+$url = "http://localhost/htdocs/document-generator/web/public/api/v1";
+$template_file = "$root/data/template.md";
 $template_name = "Test template";
 $data_file = "$root/data/data.json";
 $target_file = "$root/downloaded.zip";
@@ -15,7 +15,7 @@ echo "Uploading template ... ";
 $template_id = $api->uploadTemplate($template_name, $template_file);
 echo "Template uploaded\n";
 echo "Sending request ... ";
-$request_id = $api->sendRequest($template_id, json_decode(file_get_contents($data_file)));
+$request_id = $api->sendRequest($template_id, json_decode(file_get_contents($data_file)), 'md');
 echo "Request send\n";
 
 echo "Waiting for results ... ";
