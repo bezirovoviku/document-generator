@@ -20,7 +20,6 @@ class RequestControllerTest extends TestCase
 		$this->request->user()->associate($this->template->user);
 		$this->template->requests()->save($this->request);
 
-		// login and go to template show URL
 		$this->actingAs($this->user);
 	}
 
