@@ -12,6 +12,13 @@ use App\Request as RequestModel;
 
 class ApiController extends Controller {
 
+	/**
+    * Create a new api controller instance.
+    *
+    * @param  \Illuminate\Contracts\Filesystem\Filesystem $storage
+    * @param  \Illuminate\Http\Request $request
+    * @return void
+    */
 	public function __construct(Filesystem $storage, Request $request)
 	{
 		$this->storage = $storage;
@@ -22,7 +29,10 @@ class ApiController extends Controller {
 	}
 
 	/**
-	 * Saves template to DB and filesystem
+	 * Saves template to DB and filesystem.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @return result array
 	 */
 	public function uploadTemplate(Request $request) {
 		// not using $this->validate because of filesize is not normal input
@@ -56,7 +66,11 @@ class ApiController extends Controller {
 	}
 
 	/**
-	 * Deletes template by its ID
+	 * Deletes template by its ID.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  string $template_id
+	 * @return \Illuminate\Http\Response
 	 */
 	public function deleteTemplate(Request $request, $template_id) {
 		// get template from DB
@@ -70,7 +84,10 @@ class ApiController extends Controller {
 	}
 
 	/**
-	 * Creates request to generate
+	 * Creates request to generate.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @return result array
 	 */
 	public function createRequest(Request $request) {
 		$user = $this->user;
@@ -130,6 +147,10 @@ class ApiController extends Controller {
 
 	/**
 	 * Returns request info by its ID
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  string $request_id
+	 * @return \Illuminate\Http\Request $request
 	 */
 	public function requestInfo(Request $request, $request_id) {
 		// get request from DB
@@ -143,6 +164,10 @@ class ApiController extends Controller {
 
 	/**
 	 * Returns request info by its ID
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  string $request_id
+	 * @return \Illuminate\Http\Response
 	 */
 	public function downloadRequest(Request $request, $request_id) {
 		// get request from DB
