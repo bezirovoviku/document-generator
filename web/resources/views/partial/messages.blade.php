@@ -10,7 +10,7 @@
 @endforeach
 
 {{-- form erros --}}
-@if($errors->any())
+@if(isset($errors) && $errors->any())
 	@foreach($errors->all() as $error)
 		<div class="container">
 			<div class="alert alert-danger">

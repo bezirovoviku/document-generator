@@ -33,7 +33,14 @@ class Request extends Model {
 
 	public function scopeLastMonth($query)
 	{
-		return $query->where('requests.created_at', '>', DB::raw('date_sub(curdate(), interval 1 month)'));
+		$driver = DB::connection()->getDriverName();
+		if ($driver == 'mysql') {
+			return $query->where('requests.created_at', '>', DB::raw('date_sub(curdate(), interval 1 month)'));
+		} elseif ($driver == 'sqlite') {
+			return $query->where('requests.created_at', '>', DB::raw('datetime("now", "-1 month")'));
+		} else {
+			throw new Exception('Unexpected DB driver.');
+		}
 	}
 
 	public function scopeNewestFirst($query)
@@ -44,10 +51,19 @@ class Request extends Model {
 	public function scopeMonthsBefore($query, $months)
 	{
 		assert(is_int($months) && $months >= 0);
-		return $query->where('requests.created_at', DB::raw('between'), DB::raw(
-			'date_sub(curdate(), interval ' . ($months + 1) . ' month) and ' .
-			'date_sub(curdate(), interval ' . $months . ' month)')
-		);
+		$driver = DB::connection()->getDriverName();
+		if ($driver == 'mysql') {
+			return $query->where('requests.created_at', DB::raw('between'), DB::raw(
+				'date_sub(curdate(), interval ' . ($months + 1) . ' month) and ' .
+				'date_sub(curdate(), interval ' . $months . ' month)')
+			);
+		} elseif ($driver == 'sqlite') {
+			return $query->where('requests.created_at', DB::raw('between'),
+				DB::raw('datetime("now", "-' . ($months + 1) . ' month") and datetime("now", "-' . $months . ' month")')
+			);
+		} else {
+			throw new Exception('Unexpected DB driver.');
+		}
 	}
 
 	public function getStatusAttribute()
@@ -155,7 +171,7 @@ class Request extends Model {
 		$converter = null;
 		if ($this->type == 'pdf')
 			$converter = new OPDF();
-		
+
 		$generator->addFilters();
 		$generator->setTmp(static::TMP_PATH);
 		$generator->setTemplate($this->template->getRealPathname());
