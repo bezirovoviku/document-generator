@@ -42,6 +42,12 @@ class PasswordController extends Controller
         return view('auth.password');
     }
 
+    /**
+     * Sends password reset link to user.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function postEmail(Request $request)
     {
         $this->validate($request, ['email' => 'required|email']);

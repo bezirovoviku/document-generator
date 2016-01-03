@@ -12,11 +12,23 @@ use App\Request as RequestModel;
 
 class TemplateController extends Controller {
 
+	/**
+    * Creates a new template controller instance.
+    *
+    * @param Illuminate\Contracts\Auth\Guard $auth
+    * @return void
+    */
 	public function __construct(Guard $auth)
 	{
 		$this->user = $auth->user();
 	}
 
+	/**
+    * Shows template details.
+    *
+    * @param \Illuminate\Contracts\Auth\Guard $auth
+    * @return \Illuminate\Http\Response
+    */
 	public function show(Template $template)
 	{
 		$this->authorize('show-template', $template);
@@ -26,6 +38,13 @@ class TemplateController extends Controller {
 			->with('requests', $template->requests()->newestFirst()->paginate());
 	}
 
+	/**
+    * Creates request.
+    *
+    * @param  \App\Template $template
+    * @param  \Illuminate\Http\Request $request
+    * @return \Illuminate\Http\Response
+    */
 	public function createRequest(Request $request, Template $template) {
 		$this->authorize('create-request', $template);
 
@@ -87,6 +106,12 @@ class TemplateController extends Controller {
 		return redirect()->back()->withSuccess('Request generated.');
 	}
 
+	/**
+    * Uploads template.
+    *
+    * @param  \Illuminate\Http\Request $request
+    * @return \Illuminate\Http\Response
+    */
 	public function uploadTemplate(Request $request)
 	{
 		$this->validate($request, [
@@ -95,7 +120,7 @@ class TemplateController extends Controller {
 		]);
 
 		// save to DB
-		$template = new Template($request->only('name'));
+		$template = new Template($request->only('name'), 'docx');
 		$this->user->templates()->save($template);
 
 		// save to filesystem
@@ -104,6 +129,13 @@ class TemplateController extends Controller {
 		return redirect()->back()->withSuccess('Template uploaded.');
 	}
 
+	/**
+    * Deletes template.
+    *
+    * @param  \App\Template $template
+    * @param  \Illuminate\Http\Request $request
+    * @return \Illuminate\Http\Response
+    */
 	public function deleteTemplate(Request $request, Template $template)
 	{
 		$this->authorize('delete-template', $template);

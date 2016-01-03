@@ -10,22 +10,39 @@ class HomeController extends Controller {
 
 	use AuthenticatesAndRegistersUsers;
 
+	/**
+    * Creates a new home controller instance.
+    *
+    * @return void
+    */
 	public function __construct()
 	{
 		$this->redirectPath = action('DashboardController@index');
 		$this->loginPath = action('HomeController@index');
 	}
 
+	/**
+    * @return index view
+    */
 	public function index()
 	{
 		return view('home.index');
 	}
 
+	/**
+    * @return documentation view
+    */
 	public function docs()
 	{
 		return view('home.docs');
 	}
 
+	/**
+    * Decides if user wants to login or register.
+    *
+    * @param  \Illuminate\Http\Request $request
+    * @return \Illuminate\Http\Request $request
+    */
 	public function loginOrRegister(Request $request)
 	{
 		if ($request->input('action') == 'register') {
@@ -35,6 +52,11 @@ class HomeController extends Controller {
 		}
 	}
 
+	/**
+    * Logouts the user
+    *
+    * @return \Illuminate\Http\Response
+    */
 	public function logout()
 	{
 		return $this->getLogout();

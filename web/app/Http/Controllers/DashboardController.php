@@ -7,11 +7,22 @@ use App\Template;
 
 class DashboardController extends Controller {
 
+	/**
+    * Creates a new request controller instance.
+    *
+    * @param Illuminate\Contracts\Auth\Guard $auth
+    * @return void
+    */
 	public function __construct(Guard $auth)
 	{
 		$this->user = $auth->user();
 	}
 
+	/**
+    * Displays the dashboard view.
+    *
+    * @return \Illuminate\Http\Response
+    */
 	public function index()
 	{
 		$this->user->load('requests', 'templates');
@@ -31,6 +42,11 @@ class DashboardController extends Controller {
 		return $view;
 	}
 
+	/**
+    * Regenerates and saves api key.
+    *
+    * @return \Illuminate\Http\Response
+    */
 	public function regenerateApiKey()
 	{
 		$this->user->regenerateApiKey();
@@ -38,6 +54,12 @@ class DashboardController extends Controller {
 		return redirect()->back()->withSuccess('API key regenerated.');
 	}
 
+	/**
+    * Updates limits of generating.
+    *
+    * @param \Illuminate\Http\Request $request
+    * @return \Illuminate\Http\Response
+    */
 	public function updateLimits(Request $request)
 	{
 		$this->authorize('update-limits');

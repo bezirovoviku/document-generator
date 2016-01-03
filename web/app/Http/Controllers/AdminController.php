@@ -6,6 +6,11 @@ use App\Request;
 
 class AdminController extends Controller {
 
+	/**
+    * Displays all users.
+    *
+    * @return \Illuminate\Http\Response
+    */
 	public function users()
 	{
 		$this->authorize('list-users');
@@ -14,6 +19,11 @@ class AdminController extends Controller {
 			->with('users', User::orderBy('role', 'ASC')->orderBy('email', 'ASC')->paginate());
 	}
 
+	/**
+    * Displays all requests.
+    *
+    * @return \Illuminate\Http\Response
+    */
 	public function requests()
 	{
 		$this->authorize('list-requests');

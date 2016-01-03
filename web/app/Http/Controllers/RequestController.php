@@ -8,6 +8,12 @@ use App\Request as TemplateRequest;
 
 class RequestController extends Controller {
 
+	/**
+    * Creates a new request controller instance.
+    *
+    * @param Illuminate\Contracts\Auth\Guard $auth
+    * @return void
+    */
 	public function __construct(Guard $auth)
 	{
 		$this->user = $auth->user();
@@ -20,6 +26,12 @@ class RequestController extends Controller {
 		return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
 	}
 	
+	/**
+    * Shows request details.
+    *
+    * @param  \Illuminate\Http\Request $request
+    * @return \Illuminate\Http\Response
+    */
 	public function show(TemplateRequest $request)
 	{
 		$this->authorize('show-request', $request);
@@ -29,6 +41,12 @@ class RequestController extends Controller {
 			->with('archive_size', file_exists($request->getStoragePathname()) ? $this->human_filesize(filesize($request->getStoragePathname())) : null);
 	}
 	
+	/**
+    * Downloads request.
+    *
+    * @param  \Illuminate\Http\Request $request
+    * @return \Illuminate\Http\Response
+    */
 	public function download(TemplateRequest $request)
 	{
 		$this->authorize('show-request', $request);
