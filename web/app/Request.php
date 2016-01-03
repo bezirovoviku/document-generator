@@ -2,8 +2,8 @@
 
 use DB;
 use Illuminate\Database\Eloquent\Model;
-use Docx\Generator;
-use Docx\Converter\OPDF;
+use Temgen\Generator;
+use Temgen\Converter;
 use League\Csv\Reader;
 use Nathanmac\Utilities\Parser\Facades\Parser;
 
@@ -151,10 +151,11 @@ class Request extends Model {
 	*/
 	public function generate()
 	{
-		$generator = new Generator();
+		$generator = new Generator\Docx();
+		
 		$converter = null;
 		if ($this->type == 'pdf')
-			$converter = new OPDF();
+			$converter = new Converer\OPDF();
 		
 		$generator->addFilters();
 		$generator->setTmp(static::TMP_PATH);
