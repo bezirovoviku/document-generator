@@ -1,10 +1,16 @@
 <?php
 
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
 /**
  * Tests used for determining correct functionality of API
  */
 class ApiTest extends TestCase
 {
+	use DatabaseMigrations;
+
 	///@var string $key cached api key
 	protected $key;
 
@@ -13,10 +19,12 @@ class ApiTest extends TestCase
 	 * @return string api key
 	 */
 	protected function getApiKey() {
-		if (!$this->key)
-			$this->key = App\User::whereNotNull('api_key')->get()->first(function($key, $user) {
-				return !$user->isOverRequestLimit();
-			})->api_key;
+		if (!$this->key) {
+			$user = factory(App\User::class)->create([
+				'request_limit' => 0, // = unlimited
+			]);
+			$this->key = $user->api_key;
+		}
 		return $this->key;
 	}
 
