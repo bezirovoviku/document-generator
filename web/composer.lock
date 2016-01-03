@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bezirovoviku/temgen.git",
-                "reference": "161dea587fe2bc424e7c59d619d3a9e43b3f541c"
+                "reference": "83d0bad3c0f03cbfc4c1af9f62e51fa311213451"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bezirovoviku/temgen/zipball/161dea587fe2bc424e7c59d619d3a9e43b3f541c",
-                "reference": "161dea587fe2bc424e7c59d619d3a9e43b3f541c",
+                "url": "https://api.github.com/repos/bezirovoviku/temgen/zipball/83d0bad3c0f03cbfc4c1af9f62e51fa311213451",
+                "reference": "83d0bad3c0f03cbfc4c1af9f62e51fa311213451",
                 "shasum": ""
             },
             "require": {
@@ -48,7 +48,7 @@
                 "docx",
                 "template"
             ],
-            "time": "2016-01-03 19:36:45"
+            "time": "2016-01-03 19:56:59"
         },
         {
             "name": "classpreloader/classpreloader",
