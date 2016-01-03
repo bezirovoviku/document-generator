@@ -3,6 +3,7 @@
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Docx\Generator;
+use Docx\Converter\OPDF;
 use League\Csv\Reader;
 use Nathanmac\Utilities\Parser\Facades\Parser;
 
@@ -151,10 +152,14 @@ class Request extends Model {
 	public function generate()
 	{
 		$generator = new Generator();
+		$converter = null;
+		if ($this->type == 'pdf')
+			$converter = new OPDF();
+		
 		$generator->addFilters();
 		$generator->setTmp(static::TMP_PATH);
 		$generator->setTemplate($this->template->getRealPathname());
-		$generator->generateArchive($this->data, $this->getStoragePathname());
+		$generator->generateArchive($this->data, $this->getStoragePathname(), $converter);
 	}
 
 	/**
