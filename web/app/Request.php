@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use DB;
+use Storage;
 use Illuminate\Database\Eloquent\Model;
 use Docx\Generator;
 use Docx\Converter\OPDF;
@@ -10,7 +11,6 @@ use Nathanmac\Utilities\Parser\Facades\Parser;
 class Request extends Model {
 
 	const TMP_PATH = '/tmp';
-	const ARCHIVE_DIR = 'app/archives';
 
 	const STATUS_DONE = 'done';
 	const STATUS_FAILED = 'failed';
@@ -174,8 +174,8 @@ class Request extends Model {
 
 		$generator->addFilters();
 		$generator->setTmp(static::TMP_PATH);
-		$generator->setTemplate($this->template->getRealPathname());
-		$generator->generateArchive($this->data, $this->getStoragePathname(), $converter);
+		$generator->setTemplate(env_path($this->template->getStoragePathname()));
+		$generator->generateArchive($this->data, env_path($this->getStoragePathname()), $converter);
 	}
 
 	/**
@@ -193,11 +193,29 @@ class Request extends Model {
 		}
 	}
 
+	public function getHumanFilesize()
+	{
+		if (!Storage::exists($this->getStoragePathname()))
+			return null;
+
+		$bytes = Storage::size($this->getStoragePathname());
+		$decimals = 2;
+
+ 		$size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
+ 		$factor = floor((strlen($bytes) - 1) / 3);
+ 		return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+	}
+
 	// storage path helpers
+
+	public static function getArchiveDir()
+	{
+		return 'archives';
+	}
 
 	public function getPath()
 	{
-		return $this->user->id;
+		return join(DIRECTORY_SEPARATOR, [static::getArchiveDir(), $this->user->id]);
 	}
 
 	public function getFilename()
@@ -205,14 +223,9 @@ class Request extends Model {
 		return $this->id . '.zip';
 	}
 
-	public function getPathname()
-	{
-		return join(DIRECTORY_SEPARATOR, [$this->getPath(), $this->getFilename()]);
-	}
-
 	public function getStoragePathname()
 	{
-		return join(DIRECTORY_SEPARATOR, [storage_path(), static::ARCHIVE_DIR, $this->getPathname()]);
+		return join(DIRECTORY_SEPARATOR, [$this->getPath(), $this->getFilename()]);
 	}
 
 }

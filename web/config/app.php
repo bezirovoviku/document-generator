@@ -148,12 +148,13 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\HelperServiceProvider::class,
 
 		/*
 		 * Composer Service Providers
 		 */
 		Collective\Html\HtmlServiceProvider::class,
-		
+
 		/*
 		 * Used to parse template data
 		 */
@@ -211,7 +212,7 @@ return [
 		// composer
 		'Form' => Collective\Html\FormFacade::class,
 		'Html' => Collective\Html\HtmlFacade::class,
-		
+
 		'Parser' => Nathanmac\Utilities\Parser\Facades\Parser::class
     ],
 

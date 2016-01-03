@@ -1,9 +1,8 @@
 <?php namespace App\Providers;
 
-use Validator;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider {
+class HelperServiceProvider extends ServiceProvider {
 
 	/**
 	 * Bootstrap any application services.
@@ -12,11 +11,6 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		Validator::extend('xml', function($attribute, $value, $parameters, $validator) {
-			libxml_use_internal_errors(true);
-			simplexml_load_string($value);
-			return empty(libxml_get_errors());
-		});
 	}
 
 	/**
@@ -30,6 +24,9 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		foreach (glob(app_path().'/Helpers/*.php') as $filename){
+			require_once($filename);
+		}
 	}
 
 }

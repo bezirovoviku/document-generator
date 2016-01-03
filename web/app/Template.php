@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Symfony\Component\HttpFoundation\File\File;
 use Storage;
 
 class Template extends Model {
@@ -9,8 +10,6 @@ class Template extends Model {
 	use SoftDeletes;
 
 	protected $fillable = ['name'];
-
-	const TEMPLATE_DIR = 'templates';
 
 	public function user()
 	{
@@ -27,6 +26,11 @@ class Template extends Model {
 		return $this->requests()->count();
 	}
 
+	public function getMD5()
+	{
+		return md5_file(env_path($this->getStoragePathname()));
+	}
+
 	public function delete()
 	{
 		// delete from filesystem (and quietly ignore errors)
@@ -38,12 +42,34 @@ class Template extends Model {
 		parent::delete();
 	}
 
+	/**
+	* Moves given file to filesystem
+	*/
+	public function saveFile(File $file)
+	{
+		$path = env_path($this->getStoragePathname());
+		return $file->move(dirname($path), basename($path));
+	}
+
+	/**
+	* Save template data to filesystem
+	*/
+	public function saveContents($contents)
+	{
+		return Storage::put($this->getStoragePathname(), $contents);
+	}
+
 
 	// storage path helpers follows
 
+	public static function getTemplateDir()
+	{
+		return 'templates';
+	}
+
 	public function getPath()
 	{
-		return $this->user->id;
+		return join(DIRECTORY_SEPARATOR, [static::getTemplateDir(), $this->user->id]);
 	}
 
 	public function getFilename()
@@ -51,24 +77,9 @@ class Template extends Model {
 		return $this->id . '.docx';
 	}
 
-	public function getRealPath()
-	{
-		return join(DIRECTORY_SEPARATOR, [storage_path(), 'app', static::TEMPLATE_DIR, $this->getPath()]);
-	}
-
-	public function getRealPathname()
-	{
-		return join(DIRECTORY_SEPARATOR, [$this->getRealPath(), $this->getFilename()]);
-	}
-
-	public function getPathname()
-	{
-		return join(DIRECTORY_SEPARATOR, [$this->getPath(), $this->getFilename()]);
-	}
-
 	public function getStoragePathname()
 	{
-		return join(DIRECTORY_SEPARATOR, [static::TEMPLATE_DIR, $this->getPathname()]);
+		return join(DIRECTORY_SEPARATOR, [$this->getPath(), $this->getFilename()]);
 	}
 
 }

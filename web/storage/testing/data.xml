@@ -1,0 +1,44 @@
+<root>
+	<document>
+		<nadpis>Nadpis dokumentu 1</nadpis>
+		<items>
+			<name>Item 1</name>
+		</items>
+		<items>
+			<name>Item 2</name>
+		</items>
+		<items>
+			<name>Item 3</name>
+		</items>
+		<date>1447085800</date>
+		<format>Y-m-d H:i:s</format>
+		<number>879872475</number>
+	</document>
+	<document>
+		<nadpis>Nadpis dokumentu 2</nadpis>
+		<items>
+			<name>Meti 1</name>
+		</items>
+		<items>
+			<name>Meti 2</name>
+		</items>
+		<items>
+			<name>Meti 3</name>
+		</items>
+		<items>
+			<name>Meti 4</name>
+		</items>
+		<items>
+			<name>Meti 5</name>
+		</items>
+		<items>
+			<name>Meti 6</name>
+		</items>
+		<items>
+			<name>Meti 7</name>
+		</items>
+		<date>2015-01-02 15:40:13</date>
+		<format>d.m.Y H:i:s</format>
+		<number>879872475</number>
+	</document>
+</root>
