@@ -62,6 +62,8 @@ class DashboardController extends Controller {
     */
 	public function updateLimits(Request $request)
 	{
+		// TODO update limits for other users
+
 		$this->authorize('update-limits');
 		$this->validate($request, [
 			'request_limit' => 'required|numeric|min:0'

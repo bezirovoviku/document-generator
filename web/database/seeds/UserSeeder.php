@@ -14,14 +14,7 @@ class UserSeeder extends Seeder {
 		$user->setRole(User::ROLE_ADMIN);
 		$user->save();
 
-		$faker = Faker\Factory::create();
-		for ($i = 0; $i < 10; $i++) { 
-			User::create([
-				'email' => $faker->unique()->email,
-				'password' => 'pass',
-				'request_limit' => $faker->numberBetween(0, 300),
-			]);
-		}
+		factory(User::class, 10)->create();
 	}
 
 }

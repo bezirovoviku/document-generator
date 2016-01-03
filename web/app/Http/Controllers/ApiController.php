@@ -2,7 +2,7 @@
 
 use Validator;
 use Config;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
 use App\Jobs\GenerateRequest;
@@ -12,20 +12,9 @@ use App\Request as RequestModel;
 
 class ApiController extends Controller {
 
-	/**
-    * Create a new api controller instance.
-    *
-    * @param  \Illuminate\Contracts\Filesystem\Filesystem $storage
-    * @param  \Illuminate\Http\Request $request
-    * @return void
-    */
-	public function __construct(Filesystem $storage, Request $request)
+	public function __construct(Guard $auth)
 	{
-		$this->storage = $storage;
-
-		// selected user from DB by X-AUTH header
-		$token = $request->header('X-AUTH');
-		$this->user = User::where(['api_key' => $token])->first();
+		$this->user = $auth->user();
 	}
 
 	/**
@@ -55,13 +44,11 @@ class ApiController extends Controller {
 			'type' => $request->input('type')
 		]);
 		$this->user->templates()->save($template);
-
-		// save to filesystem
-		$this->storage->put($template->getStoragePathname(), $request->getContent());
+		$template->saveContents($request->getContent());
 
 		return [
 			'template_id' => $template->id,
-			'md5' => md5_file($template->getRealPathname()),
+			'md5' => $template->getMD5(),
 		];
 	}
 
@@ -72,14 +59,10 @@ class ApiController extends Controller {
 	 * @param  string $template_id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function deleteTemplate(Request $request, $template_id) {
-		// get template from DB
-		$template = $this->user->templates()->find($template_id);
-		if ($template == NULL) {
-			throw new ApiException('Template not found.');
-		}
-
-		$template->delete();
+ 	public function deleteTemplate(Request $request, Template $template)
+ 	{
+ 		$this->authorize('delete-template', $template);
+ 		$template->delete();
 		return response(NULL, 200);
 	}
 
@@ -109,13 +92,13 @@ class ApiController extends Controller {
 		if ($template == NULL) {
 			throw new ApiException('Template not found.');
 		}
-		
+
 		$allowed = [
 			'md' => ['md', 'html', 'pdf'],
 			'html' => ['html', 'pdf'],
 			'docx' => ['docx', 'pdf']
 		];
-		
+
 		if (!in_array($request->input('type'), $allowed[$template->type]))
 			throw new ApiException("Specified template can't be converted to requested type.");
 
@@ -138,10 +121,10 @@ class ApiController extends Controller {
 
 		$requ = new GenerateRequest($requestModel);
 		$requ->handle();
-		
+
 		//$this->dispatch(new GenerateRequest($requestModel));
-		
-		
+
+
 		return ['request_id' => $requestModel->id];
 	}
 
@@ -152,13 +135,8 @@ class ApiController extends Controller {
 	 * @param  string $request_id
 	 * @return \Illuminate\Http\Request $request
 	 */
-	public function requestInfo(Request $request, $request_id) {
-		// get request from DB
-		$request = $this->user->requests()->find($request_id);
-		if ($request == NULL) {
-			throw new ApiException('Request not found.');
-		}
-
+	public function getRequestInfo(RequestModel $request) {
+		$this->authorize('show-request', $request);
 		return $request;
 	}
 
@@ -169,14 +147,9 @@ class ApiController extends Controller {
 	 * @param  string $request_id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function downloadRequest(Request $request, $request_id) {
-		// get request from DB
-		$request = $this->user->requests()->find($request_id);
-		if ($request == NULL) {
-			throw new ApiException('Request not found.');
-		}
-
-		return response()->download($request->getStoragePathname());
+	public function downloadRequest(RequestModel $request) {
+		$this->authorize('download-request', $request);
+		return response()->download(env_path($request->getStoragePathname()));
 	}
 
 }

@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use DB;
+use Storage;
 use Illuminate\Database\Eloquent\Model;
 use Temgen\Generator;
 use Temgen\Converter;
@@ -11,7 +12,6 @@ use Nathanmac\Utilities\Parser\Facades\Parser;
 class Request extends Model {
 
 	const TMP_PATH = '/tmp';
-	const ARCHIVE_DIR = 'app/archives';
 
 	const STATUS_DONE = 'done';
 	const STATUS_FAILED = 'failed';
@@ -44,7 +44,14 @@ class Request extends Model {
 	 */
 	public function scopeLastMonth($query)
 	{
-		return $query->where('requests.created_at', '>', DB::raw('date_sub(curdate(), interval 1 month)'));
+		$driver = DB::connection()->getDriverName();
+		if ($driver == 'mysql') {
+			return $query->where('requests.created_at', '>', DB::raw('date_sub(curdate(), interval 1 month)'));
+		} elseif ($driver == 'sqlite') {
+			return $query->where('requests.created_at', '>', DB::raw('datetime("now", "-1 month")'));
+		} else {
+			throw new Exception('Unexpected DB driver.');
+		}
 	}
 
 	/**
@@ -64,10 +71,19 @@ class Request extends Model {
 	public function scopeMonthsBefore($query, $months)
 	{
 		assert(is_int($months) && $months >= 0);
-		return $query->where('requests.created_at', DB::raw('between'), DB::raw(
-			'date_sub(curdate(), interval ' . ($months + 1) . ' month) and ' .
-			'date_sub(curdate(), interval ' . $months . ' month)')
-		);
+		$driver = DB::connection()->getDriverName();
+		if ($driver == 'mysql') {
+			return $query->where('requests.created_at', DB::raw('between'), DB::raw(
+				'date_sub(curdate(), interval ' . ($months + 1) . ' month) and ' .
+				'date_sub(curdate(), interval ' . $months . ' month)')
+			);
+		} elseif ($driver == 'sqlite') {
+			return $query->where('requests.created_at', DB::raw('between'),
+				DB::raw('datetime("now", "-' . ($months + 1) . ' month") and datetime("now", "-' . $months . ' month")')
+			);
+		} else {
+			throw new Exception('Unexpected DB driver.');
+		}
 	}
 
 	/**
@@ -186,15 +202,15 @@ class Request extends Model {
 	{
 		$generator = null;
 		$converter = null;
-		
+
 		if ($this->template->type == 'docx') {
 			$generator = new Generator\Docx();
-			$generator->setTemplate(new Document\Docx($this->template->getRealPathname()));
+			$generator->setTemplate(new Document\Docx(env_path($this->template->getStoragePathname())));
 		} else {
 			$generator = new Generator();
-			$generator->setTemplate(new Document($this->template->getRealPathname()));
+			$generator->setTemplate(new Document(env_path($this->template->getStoragePathname())));
 		}
-		
+
 		if ($this->type == 'html' && $this->template->type == 'md') {
 			$converter = new Converter\MD();
 		} else if ($this->type == 'pdf') {
@@ -208,10 +224,10 @@ class Request extends Model {
 					new Converter\PPDF
 				]);
 		}
-		
+
 		$generator->addFilters();
 		$generator->setTmp(static::TMP_PATH);
-		$generator->generateArchive($this->data, $this->getStoragePathname(), $converter);
+		$generator->generateArchive($this->data, env_path($this->getStoragePathname()), $converter);
 	}
 
 	/**
@@ -229,38 +245,42 @@ class Request extends Model {
 		}
 	}
 
-	// storage path helpers
-
-	/**
-	 * @return path
-	 */
-	public function getPath()
+	public function getHumanFilesize()
 	{
-		return $this->user->id;
+		if (!Storage::exists($this->getStoragePathname()))
+			return null;
+
+		$bytes = Storage::size($this->getStoragePathname());
+		$decimals = 2;
+
+ 		$size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
+ 		$factor = floor((strlen($bytes) - 1) / 3);
+ 		return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
 	}
 
-	/**
-	 * @return filename
-	 */
+	// storage path helpers
+
+	public static function getArchiveDir()
+	{
+		return 'archives';
+	}
+
+	public function getPath()
+	{
+		return join(DIRECTORY_SEPARATOR, [static::getArchiveDir(), $this->user->id]);
+	}
+
 	public function getFilename()
 	{
 		return $this->id . '.zip';
 	}
 
 	/**
-	 * @return path name
-	 */
-	public function getPathname()
-	{
-		return join(DIRECTORY_SEPARATOR, [$this->getPath(), $this->getFilename()]);
-	}
-
-	/**
-	 * @return storage path name 
+	 * @return storage path name
 	 */
 	public function getStoragePathname()
 	{
-		return join(DIRECTORY_SEPARATOR, [storage_path(), static::ARCHIVE_DIR, $this->getPathname()]);
+		return join(DIRECTORY_SEPARATOR, [$this->getPath(), $this->getFilename()]);
 	}
 
 }

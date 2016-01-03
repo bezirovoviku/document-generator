@@ -107,36 +107,33 @@ class TemplateController extends Controller {
 	}
 
 	/**
-    * Uploads template.
-    *
-    * @param  \Illuminate\Http\Request $request
-    * @return \Illuminate\Http\Response
-    */
-	public function uploadTemplate(Request $request)
+	* Uploads template.
+	*
+	* @param  \Illuminate\Http\Request $request
+	* @return \Illuminate\Http\Response
+	*/
+	public function upload(Request $request)
 	{
 		$this->validate($request, [
 			'name' => 'required|max:255',
 			'template' => 'required|max:2048',
 		]);
 
-		// save to DB
 		$template = new Template($request->only('name'), 'docx');
 		$this->user->templates()->save($template);
-
-		// save to filesystem
-		$request->file('template')->move($template->getRealPath(), $template->getFilename());
+		$template->saveFile($request->file('template'));
 
 		return redirect()->back()->withSuccess('Template uploaded.');
 	}
 
 	/**
-    * Deletes template.
-    *
-    * @param  \App\Template $template
-    * @param  \Illuminate\Http\Request $request
-    * @return \Illuminate\Http\Response
-    */
-	public function deleteTemplate(Request $request, Template $template)
+	* Deletes template.
+	*
+	* @param  \Illuminate\Http\Request $request
+	* @param  \App\Template $template
+	* @return \Illuminate\Http\Response
+	*/
+	public function delete(Request $request, Template $template)
 	{
 		$this->authorize('delete-template', $template);
 		$template->delete();

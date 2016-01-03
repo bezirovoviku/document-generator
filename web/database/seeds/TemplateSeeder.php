@@ -8,16 +8,9 @@ class TemplateSeeder extends Seeder {
 
 	public function run()
 	{
-	$users = iterator_to_array(User::all());
-
-	$faker = Faker\Factory::create();
-
-	for ($i = 0; $i < 20; $i++) { 
-		$template = new Template([
-			'name' => $faker->sentence(3),
-		]);
-		$faker->randomElement($users)->templates()->save($template);
-	}
+		$template = factory(Template::class, 20)->make()->each(function($template) {
+			User::orderByRaw('RAND()')->firstOrFail()->templates()->save($template);
+		});
 	}
 
 }

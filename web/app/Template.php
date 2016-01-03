@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Symfony\Component\HttpFoundation\File\File;
 use Storage;
 
 class Template extends Model {
@@ -9,8 +10,6 @@ class Template extends Model {
 	use SoftDeletes;
 
 	protected $fillable = ['name', 'type'];
-
-	const TEMPLATE_DIR = 'templates';
 
 	/**
 	 * @return user associated with the template
@@ -36,6 +35,11 @@ class Template extends Model {
 		return $this->requests()->count();
 	}
 
+	public function getMD5()
+	{
+		return md5_file(env_path($this->getStoragePathname()));
+	}
+
 	/**
 	 * Deletes template from storage.
 	 */
@@ -50,54 +54,46 @@ class Template extends Model {
 		parent::delete();
 	}
 
+	/**
+	* Moves given file to filesystem
+	*/
+	public function saveFile(File $file)
+	{
+		$path = env_path($this->getStoragePathname());
+		return $file->move(dirname($path), basename($path));
+	}
+
+	/**
+	* Save template data to filesystem
+	*/
+	public function saveContents($contents)
+	{
+		return Storage::put($this->getStoragePathname(), $contents);
+	}
+
 	// storage path helpers follows
 
-	/**
-	 * @return path
-	 */
+	public static function getTemplateDir()
+	{
+		return 'templates';
+	}
+
 	public function getPath()
 	{
-		return $this->user->id;
+		return join(DIRECTORY_SEPARATOR, [static::getTemplateDir(), $this->user->id]);
 	}
 
-	/**
-	 * @return filename
-	 */
 	public function getFilename()
 	{
-		return $this->id . '.' . $this->type;
+		return $this->id . '.docx';
 	}
 
 	/**
-	 * @return real path
-	 */
-	public function getRealPath()
-	{
-		return join(DIRECTORY_SEPARATOR, [storage_path(), 'app', static::TEMPLATE_DIR, $this->getPath()]);
-	}
-
-	/**
-	 * @return real path name
-	 */
-	public function getRealPathname()
-	{
-		return join(DIRECTORY_SEPARATOR, [$this->getRealPath(), $this->getFilename()]);
-	}
-
-	/**
-	 * @return path name
-	 */
-	public function getPathname()
-	{
-		return join(DIRECTORY_SEPARATOR, [$this->getPath(), $this->getFilename()]);
-	}
-
-	/**
-	 * @return storage path name 
+	 * @return storage path name
 	 */
 	public function getStoragePathname()
 	{
-		return join(DIRECTORY_SEPARATOR, [static::TEMPLATE_DIR, $this->getPathname()]);
+		return join(DIRECTORY_SEPARATOR, [$this->getPath(), $this->getFilename()]);
 	}
 
 }

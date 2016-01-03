@@ -68,12 +68,12 @@ class HomeController extends Controller {
 	 * @param  array  $data
 	 * @return \Illuminate\Contracts\Validation\Validator
 	 */
-	public function validator(array $data)
+	private function validator(array $data)
 	{
 		return Validator::make($data, [
 			'email' => 'required|email|max:255|unique:users',
 			'password' => 'required|min:6|confirmed',
-			'password_confirmation' => 'required|min:6'
+			'password_confirmation' => 'required'
 		]);
 	}
 
@@ -83,7 +83,7 @@ class HomeController extends Controller {
 	 * @param  array  $data
 	 * @return User
 	 */
-	public function create(array $data)
+	private function create(array $data)
 	{
 		return User::create([
 			'email' => $data['email'],

@@ -34,8 +34,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'user'], function() {
 	Route::group(['middleware' => 'csrf', 'prefix' => 'template'], function() {
 		Route::get('{template}/show', 'TemplateController@show');
 		Route::post('{template}/request', 'TemplateController@createRequest');
-		Route::post('upload', 'TemplateController@uploadTemplate');
-		Route::post('{template}/delete', 'TemplateController@deleteTemplate');
+		Route::post('upload', 'TemplateController@upload');
+		Route::post('{template}/delete', 'TemplateController@delete');
 	});
 
 	// request resource
@@ -55,11 +55,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'user'], function() {
 Route::group(['middleware' => 'api', 'prefix' => 'api/v1'], function() {
 
 	Route::post('template', 'ApiController@uploadTemplate');
-	Route::delete('template/{template_id}', 'ApiController@deleteTemplate');
+	Route::delete('template/{template}', 'ApiController@deleteTemplate');
 
 	Route::post('request', 'ApiController@createRequest');
-	Route::get('request/{request_id}', 'ApiController@requestInfo');
-	Route::get('request/{request_id}/download', 'ApiController@downloadRequest');
+	Route::get('request/{request}', 'ApiController@getRequestInfo');
+	Route::get('request/{request}/download', 'ApiController@downloadRequest');
 });
 
 // ----------------------------------------------------------------------------
