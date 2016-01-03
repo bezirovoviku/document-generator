@@ -1,14 +1,9 @@
 <?php
 
 use App\User;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class DashboardControllerTest extends TestCase
 {
-	use DatabaseMigrations;
-
 	/**
 	* Test basic home page display
 	*/

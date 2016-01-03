@@ -1,16 +1,10 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-
 /**
  * Tests used for determining correct functionality of API
  */
 class ApiTest extends TestCase
 {
-	use DatabaseMigrations;
-
 	///@var string $key cached api key
 	protected $key;
 
@@ -43,10 +37,10 @@ class ApiTest extends TestCase
 	 * Tests template upload
 	 */
 	public function testUpload() {
-		$file = dirname(__FILE__) . "/data/template.docx";
-		$name = "Test template";
+		$file = env_path('template.docx');
+		$name = 'Test template';
 
-		$response = $this->apiRequest("template?name=" . urlencode($name), 'POST', file_get_contents($file), null);
+		$response = $this->apiRequest('template?name=' . urlencode($name), 'POST', file_get_contents($file), null);
 		//$response = $this->call('POST', '/api/v1/template?name=' .  urlencode($name), file_get_contents($file), [], ['HTTP_X-Auth' => $this->getApiKey()], [], file_get_contents($file));
 		$json = json_decode($response->content());
 
@@ -61,14 +55,14 @@ class ApiTest extends TestCase
 	 */
 	public function testAPI() {
 		//Prepare template values
-		$file = dirname(__FILE__) . "/data/template.docx";
-		$name = "Test template";
+		$file = env_path('template.docx');
+		$name = 'Test template';
 
 		//$response = $this->call('POST', '/api/v1/template?name=' .  urlencode($name), file_get_contents($file), [], ['HTTP_X-Auth' => $this->getApiKey()], [], file_get_contents($file));
 
 		/** Upload template and save its ID **/
 
-		$response = $this->apiRequest("template?name=" . urlencode($name), 'POST', file_get_contents($file));
+		$response = $this->apiRequest('template?name=' . urlencode($name), 'POST', file_get_contents($file));
 		$json = json_decode($response->content());
 
 		$this->assertEquals(200, $response->status());
@@ -136,7 +130,7 @@ class ApiTest extends TestCase
 			$this->assertFalse(isset($json->error));
 			$this->assertTrue(isset($json->status));
 
-			if ($json->status == "done") {
+			if ($json->status == 'done') {
 				break;
 			}
 		}

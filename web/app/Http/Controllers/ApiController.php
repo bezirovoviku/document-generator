@@ -42,7 +42,7 @@ class ApiController extends Controller {
 
 		return [
 			'template_id' => $template->id,
-			'md5' => md5_file($template->getRealPathname()),
+			'md5' => $template->getMD5(),
 		];
 	}
 
@@ -115,7 +115,7 @@ class ApiController extends Controller {
 	 */
 	public function downloadRequest(RequestModel $request) {
 		$this->authorize('download-request', $request);
-		return response()->download($request->getStoragePathname());
+		return response()->download(env_path($request->getStoragePathname()));
 	}
 
 }

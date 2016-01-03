@@ -94,12 +94,9 @@ class TemplateController extends Controller {
 			'template' => 'required|max:2048',
 		]);
 
-		// save to DB
 		$template = new Template($request->only('name'));
 		$this->user->templates()->save($template);
-
-		// save to filesystem
-		$request->file('template')->move($template->getRealPath(), $template->getFilename());
+		$template->saveFile($request->file('template'));
 
 		return redirect()->back()->withSuccess('Template uploaded.');
 	}
