@@ -51,7 +51,7 @@ global $counter;
             <pre id="full-xml-{{ $counter }}"><code class="language-json" data-lang="json">{
     "template_id": 1,
     "data_type": "xml",
-    "data": '&lt;root&gt;&lt;document&gt;{{ $request['xml'] or '' }}&lt;/document&gt;&lt;/root&gt;'
+    "data": '{{ $request['xml'] or '' }}'
 }</code></pre>
         </div>
 
