@@ -137,8 +137,7 @@ class ApiTest extends TestCase
 
 		//Download resulting file and save it to result folder
 		$response = $this->apiRequest("request/$request_id/download", 'GET');
-
-		$this->assertTrue($response instanceof \Symfony\Component\HttpFoundation\BinaryFileResponse);
+		$this->assertInstanceOf(\Symfony\Component\HttpFoundation\BinaryFileResponse::class, $response);
 
 		$archive = $response->getFile()->getRealPath();
 

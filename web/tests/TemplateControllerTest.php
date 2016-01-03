@@ -98,7 +98,7 @@ class TemplateControllerTest extends TestCase
 	/**
 	* Upload template
 	*/
-	public function testUploadTemplate()
+	public function testUpload()
 	{
 		$name = str_random(50);
 		$this->visit('/user/dashboard')
@@ -112,7 +112,7 @@ class TemplateControllerTest extends TestCase
 	/**
 	* Delete template
 	*/
-	public function testDeleteTemplate()
+	public function testDelete()
 	{
 		$this->visit('/user/dashboard')
 			->see($this->template->id)

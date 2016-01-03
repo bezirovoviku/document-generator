@@ -87,7 +87,7 @@ class TemplateController extends Controller {
 		return redirect()->back()->withSuccess('Request generated.');
 	}
 
-	public function uploadTemplate(Request $request)
+	public function upload(Request $request)
 	{
 		$this->validate($request, [
 			'name' => 'required|max:255',
@@ -101,7 +101,7 @@ class TemplateController extends Controller {
 		return redirect()->back()->withSuccess('Template uploaded.');
 	}
 
-	public function deleteTemplate(Request $request, Template $template)
+	public function delete(Request $request, Template $template)
 	{
 		$this->authorize('delete-template', $template);
 		$template->delete();
