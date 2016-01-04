@@ -2,6 +2,10 @@
 
 use App\Exceptions\ApiException;
 
+// language localization route
+Route::get('lang/{lang}', ['as'=>'lang.switch', 'uses'=>'LanguageController@switchLang']);
+
+// ---------------------------------------------------------------------------
 // home page
 Route::get('/', 'HomeController@index');
 Route::get('docs', 'HomeController@docs');

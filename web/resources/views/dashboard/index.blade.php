@@ -1,11 +1,11 @@
 @extends('layout.master')
-@section('title', 'Dashboard')
+@section('title', trans('dashboard.Dashboard'))
 
 @section('content')
 
 <div class="container">
 
-<h1 class="page-header sr-only">Dashboard</h1>
+<h1 class="page-header sr-only">{{ trans('dashboard.Dashboard') }}</h1>
 
 <div class="row">
 
@@ -38,10 +38,10 @@
 		<div class="panel-heading">
 			<div class="pull-right">
 				<button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#addNewTemplate">
-					<span class="glyphicon glyphicon-plus"></span> Add new template
+					<span class="glyphicon glyphicon-plus"></span> {{ trans('dashboard.AddNewTemplate') }}
 				</button>
 			</div>
-			<h3 class="panel-title">Templates</h3>
+			<h3 class="panel-title">{{ trans('dashboard.Templates') }}</h3>
 		</div>
 
 
@@ -50,8 +50,8 @@
 			<thead>
 				<tr>
 					<th class="text-right">ID</th>
-					<th class="text-right">Used</th>
-					<th>Name</th>
+					<th class="text-right">{{ trans('dashboard.Used') }}</th>
+					<th>{{ trans('dashboard.Name') }}</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -63,14 +63,14 @@
 					<td>{{ $template->name }}</td>
 					<td class="text-right">
 						{!! Form::open(['action' => ['TemplateController@delete', $template->id]]) !!}
-							<a href="{{ action('TemplateController@show', $template->id) }}" class="btn btn-xs btn-link">details</a>
-							<button type="submit" class="btn btn-xs btn-link">delete</button>
+							<a href="{{ action('TemplateController@show', $template->id) }}" class="btn btn-xs btn-link">{{ trans('dashboard.details') }}</a>
+							<button type="submit" class="btn btn-xs btn-link">{{ trans('dashboard.delete') }}</button>
 						{!! Form::close() !!}
 					</td>
 				</tr>
 				@empty
 				<tr>
-					<td colspan="4" class="text-center text-muted">No templates</td>
+					<td colspan="4" class="text-center text-muted">{{ trans('dashboard.NoTemplates') }}</td>
 				</tr>
 				@endforelse
 			</tbody>
@@ -83,20 +83,20 @@
 	<div class="modal fade" id="addNewTemplate" tabindex="-1" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<div class="modal-header"><h4 class="modal-title"><span class="glyphicon glyphicon-plus"></span> Add new template</h4></div>
+				<div class="modal-header"><h4 class="modal-title"><span class="glyphicon glyphicon-plus"></span> {{ trans('dashboard.AddNewTemplate') }}</h4></div>
 				<div class="modal-body">
 
 					<div class="form-group">
-						<label for="templateName" class="col-md-4 col-sm-3 control-label">Template name</label>
+						<label for="templateName" class="col-md-4 col-sm-3 control-label">{{ trans('dashboard.TemplateName') }}</label>
 						<div class="col-md-8 col-sm-9">{!! Form::text('name', null, ['id' => 'templateName', 'class' => 'form-control']) !!}</div>
 					</div>
 					<div class="form-group form-group-file">
-						<label for="template" class="col-md-4 col-sm-3 control-label">DOCX template file</label>
+						<label for="template" class="col-md-4 col-sm-3 control-label">{{ trans('dashboard.DOCXTemp') }}</label>
 						<div class="col-md-8 col-sm-9">
 							<div class="input-group">
 								<span class="input-group-btn">
 									<span class="btn btn-primary btn-file">
-										Select file&hellip; {!! Form::file('template', null, ['id' => 'template']) !!}
+										{{ trans('dashboard.SelectFile') }}&hellip; {!! Form::file('template', null, ['id' => 'template']) !!}
 									</span>
 								</span>
 								<input type="text" class="form-control" readonly>
@@ -106,8 +106,8 @@
 
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-					<button type="submit" class="btn btn-primary">Upload template</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('dashboard.Cancel') }}</button>
+					<button type="submit" class="btn btn-primary">{{ trans('dashboard.UploadTemplate') }}</button>
 				</div>
 			</div>
 		</div>
@@ -117,7 +117,7 @@
 	{{-- requests --}}
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title">Requests</h3>
+			<h3 class="panel-title">{{ trans('dashboard.Requests') }}</h3>
 		</div>
 
 		<div class="table-responsive">
@@ -125,7 +125,7 @@
 			<thead>
 				<tr>
 					<th class="text-right">ID</th>
-					<th>Template</th>
+					<th>{{ trans('dashboard.Template') }}</th>
 					<th>Status</th>
 					<th></th>
 				</tr>
@@ -140,11 +140,11 @@
 						<td class="text-muted"><s>{{ $request->template->name }}</s></td>
 					@endif
 					<td>@include('partial.request_status', ['request' => $request])</td>
-					<td><a href="{{ action('RequestController@show', $request->id) }}" class="btn btn-xs btn-link">details</a></td>
+					<td><a href="{{ action('RequestController@show', $request->id) }}" class="btn btn-xs btn-link">{{ trans('dashboard.details') }}</a></td>
 				</tr>
 				@empty
 				<tr>
-					<td colspan="3" class="text-center text-muted">No requests</td>
+					<td colspan="3" class="text-center text-muted">{{ trans('dashboard.NoRequests') }}</td>
 				</tr>
 				@endforelse
 			</tbody>
@@ -167,15 +167,15 @@
 	<div class="panel panel-default panel-api-key">
 		<div class="panel-heading">
 			<div class="pull-right">
-				<button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-refresh"></span> Regenerate</button>
+				<button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-refresh"></span> {{ trans('dashboard.Regenerate') }}</button>
 			</div>
-			<h3 class="panel-title">Your API key</h3>
+			<h3 class="panel-title">{{ trans('dashboard.YourAPIKey') }}</h3>
 		</div>
 		<div class="panel-body">
 			<div class="form-group form-group-lg">
 				<input type="text" class="form-control text-center" disabled value="{{ $user->api_key }}">
 			</div>
-			<p>Use this key in your application to make requests. For more informations, read <a href="http://docs.docgen.apiary.io">the docs</a> please.</p>
+			<p>{{ trans('dashboard.Description1') }}<a href="http://docs.docgen.apiary.io">the docs</a>{{ trans('dashboard.Description2') }}</p>
 		</div>
 	</div>
 	{!! Form::close() !!}
@@ -183,14 +183,14 @@
 	{{-- usage history --}}
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title">Usage history</h3>
+			<h3 class="panel-title">{{ trans('dashboard.UsageHistory') }}</h3>
 		</div>
 		<div class="panel-body">
 			<canvas id="usageChart" style="width:100%;"></canvas>
 			<hr>
 			{{-- usage progress bar --}}
 			@if ($user->request_limit)
-				<p>You have used <strong>{{ $requestsUsed }} of {{ $user->request_limit }}</strong> allowed requests this month.</p>
+				<p>{{ trans('dashboard.Description3') }}<strong>{{ $requestsUsed }}{{ trans('dashboard.Description4') }}{{ $user->request_limit }}</strong>{{ trans('dashboard.Description5') }}</p>
 				<div class="progress">
 					<div class="progress-bar progress-bar-{{ $requestsPercentage < 66 ? 'success' : ($requestsPercentage < 80 ? 'warning' : 'danger') }}"
 						style="width: {{ min($requestsPercentage, 100) }}%; min-width: 2em" role="progressbar" >
@@ -198,7 +198,7 @@
 					</div>
 				</div>
 			@else
-				<p>You have <strong>unlimited</strong> number of requests. Yeah!</p>
+				<p>{{ trans('dashboard.Description6') }}<strong>{{ trans('dashboard.Description7') }}</strong>{{ trans('dashboard.Description8') }}</p>
 			@endif
 		</div>
 	</div>

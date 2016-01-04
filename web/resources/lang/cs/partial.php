@@ -20,6 +20,7 @@ return [
 	"LoggedInAs" => "Přihlášen ",	
 	"logout" => "odhlásit",	
 	"Home" => "	Úvodní stránka",
+	"Documentation" => "Dokumentace",
 	"Dashboard" => "Pracovní plocha",	
 
 	"Request" => "Žádost",	

@@ -1,16 +1,16 @@
 @extends('layout.master')
-@section('title', 'Request #' . $request->id)
+@section('title', trans('request.Header') . $request->id)
 
 @section('content')
 
 <div class="container">
 
-<h1 class="page-header">{{ $request->template->name }} #{{ $request->id }} <small>(request)</small></h1>
+<h1 class="page-header">{{ $request->template->name }} #{{ $request->id }} <small>({{ trans('request.request') }})</small></h1>
 
 <div class="row">
 	<div class="col-xs-12 col-sm-8">
 		<div class="panel panel-default">
-			<div class="panel-heading">Request data</div>
+			<div class="panel-heading">{{ trans('request.RequestData') }}</div>
 			<div class="panel-body">
 				<pre><code>{{ json_encode($request->data, JSON_PRETTY_PRINT) }}</code></pre>
 				{{-- <div id="document-tree"></div> --}}
@@ -23,7 +23,7 @@
 			<div class="panel-heading">Info</div>
 			<table class="table">
 				<tr>
-					<th>Template</th>
+					<th>{{ trans('request.Template') }}</th>
 					<td>
 						@if (!$request->template->deleted_at)
 							<a href="{{ action('TemplateController@show', $request->template->id) }}">{{ $request->template->name }}</a>
@@ -34,7 +34,7 @@
 				</tr>
 
 				<tr>
-					<th>Created</th>
+					<th>{{ trans('request.Created') }}</th>
 					<td>{{ $request->created_at }}</td>
 				</tr>
 
@@ -44,7 +44,7 @@
 				</tr>
 				@if ($request->status == App\Request::STATUS_DONE)
 				<tr>
-					<th>Download</th>
+					<th>{{ trans('request.Download') }}</th>
 					<td><a href="{{action('RequestController@download', ['request' => $request->id ])}}"><i class="glyphicon glyphicon-floppy-save"></i> Package <small>{{ $archive_size }}</small></a></td>
 				</tr>
 				@endif

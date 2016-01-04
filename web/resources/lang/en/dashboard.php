@@ -11,6 +11,8 @@ return [
 	|
 	*/
 
+	"Dashboard" => "Dashboard",
+
 	/*- templates -*/
 
 	"Templates" => "Templates",

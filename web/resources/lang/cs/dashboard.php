@@ -11,6 +11,8 @@ return [
 	|
 	*/
 
+	"Dashboard" => "Pracovní plocha",
+
 	/*- templates -*/
 
 	"Templates" => "Šablony",

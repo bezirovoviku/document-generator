@@ -11,7 +11,7 @@ return [
 	|
 	*/
 
-
+	"Header" => "'Žádost #'",	
 	"Created" => "Vytvořeno",	
 	"Download" => "Stáhnout",
 	"request" => "žádost",

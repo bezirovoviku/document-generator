@@ -20,6 +20,7 @@ return [
 	"LoggedInAs" => "Logged in as ",	
 	"logout" => "logout",	
 	"Home" => "Home",	
+	"Documentation" => "Documentation",
 	"Dashboard" => "Dashboard",	
 
 	"Request" => "Request",	

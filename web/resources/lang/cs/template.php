@@ -11,6 +11,7 @@ return [
 	|
 	*/
 
+	"TemplateHeader" => "Šablona: ",
 	"template" => "šablona",
 	"NoRequest" => "Žádná žádost",
 	"Request" => "Žádost",
@@ -19,6 +20,14 @@ return [
 	"details" => "detaily",
 	"RequestData" => "Data žádosti",
 	"Description1" => "Data žádosti jsou poskytovány ve voláni API – v JSON formatu.",
+	"RequestDataFile" => "Datový soubor žádosti",
+	"Description1-1" => "Pouze obsah pole  ",
+	"Description1-2" => " z žádosti.",
+	"CallbackURL" => "Zpětná URL",
+	"optional" => "nepovinné",
+	"DirectInput" => "Přímé nahrání",
+	"FileUpload" => "Nahrát soubor",
+	"SelectFile" => "Zvolit soubor",
 
 
 ];

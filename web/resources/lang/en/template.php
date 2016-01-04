@@ -11,6 +11,7 @@ return [
 	|
 	*/
 
+	"TemplateHeader" => "Template: ",
 	"template" => "template",
 	"NoRequest" => "No request",
 	"Request" => "Request",
@@ -18,8 +19,15 @@ return [
 	"TestIt" => "Test it",
 	"details" => "details",
 	"RequestData" => "Request data",
-	"Description1" => "Request data as provided in API calls – in JSON format.",
-
+	"Description1" => "Request data as provided in API calls – in JSON format.",	
+	"RequestDataFile" => "Request data file",
+	"Description1-1" => "Only the request's ",
+	"Description1-2" => " filed as provided through API.",
+	"CallbackURL" => "Callback URL",
+	"optional" => "optional",
+	"DirectInput" => "Direct input",
+	"FileUpload" => "File upload",
+	"SelectFile" => "Select file",
 
 ];
 

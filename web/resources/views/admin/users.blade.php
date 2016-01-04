@@ -5,7 +5,7 @@
 
 <div class="container">
 
-	<h1 class="page-header sr-only">All users</h1>
+	<h1 class="page-header sr-only">{{ trans('admin.AllUsers') }}</h1>
 
 	<div class="table-responsive">
 	<table class="table table-hover">
@@ -25,7 +25,7 @@
 			</tr>
 			@empty
 			<tr>
-				<td colspan="3" class="text-center text-muted">No users</td>
+				<td colspan="3" class="text-center text-muted">{{ trans('admin.NoUsers') }}</td>
 			</tr>
 			@endforelse
 		</tbody>

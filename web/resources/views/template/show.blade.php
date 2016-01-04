@@ -1,11 +1,11 @@
 @extends('layout.master')
-@section('title', 'Template: ' . $template->name)
+@section('title', trans('template.TemplateHeader'). $template->name)
 
 @section('content')
 
 <div class="container">
 
-	<h1 class="page-header">{{ $template->name }} <small>(template)</small></h1>
+	<h1 class="page-header">{{ $template->name }} <small>({{ trans('template.template') }})</small></h1>
 
 	<div class="row">
 		<div class="col-xs-12 col-sm-8">
@@ -13,7 +13,7 @@
 			{!! Form::open(['action' => ['TemplateController@createRequest', $template->id], 'class' => 'form', 'files' => true]) !!}
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3 class="panel-title">Test it</h3>
+					<h3 class="panel-title">{{ trans('template.TestIt') }}</h3>
 				</div>
 
 				<div class="panel-body">
@@ -23,10 +23,10 @@
 							{{-- TODO create HTML macro --}}
 							<div class="btn-group pull-right" data-toggle="buttons">
 								<label class="btn btn-default {{ Input::old('input_type') != 'file' ? 'active' : '' }}" data-toggle="tab" data-target="#direct">
-									<input type="radio" name="input_type" value="direct" {{ Input::old('input_type') != 'file' ? 'checked' : '' }}> Direct input
+									<input type="radio" name="input_type" value="direct" {{ Input::old('input_type') != 'file' ? 'checked' : '' }}> {{ trans('template.DirectInput') }}
 								</label>
 								<label class="btn btn-default {{ Input::old('input_type') == 'file' ? 'active' : '' }}" data-toggle="tab" data-target="#file">
-									<input type="radio" name="input_type" value="file" {{ Input::old('input_type') == 'file' ? 'checked' : '' }}> File upload
+									<input type="radio" name="input_type" value="file" {{ Input::old('input_type') == 'file' ? 'checked' : '' }}> {{ trans('template.FileUpload') }}
 								</label>
 							</div>
 							<div class="btn-group" data-toggle="buttons">
@@ -48,20 +48,20 @@
 						{{-- direct input --}}
 						<div class="tab-pane {{ Input::old('input_type') != 'file' ? 'active' : '' }}" id="direct">
 							<div class="form-group">
-								<label for="request_data">Request data</label>
+								<label for="request_data">{{ trans('template.RequestData') }}</label>
 								<textarea id="request_data" name="data" class="form-control" rows="10">{{ Input::old('data') }}</textarea>
-								<p class="help-block">Only the request's <code>data</code> filed as provided through API.</p>
+								<p class="help-block">{{ trans('template.Description1-1') }}<code>data</code>{{ trans('template.Description1-2') }}</p>
 							</div>
 						</div>
 
 						{{-- file --}}
 						<div class="tab-pane {{ Input::old('input_type') == 'file' ? 'active' : '' }}" id="file">
 							<div class="form-group form-group-file">
-								<label for="data_file" class="control-label">Request data file</label>
+								<label for="data_file" class="control-label">{{ trans('template.RequestDataFile') }}</label>
 								<div class="input-group">
 									<span class="input-group-btn">
 										<span class="btn btn-primary btn-file">
-											Select file&hellip; {!! Form::file('data_file', null, ['id' => 'data_file']) !!}
+											{{ trans('template.SelectFile') }}&hellip; {!! Form::file('data_file', null, ['id' => 'data_file']) !!}
 										</span>
 									</span>
 									<input type="text" class="form-control" readonly>
@@ -73,11 +73,11 @@
 					</div>
 
 					<div class="form-group">
-						<label for="callback_url">Callback URL</label>
-						{!! Form::text('callback_url', null, ['id' => 'callback_url', 'class' => 'form-control', 'placeholder' => 'optional']) !!}
+						<label for="callback_url">{{ trans('template.CallbackURL') }}</label>
+						{!! Form::text('callback_url', null, ['id' => 'callback_url', 'class' => 'form-control', 'placeholder' => trans('template.optional')]) !!}
 					</div>
 
-					<button type="submit" class="btn btn-primary pull-right">Submit a request</button>
+					<button type="submit" class="btn btn-primary pull-right">{{ trans('template.SubmitARequest') }}</button>
 				</div>
 
 			</div>
@@ -88,7 +88,7 @@
 			{{-- requests --}}
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3 class="panel-title">Requests</h3>
+					<h3 class="panel-title">{{ trans('template.Request') }}</h3>
 				</div>
 
 				<div class="table-responsive">
@@ -105,11 +105,11 @@
 							<tr>
 								<td class="text-right">{{ $request->id }}</td>
 								<td>@include('partial.request_status', ['request' => $request])</td>
-								<td><a href="{{ action('RequestController@show', $request->id) }}" class="btn btn-xs btn-link">details</a></td>
+								<td><a href="{{ action('RequestController@show', $request->id) }}" class="btn btn-xs btn-link">{{ trans('template.details') }}</a></td>
 							</tr>
 							@empty
 							<tr>
-								<td colspan="3" class="text-center text-muted">No requests</td>
+								<td colspan="3" class="text-center text-muted">{{ trans('template.NoRequest') }}</td>
 							</tr>
 							@endforelse
 						</tbody>

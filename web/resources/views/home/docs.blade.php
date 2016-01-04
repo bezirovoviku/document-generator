@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'Documentation')
+@section('title', trans('docs.Documentation'))
 
 @section('content')
 
@@ -7,25 +7,25 @@
 <div class="row">
 <nav class="col-md-3 col-md-push-9 hidden-sm hidden-xs">
 <div class="scrollspy">
-	<strong>Contents:</strong>
+	<strong>{{ trans('docs.Contents') }}:</strong>
 	<ul class="nav nav-stacked">
 		<li>
 			<a href="#api">API</a>
 		</li>
 		<li>
-			<a href="#templates">Templates</a>
+			<a href="#templates">{{ trans('docs.Templates') }}</a>
 			<ul class="nav nav-stacked">
-				<li><a href="#templates-replacing">Word Replacing</a></li>
-				<li><a href="#templates-replacing-nested">Nested Replacing</a></li>
-				<li><a href="#templates-cycles">Multiitem Replacing</a></li>
-				<li><a href="#templates-cycles-tables">Multiitem Replacing In Tables</a></li>
-				<li><a href="#templates-filters">Template Filters</a></li>
+				<li><a href="#templates-replacing">{{ trans('docs.WordReplacing') }}</a></li>
+				<li><a href="#templates-replacing-nested">{{ trans('docs.NestedReplacing') }}</a></li>
+				<li><a href="#templates-cycles">{{ trans('docs.MultiitemReplacing') }}</a></li>
+				<li><a href="#templates-cycles-tables">{{ trans('docs.MultiitemReplacingInTables') }}</a></li>
+				<li><a href="#templates-filters">{{ trans('docs.TemplateFilters') }}</a></li>
 			</ul>
 		</li>
 		<li>
-			<a href="#examples">Examples</a>
+			<a href="#examples">{{ trans('docs.Examples') }}</a>
 			<ul class="nav nav-stacked">
-				<li><a href="#examples-01">Example #01</a></li>
+				<li><a href="#examples-01">{{ trans('docs.Example') }} #01</a></li>
 			</ul>
 		</li>
 	</ul>
@@ -33,18 +33,16 @@
 </nav>
 <div class="col-md-9 col-md-pull-3 col-sm-12">
 
-<h1 class="page-header">Documentation</h1>
+<h1 class="page-header">{{ trans('docs.Header1') }}</h1>
 
 <h2 id="api">API</h2>
-<p>For API documentation, please refer to our <a href="http://docs.docgen.apiary.io">Apiary docs</a></p>
+<p>{{ trans('docs.Description2') }}<a href="http://docs.docgen.apiary.io">Apiary docs</a>.</p>
 
-<h2 id="templates">Templates</h2>
-<p>Our system works with DOCX templates, format used by Microsoft Office (2007 and newer).
-Data should be provided (<a href="http://docs.docgen.apiary.io">Apiary docs</a>) as JSON array,
-where each document is single object containing all the data.</p>
+<h2 id="templates">{{ trans('docs.Templates') }}</h2>
+<p>{{ trans('docs.Description3') }}(<a href="http://docs.docgen.apiary.io">Apiary docs</a>){{ trans('docs.Description4') }}</p>
 
-<h3 id="templates-replacing">Word replacing</h3>
-	<p>Our system simply replaces specified keywords inside document text. Keywords are expected in format <code>{KEYWORD}</code>.<p>
+<h3 id="templates-replacing">{{ trans('docs.WordReplacing') }}</h3>
+	<p>{{ trans('docs.Description5') }}<code>{KEYWORD}</code>.<p>
 
 	@include('partial.example', ['request' => [
 									'json' => '{"name":"Hildegard Testimen"}',
@@ -54,8 +52,8 @@ where each document is single object containing all the data.</p>
 								'template' => '{name}',
 								 'result' => 'Hildegard Testimen'])
 
-<h3 id="templates-replacing-nested">Nested replacing</h3>
-	<p>We also support multilevel objects in data. Simple use <code>{OBJ1.OBJ2.KEYWORD}</code>.<p>
+<h3 id="templates-replacing-nested">{{ trans('docs.NestedReplacing') }}</h3>
+	<p>{{ trans('docs.Description6') }}<code>{OBJ1.OBJ2.KEYWORD}</code>.<p>
 
 	@include('partial.example', ['request' => [
 									'json' => '{"person":{"name":"Hildegard Testimen","age":25}}',
@@ -65,14 +63,10 @@ where each document is single object containing all the data.</p>
 								'template' => '{person.name} ({person.age})',
 								'result' => 'Hildegard Testimen (25)'])
 
-<h3 id="templates-cycles">Multiitem replacing</h3>
-	<p>You can also have repeated items inside your data. To insert them,
-	you will need to write <code>{foreach items as item}</code> on one line,
-	where items is data keyword which contains multiple subitems, item is keyword that can be used inside foreach tag.
-	Then place content that will be repeated for each item (that will be masked as <code>{item}</code>) and then create ending line with <code>{/foreach}</code>.</p>
-	<p>It's vitaly important, that both <code>{foreach}</code> and <code>{/foreach}</code> tags must be on own line.
-	Anything that will be on the same line will be deleted.</p>
-	<p>Example data:</p>
+<h3 id="templates-cycles">{{ trans('docs.MultiitemReplacing') }}</h3>
+	<p>{{ trans('docs.Description7') }}<code>{foreach items as item}</code>{{ trans('docs.Description8') }}<cpde>{item}</code>){{ trans('docs.Description9') }}<code>{/foreach}</code>.</p>
+	<p>{{ trans('docs.Description10') }}<code>{foreach}</code> {{ trans('docs.and') }} <code>{/foreach}</code>{{ trans('docs.Description11') }}</p>
+	<p>{{ trans('docs.Description12') }}:</p>
 
 	@include('partial.example', ['request' => [
 									'json' => '{"items":[{"name":"Item 1","cost":5},{"name":"Item 2","cost":6}]}',
@@ -81,20 +75,19 @@ where each document is single object containing all the data.</p>
 								'template' => "{foreach items as item}\r\n{item.name} ({item.cost})\r\n{/foreach}",
 								'result' => "Item 1 (5)\r\nItem 2 (6)"])
 
-<h3 id="templates-cycles-tables">Multiitem replacing in tables</h3>
-	<p>To repeat table rows you need to write <code>{foreach items as item}</code> to one row, then add rows that will contain items,
-	then add one last row with <code>{/foreach}</code> that will mark end of the mutliitem replacing.</p>
-	<p>This is how your document would look like:</p>
+<h3 id="templates-cycles-tables">{{ trans('docs.MultiitemReplacingInTables') }}</h3>
+	<p>{{ trans('docs.Description13') }}<code>{foreach items as item}</code>{{ trans('docs.Description14') }}<code>{/foreach}</code>{{ trans('docs.Description15') }}</p>
+	<p>{{ trans('docs.Description16') }}:</p>
 	<img src="{{ asset('img/example_02.png') }}" alt="Example of foreach in table" />
 
-<h3 id="templates-filters">Template filters</h3>
-	<p>Our generator supports some basic filters you can use on values. The syntax is <code>{value|filter parameter1 parameter2 ...}</code>.
-	If you use as a parameter string value, you have to enclose it in <code>*value*</code> (for example: <code>{value|date *Y-m-d H:i:s*}</code>).</p>
-	<p>You can also use variables from your plate data. For example if you have variable named <code>format</code>: <code>{value|date format}</code>.</p>
+<h3 id="templates-filters">{{ trans('docs.TemplateFilters') }}</h3>
+	<p>{{ trans('docs.Description17') }}<code>{value|filter parameter1 parameter2 ...}</code>.
+	{{ trans('docs.Description18') }}<code>*value*</code> ({{ trans('docs.Description19') }}: <code>{value|date *Y-m-d H:i:s*}</code>).</p>
+	<p>{{ trans('docs.Description20') }}<code>format</code>: <code>{value|date format}</code>.</p>
 
-	<h4>Date filter</h4>
-	<p>Use this filter to format a date value to a specific format. For supported formats see <a target="_blank" href="http://php.net/manual/en/function.date.php">available formats</a>.
-	As a date value you can use a unix timestamp or dates supported by PHP function <a target="_blank" href="http://php.net/manual/en/function.strtotime.php">strtotime</a>.</p>
+	<h4>{{ trans('docs.DateFilter') }}</h4>
+	<p>{{ trans('docs.Description21') }}<a target="_blank" href="http://php.net/manual/en/function.date.php">{{ trans('docs.Description22') }}</a>.
+	{{ trans('docs.Description23') }}<a target="_blank" href="http://php.net/manual/en/function.strtotime.php">strtotime</a>.</p>
 
 		@include('partial.example', ['request' => [
 									'json' => '{"date1":1447137857,"format1":"Y-m-d:H-i-s","date2":"2015-11-10","format2":"d/m/Y"}',
@@ -104,8 +97,8 @@ where each document is single object containing all the data.</p>
 								'template' => "{date1|format1}\r\n{date2|format2}",
 								'result' => "2015-11-10:06-44-17\r\n10/11/2015"])
 
-	<h4>String filters</h4>
-	<p>To convert strings to uppercase letters use <code>{string|upper}</code> For lowercase letters use <code>{string|lower}</code>.</p>
+	<h4>{{ trans('docs.StringFilters') }}</h4>
+	<p>{{ trans('docs.Description24') }}<code>{string|upper}</code>.{{ trans('docs.Description25') }}<code>{string|lower}</code>.</p>
 
 		@include('partial.example', ['request' => [
 									'json' => '{"string":"Hello World"}',
@@ -115,8 +108,8 @@ where each document is single object containing all the data.</p>
 								'template' => "{string|upper}\r\n{string|lower}",
 								'result' => "HELLO WORLD\r\nhello world"])
 
-	<h4>Number filter</h4>
-	<p>With this filter you can use EU format or US format by default. Usage id <code>{value|number standard [number of digits after decimal point]} // => 1 111</code><p>
+	<h4>{{ trans('docs.NumberFilter') }}</h4>
+	<p>{{ trans('docs.Description26') }}<code>{value|number standard [number of digits after decimal point]} // => 1 111</code><p>
 
 	@include('partial.example', ['request' => [
 									'json' => '{"num":1111}',
@@ -127,9 +120,9 @@ where each document is single object containing all the data.</p>
 								'result' => "1 111,00\r\n1,111.00\r\n1 111\r\n1,111\r\n1,111"])
 
 
-<h2 id="examples">Examples</h2>
-<h3 id="examples-01">Example #01</h3>
-<h4 id="examples-document">Document</h4>
+<h2 id="examples">{{ trans('docs.Examples') }}</h2>
+<h3 id="examples-01">{{ trans('docs.Example') }} #01</h3>
+<h4 id="examples-document">{{ trans('docs.Document') }}</h4>
 	<img src="{{ asset('examples/template.png') }}" alt="template screenshot" class="img img-responsive" />
 
 <h4 id="examples-data">Data</h4>
@@ -164,10 +157,10 @@ where each document is single object containing all the data.</p>
 ]
 }</code></pre>
 
-	<h4 id="examples-download">Download</h4>
+	<h4 id="examples-download">{{ trans('docs.Download') }}</h4>
 	<ul>
-		<li><a href="/examples/template.docx"><i class="glyphicon glyphicon-floppy-save"></i> template.docx - example template</a></li>
-		<li><a href="/examples/data.json"><i class="glyphicon glyphicon-floppy-save"></i> data.json - example data</a></li>
+		<li><a href="/examples/template.docx"><i class="glyphicon glyphicon-floppy-save"></i> template.docx - {{ trans('docs.exampleTemplate') }}</a></li>
+		<li><a href="/examples/data.json"><i class="glyphicon glyphicon-floppy-save"></i> data.json - {{ trans('docs.exampleData') }}</a></li>
 	</ul>
 
 </div> {{-- end right col --}}
