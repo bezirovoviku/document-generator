@@ -37,6 +37,20 @@
 		</ul>
 
 		{{-- right side for authenticated users --}}
+		<ul class="nav navbar-nav navbar-right">
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					{{ Config::get('languages')[App::getLocale()] }} <span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					@foreach (Config::get('languages') as $lang => $language)
+					@if ($lang != App::getLocale())
+					<li>{!! link_to_route('lang.switch', $language, $lang) !!}</li>
+					@endif
+					@endforeach
+				</ul>
+			</li>
+		</ul>
 		@if (Auth::check())
 			<div class="navbar-right">
 				<p class="navbar-text">{{ trans('partial.LoggedInAs') }}{{ Auth::user()->email }}, <a href="{{ action('HomeController@logout') }}" class="navbar-link">{{ trans('partial.logout') }}</a></p>
