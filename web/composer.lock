@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "29a14fb27c522d9ff33beb8107085fdf",
-    "content-hash": "768e3f3261a912231c076dc2243db444",
+    "hash": "e0c1cde5caba9459e52c184ff6c0c1ee",
+    "content-hash": "338263fa7d3439228773f140ec28d133",
     "packages": [
         {
             "name": "bezirovoviku/temgen",
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bezirovoviku/temgen.git",
-                "reference": "353f24111a2b79eb40856da792aaeca1225f4cb1"
+                "reference": "0670db632fb40ac53acefe0887537c26ff85b51a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bezirovoviku/temgen/zipball/353f24111a2b79eb40856da792aaeca1225f4cb1",
-                "reference": "353f24111a2b79eb40856da792aaeca1225f4cb1",
+                "url": "https://api.github.com/repos/bezirovoviku/temgen/zipball/0670db632fb40ac53acefe0887537c26ff85b51a",
+                "reference": "0670db632fb40ac53acefe0887537c26ff85b51a",
                 "shasum": ""
             },
             "require": {
@@ -49,7 +49,7 @@
                 "docx",
                 "template"
             ],
-            "time": "2016-01-03 20:39:49"
+            "time": "2016-01-03 21:47:18"
         },
         {
             "name": "cebe/markdown",

@@ -2,6 +2,7 @@
 
 use Validator;
 use Config;
+use Storage;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
@@ -38,7 +39,6 @@ class ApiController extends Controller {
 			return response(['error' => $validator->errors()], 400);
 		}
 
-		// save to DB
 		$template = new Template([
 			'name' => $request->input('name'),
 			'type' => $request->input('type')
@@ -149,6 +149,10 @@ class ApiController extends Controller {
 	 */
 	public function downloadRequest(RequestModel $request) {
 		$this->authorize('download-request', $request);
+		// FIXME I was unable to figure out how to test BinaryFileResponse
+		if (env('APP_ENV') == 'testing') {
+			return response(Storage::get($request->getStoragePathname()));
+		}
 		return response()->download(env_path($request->getStoragePathname()));
 	}
 

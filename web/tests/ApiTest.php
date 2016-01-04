@@ -5,11 +5,11 @@
  */
 class ApiTest extends TestCase
 {
-	///@var string $key cached api key
+	/// @var string $key cached api key
 	protected $key;
 
 	/**
-	 * Returns first avaible API key
+	 * Create test user and returns his API key
 	 * @return string api key
 	 */
 	protected function getApiKey() {
@@ -22,59 +22,49 @@ class ApiTest extends TestCase
 		return $this->key;
 	}
 
-	/**
-	 * Helper function for api requests
-	 */
-	protected function apiRequest($url, $method = 'GET', $data = null, $type = 'application/json') {
-		$server = ['HTTP_X-Auth' => $this->getApiKey(), 'HTTP_Content-length' => strlen($data)];
-		if ($type)
-			$server['CONTENT_TYPE'] = $type;
+	public function call($method, $uri, array $parameters = [], array $cookies = [], array $files = [], array $server = [], $content = null)
+	{
+		$server = array_merge($server, $this->transformHeadersToServerVars([
+			'X-Auth' => $this->getApiKey(),
+			'Accept' => 'application/json',
+		]));
+		$uri = '/api/v1/' . $uri;
 
-		return $this->call($method, '/api/v1/' . $url, [], [], [], $server, $data);
+		$response = parent::call($method, $uri, $parameters, $cookies, $files, $server, $content);
+
+		$content = $response->getContent();
+		$json = json_decode($content);
+		if (json_last_error() === JSON_ERROR_NONE) {
+			return $json;
+		}
+		return $response;
 	}
 
-	/**
-	 * Tests template upload
-	 */
-	public function testUpload() {
-		$file = env_path('template.docx');
-		$name = 'Test template';
-
-		$response = $this->apiRequest('template?name=' . urlencode($name), 'POST', file_get_contents($file), null);
-		//$response = $this->call('POST', '/api/v1/template?name=' .  urlencode($name), file_get_contents($file), [], ['HTTP_X-Auth' => $this->getApiKey()], [], file_get_contents($file));
-		$json = json_decode($response->content());
-
-		$this->assertEquals(200, $response->status());
-		$this->assertNotNull($json);
-		$this->assertFalse(isset($json->error));
-		$this->assertTrue(isset($json->template_id));
+	public function simpleCall($method, $uri, array $parameters = [], array $headers = [], $content = null)
+	{
+		$server = $this->transformHeadersToServerVars($headers);
+		return $this->call($method, $uri, $parameters, [], [], $server, $content);
 	}
 
 	/**
 	 * Tests complete process of API usage
 	 */
 	public function testAPI() {
-		//Prepare template values
-		$file = env_path('template.docx');
-		$name = 'Test template';
+		// upload
+		$params = [
+			'name' => 'Test template',
+			'type' => 'docx'
+		];
+		$headers = [
+			'Content-Length' => Storage::size('template.docx')
+		];
+		$response = $this->simpleCall('POST', 'template', $params, $headers, Storage::get('template.docx'));
+		$this->assertFalse(isset($response->error), 'API returned an error');
+		$this->assertTrue(isset($response->template_id), 'Template ID not presented');
 
-		//$response = $this->call('POST', '/api/v1/template?name=' .  urlencode($name), file_get_contents($file), [], ['HTTP_X-Auth' => $this->getApiKey()], [], file_get_contents($file));
+		$template_id = $response->template_id;
 
-		/** Upload template and save its ID **/
-
-		$response = $this->apiRequest('template?name=' . urlencode($name), 'POST', file_get_contents($file));
-		$json = json_decode($response->content());
-
-		$this->assertEquals(200, $response->status());
-
-		$this->assertNotNull($json);
-		$this->assertFalse(isset($json->error));
-		$this->assertTrue(isset($json->template_id));
-
-		$template_id = $json->template_id;
-
-		/** Create request and save its ID **/
-
+		// create request and save its ID
 		$data = array(
 			'template_id' => $template_id,
 			'type' => 'docx',
@@ -108,47 +98,35 @@ class ApiTest extends TestCase
 				)
 			]
 		);
+		$response = $this->simpleCall('POST', 'request', $data);
+		$this->assertFalse(isset($response->error), 'API returned an error');
+		$this->assertTrue(isset($response->request_id), 'Request ID not presented');
+		$request_id = $response->request_id;
 
-		$response = $this->apiRequest('request/', 'POST', json_encode($data));
-		$json = json_decode($response->content());
+		// wait for request to finish
+		do {
+			$response = $this->simpleCall('GET', "request/$request_id");
+			$this->assertFalse(isset($response->error), 'API returned an error');
+			$this->assertTrue(isset($response->status), 'Status not presented');
+		} while ($response->status != 'done');
 
-		$this->assertEquals(200, $response->status());
-		$this->assertNotNull($json);
-		$this->assertFalse(isset($json->error));
-		$this->assertTrue(isset($json->request_id));
+		// download resulting file and save it to tempfile
+		$response = $this->simpleCall('GET', "request/$request_id/download");
+		// $this->dump();
+		$this->assertFalse(isset($response->error), 'API returned an error');
+		$this->assertNotEmpty($response->content(), 'File contents not returned.');
 
-		$request_id = $json->request_id;
+		$temp = tempnam(env_path('tmp'), 'archive');
+		file_put_contents($temp, $response->content());
 
-		/** Wait for request to finish **/
-
-		while(true) {
-			$response = $this->apiRequest("request/$request_id", 'GET', json_encode($data));
-			$json = json_decode($response->content());
-
-			$this->assertEquals(200, $response->status());
-			$this->assertNotNull($json);
-			$this->assertFalse(isset($json->error));
-			$this->assertTrue(isset($json->status));
-
-			if ($json->status == 'done') {
-				break;
-			}
-		}
-
-		//Download resulting file and save it to result folder
-		$response = $this->apiRequest("request/$request_id/download", 'GET');
-		$this->assertInstanceOf(\Symfony\Component\HttpFoundation\BinaryFileResponse::class, $response);
-
-		$archive = $response->getFile()->getRealPath();
-
-		//Check for correct archive contents
+		// check for correct archive contents
 		$zip = new \ZipArchive();
-
-		$this->assertTrue($zip->open($archive));
+		$this->assertTrue($zip->open($temp));
 		$this->assertNotFalse($zip->statName('document0.docx'));
 		$this->assertNotFalse($zip->statName('document1.docx'));
 		$this->assertFalse($zip->statName('document2.docx'));
 
 		$zip->close();
+		unlink($temp);
 	}
 }
